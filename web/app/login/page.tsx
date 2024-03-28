@@ -2,7 +2,7 @@
 
 import {
   signInClicked,
-} from '@/app/utils/login';
+} from '@/app/utils/auth';
 import {
   Button,
   Card,
@@ -13,6 +13,7 @@ import {
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { EyeFilledIcon } from './components/EyeFilledIcon';
 import { EyeSlashFilledIcon } from './components/EyeSlashFilledIcon';
+import { useRouter } from 'next/navigation';
 
 const Login = () => {
   const [selected, setSelected] = useState<string | number>('login');
@@ -23,6 +24,8 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const toggleVisibility = () => setIsVisible(!isVisible);
+  
+  const router = useRouter();
 
   useEffect(() => {
   }, []);
@@ -50,8 +53,11 @@ const Login = () => {
     }
     try {
       setIsLoading(true);
-      await signInClicked(email, password);
+      let response=await signInClicked(email, password);
       setIsLoading(false);
+      if(response==='success'){
+        router.push('/main')
+      }
     } catch (error) {
       console.log(error);
     }
