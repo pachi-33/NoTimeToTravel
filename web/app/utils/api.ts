@@ -9,7 +9,7 @@ interface checkTravelDiary{
 const CheckTravelDiaryApi = {
   postCheckRequest: async (data: Partial<checkTravelDiary>) =>
     await request.post<checkTravelDiary, AxiosResponse<Partial<checkTravelDiary>>>(
-      `/check`,
+      `/main`,
       data
     ),
 };
