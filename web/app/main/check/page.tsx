@@ -16,18 +16,25 @@ import {
   Chip,
   User,
   Pagination,
+  Switch,
   Tooltip,
   getKeyValue,
   SortDescriptor,
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  useDisclosure,
 } from "@nextui-org/react";
-import { PlusIcon } from "./components/PlusIcon";
-import { VerticalDotsIcon } from "./components/VerticalDotsIcon";
-import { SearchIcon } from "./components/SearchIcon";
-import { ChevronDownIcon } from "./components/ChevronDownIcon";
+import { PlusIcon } from "../../icons/PlusIcon";
+import { VerticalDotsIcon } from "../../icons/VerticalDotsIcon";
+import { SearchIcon } from "../../icons/SearchIcon";
+import { ChevronDownIcon } from "../../icons/ChevronDownIcon";
 import { columns, users, statusOptions } from "./components/data";
-import { EditIcon } from "./components/EditIcon";
-import { DeleteIcon } from "./components/DeleteIcon";
-import { EyeIcon } from "./components/EyeIcon";
+import { EditIcon } from "../../icons/EditIcon";
+import { DeleteIcon } from "../../icons/DeleteIcon";
+import { EyeIcon } from "../../icons/EyeIcon";
 
 interface userType {
   id: number;
@@ -46,18 +53,45 @@ const statusColorMap = {
 const INITIAL_VISIBLE_COLUMNS = ["name", "title", "time", "status", "actions"];
 
 export default function App() {
+  // input value
   const [filterValue, setFilterValue] = React.useState("");
-  const [selectedKeys, setSelectedKeys] = React.useState(new Set([]));
+  // selected columns
+  const [selectedKeys, setSelectedKeys] = React.useState(new Set([]) || "all");
+  // dropdown colomns
   const [visibleColumns, setVisibleColumns] = React.useState(
-    new Set(INITIAL_VISIBLE_COLUMNS)
+    new Set(INITIAL_VISIBLE_COLUMNS) || "all"
   );
+  // status selected
   const [statusFilter, setStatusFilter] = React.useState("all");
+  // rows per page
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
     column: "age",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
+  // select mode, single or multiple
+  const [isMultiple, setIsMultiple] = React.useState(false);
+
+  const [showDetails, setShowDetails] = React.useState(false);
+  const [showChangeStatus, setShowChangeStatus] = React.useState(false);
+  const [showDelete, setShowDelete] = React.useState(false);
+
+  const {
+    isOpen: isDetailsOpen,
+    onOpen: onDetailsOpen,
+    onOpenChange: onDetailsOpenChange,
+  } = useDisclosure();
+  const {
+    isOpen: isChangeStatusOpen,
+    onOpen: onChangeStatusOpen,
+    onOpenChange: onChangeStatusOpenChange,
+  } = useDisclosure();
+  const {
+    isOpen: isDeleteOpen,
+    onOpen: onDeleteOpen,
+    onOpenChange: onDeleteOpenChange,
+  } = useDisclosure();
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -82,7 +116,8 @@ export default function App() {
   }, [users, filterValue, statusFilter]);
 
   const headerColumns = React.useMemo(() => {
-    if (visibleColumns.size >= filteredItems.length) return columns;
+    if (visibleColumns.size >= filteredItems.length || `${visibleColumns}` === "all")
+      return columns;
 
     return columns.filter((column) =>
       Array.from(visibleColumns).includes(column.iid)
@@ -107,6 +142,69 @@ export default function App() {
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
     });
   }, [sortDescriptor, items]);
+
+  const handleViewDetails = (id: number) => {
+    console.log(id);
+    setShowDetails(true);
+    // axios get details
+    onDetailsOpen();
+  };
+
+  const handleChangeStatus = (id: number) => {
+    console.log(id);
+    setShowChangeStatus(true);
+    // axios get details
+    onChangeStatusOpen();
+  };
+
+  const handleDeleteDiary = (id: number) => {
+    console.log(id);
+    setShowDelete(true);
+    // axios get details
+    onDeleteOpen();
+  };
+
+  const handlePassSelected = () => {
+    let selectedArray: Array<number> = [];
+    if (`${selectedKeys}` == "all") {
+      users.forEach((value) => {
+        selectedArray.push(value.id);
+      });
+    } else {
+      selectedKeys.forEach((value) => {
+        selectedArray.push(value);
+      });
+    }
+    console.log(selectedArray);
+  };
+
+  const handleRejectSelected = () => {
+    let selectedArray: Array<number> = [];
+    if (`${selectedKeys}` == "all") {
+      users.forEach((value) => {
+        selectedArray.push(value.id);
+      });
+    } else {
+      selectedKeys.forEach((value) => {
+        selectedArray.push(value);
+      });
+    }
+    console.log(selectedArray);
+  };
+
+  const handleDeleteSelected = () => {
+    let selectedArray: Array<number> = [];
+    if (`${selectedKeys}` == "all") {
+      users.forEach((value) => {
+        selectedArray.push(value.id);
+      });
+    } else {
+      selectedKeys.forEach((value) => {
+        selectedArray.push(value);
+      });
+    }
+    console.log(selectedArray);
+  };
 
   const renderCell = React.useCallback((user: userType, columnKey: Key) => {
     const cellValue = user[columnKey as keyof typeof user];
@@ -145,19 +243,34 @@ export default function App() {
         );
       case "actions":
         return (
-          <div className="relative flex items-center gap-2">
-            <Tooltip content="Details">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+          <div className="relative flex items-center gap-3">
+            <Tooltip content="游记详情">
+              <span
+                className="text-lg text-default-400 cursor-pointer active:opacity-50"
+                onClick={() => {
+                  handleViewDetails(user.id);
+                }}
+              >
                 <EyeIcon />
               </span>
             </Tooltip>
-            <Tooltip content="Edit user">
-              <span className="text-lg text-default-400 cursor-pointer active:opacity-50">
+            <Tooltip content="审核游记">
+              <span
+                className="text-lg text-default-400 cursor-pointer active:opacity-50"
+                onClick={() => {
+                  handleChangeStatus(user.id);
+                }}
+              >
                 <EditIcon />
               </span>
             </Tooltip>
-            <Tooltip color="danger" content="Delete user">
-              <span className="text-lg text-danger cursor-pointer active:opacity-50">
+            <Tooltip color="danger" content="删除游记">
+              <span
+                className="text-lg text-danger cursor-pointer active:opacity-50"
+                onClick={() => {
+                  handleDeleteDiary(user.id);
+                }}
+              >
                 <DeleteIcon />
               </span>
             </Tooltip>
@@ -194,6 +307,7 @@ export default function App() {
       setPage(1);
     } else {
       setFilterValue("");
+      setPage(1);
     }
   }, []);
 
@@ -216,6 +330,16 @@ export default function App() {
             onValueChange={onSearchChange}
           />
           <div className="flex gap-3">
+            <div className="flex gap-2 items-center justify-center mr-2">
+              <Switch
+                className="text-small"
+                isSelected={isMultiple}
+                onValueChange={setIsMultiple}
+              >
+                Multiple:
+              </Switch>
+              <span className="text-small">{isMultiple ? "on" : "off"}</span>
+            </div>
             <Dropdown>
               <DropdownTrigger className="hidden sm:flex">
                 <Button
@@ -232,7 +356,7 @@ export default function App() {
                 selectedKeys={statusFilter}
                 selectionMode="multiple"
                 onSelectionChange={(keys) => {
-                  // console.log(keys);
+                  console.log(keys);
                   setStatusFilter(keys as string);
                 }}
               >
@@ -298,16 +422,52 @@ export default function App() {
     users.length,
     onSearchChange,
     hasSearchFilter,
+    isMultiple,
   ]);
 
   const bottomContent = React.useMemo(() => {
     return (
       <div className="py-2 px-2 flex justify-between items-center">
-        <span className="w-[30%] text-small text-default-400">
-          {selectedKeys.size >= filteredItems.length
-            ? "All items selected"
-            : `${selectedKeys.size} of ${filteredItems.length} selected`}
-        </span>
+        {isMultiple ? (
+          <div className="w-[30%] flex items-center gap-4">
+            <span className=" text-small text-default-400">
+              {selectedKeys.size >= filteredItems.length ||
+              `${selectedKeys}` == "all"
+                ? "All items selected"
+                : `${selectedKeys.size} of ${filteredItems.length} selected`}
+            </span>
+            {(selectedKeys.size > 0 || `${selectedKeys}` == "all") && (
+              <div className="relative flex items-center gap-4 rounded-full bg-slate-200 px-3 py-1">
+                <Tooltip color="success" content="通过所选">
+                  <span
+                    className="text-2xl text-success cursor-pointer active:opacity-50"
+                    onClick={handlePassSelected}
+                  >
+                    +
+                  </span>
+                </Tooltip>
+                <Tooltip color="danger" content="不通过所选">
+                  <span
+                    className="text-2xl text-danger cursor-pointer active:opacity-50"
+                    onClick={handleRejectSelected}
+                  >
+                    -
+                  </span>
+                </Tooltip>
+                <Tooltip color="danger" content="删除所选">
+                  <span
+                    className="text-lg text-danger cursor-pointer active:opacity-50"
+                    onClick={handleDeleteSelected}
+                  >
+                    <DeleteIcon />
+                  </span>
+                </Tooltip>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="w-[30%] text-small text-default-400"></div>
+        )}
         <Pagination
           isCompact
           showControls
@@ -337,54 +497,123 @@ export default function App() {
         </div>
       </div>
     );
-  }, [selectedKeys, items.length, page, pages, hasSearchFilter]);
+  }, [selectedKeys, items.length, page, pages, hasSearchFilter, isMultiple]);
 
   return (
-    <Table
-      aria-label="Example table with custom cells, pagination and sorting"
-      isHeaderSticky
-      bottomContent={bottomContent}
-      bottomContentPlacement="outside"
-      classNames={{
-        wrapper: "max-h-[382px]",
-      }}
-      selectedKeys={selectedKeys}
-      selectionMode="multiple"
-      sortDescriptor={sortDescriptor as SortDescriptor}
-      topContent={topContent}
-      topContentPlacement="outside"
-      onSelectionChange={(keys) => {
-        console.log(keys);
-        setSelectedKeys(keys as Set<never>);
-      }}
-      onSortChange={(descriptor) => {
-        setSortDescriptor(
-          descriptor as React.SetStateAction<{
-            column: string;
-            direction: string;
-          }>
-        );
-      }}
-    >
-      <TableHeader columns={headerColumns}>
-        {(column) => (
-          <TableColumn
-            key={column.iid}
-            align={column.iid === "actions" ? "center" : "start"}
-          >
-            {column.name}
-          </TableColumn>
-        )}
-      </TableHeader>
-      <TableBody emptyContent={"No users found"} items={sortedItems}>
-        {(item) => (
-          <TableRow key={item.id}>
-            {(columnKey) => (
-              <TableCell>{renderCell(item, columnKey)}</TableCell>
+    <div className="relative w-full h-full px-4">
+      <Table
+        aria-label="Example table with custom cells, pagination and sorting"
+        isHeaderSticky
+        bottomContent={bottomContent}
+        bottomContentPlacement="outside"
+        className="max-h-[80vh]"
+        selectedKeys={selectedKeys}
+        selectionMode={isMultiple ? "multiple" : "none"}
+        sortDescriptor={sortDescriptor as SortDescriptor}
+        topContent={topContent}
+        topContentPlacement="outside"
+        onSelectionChange={(keys) => {
+          console.log(keys);
+          setSelectedKeys(keys as Set<never>);
+        }}
+        onSortChange={(descriptor) => {
+          setSortDescriptor(
+            descriptor as React.SetStateAction<{
+              column: string;
+              direction: string;
+            }>
+          );
+        }}
+      >
+        <TableHeader columns={headerColumns}>
+          {(column) => (
+            <TableColumn
+              key={column.iid}
+              align={column.iid === "actions" ? "center" : "start"}
+            >
+              {column.name}
+            </TableColumn>
+          )}
+        </TableHeader>
+        <TableBody emptyContent={"暂无游记"} items={sortedItems}>
+          {(item) => (
+            <TableRow key={item.id}>
+              {(columnKey) => (
+                <TableCell>{renderCell(item, columnKey)}</TableCell>
+              )}
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+
+      {showDetails && (
+        <Modal isOpen={isDetailsOpen} onOpenChange={onDetailsOpenChange}>
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-col gap-1">
+                  游记详情
+                </ModalHeader>
+                <ModalBody>
+                  <p>rmt</p>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="primary" variant="light" onPress={onClose}>
+                    Close
+                  </Button>
+                </ModalFooter>
+              </>
             )}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+          </ModalContent>
+        </Modal>
+      )}
+
+      {showChangeStatus && (
+        <Modal
+          isOpen={isChangeStatusOpen}
+          onOpenChange={onChangeStatusOpenChange}
+        >
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-col gap-1">
+                  审核游记
+                </ModalHeader>
+                <ModalBody>
+                  <p>rmt</p>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="primary" variant="light" onPress={onClose}>
+                    Close
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
+      )}
+
+      {showDelete && (
+        <Modal isOpen={isDeleteOpen} onOpenChange={onDeleteOpenChange}>
+          <ModalContent>
+            {(onClose) => (
+              <>
+                <ModalHeader className="flex flex-col gap-1">
+                  删除游记
+                </ModalHeader>
+                <ModalBody>
+                  <p>rmt</p>
+                </ModalBody>
+                <ModalFooter>
+                  <Button color="primary" variant="light" onPress={onClose}>
+                    Close
+                  </Button>
+                </ModalFooter>
+              </>
+            )}
+          </ModalContent>
+        </Modal>
+      )}
+    </div>
   );
 }

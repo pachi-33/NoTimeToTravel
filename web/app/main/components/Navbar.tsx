@@ -131,7 +131,7 @@ const NavBar = ({ className }: { className: string }) => {
   };
 
   return (
-    <div className={`flex flex-row items-center h-18 ${className}`}>
+    <div className={`flex flex-row items-center h-16 ${className}`}>
       <Navbar
         onMenuOpenChange={setIsMenuOpen}
         maxWidth="xl"
@@ -153,7 +153,7 @@ const NavBar = ({ className }: { className: string }) => {
         <NavbarContent className="hidden sm:flex" justify="center">
           <div
             className="
-                flex h-[40px] flex-row items-center justify-center gap-4 rounded-full bg-white/15
+                flex h-[40px] flex-row items-center justify-center gap-8 rounded-full bg-white/15
                 px-6 py-1 text-white
               "
           >
