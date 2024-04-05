@@ -1,2 +1,8 @@
-# -
-没有时间也要旅行组
+# Server End
+
+### users  TABLE
+
+| uid  | username     | password     | auth                          |
+| ---- | ------------ | ------------ | ----------------------------- |
+| INT  | VARCHAR(255) | VARCHAR(255) | ENUM('admin','user','review') |
+
