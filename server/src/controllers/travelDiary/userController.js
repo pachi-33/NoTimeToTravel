@@ -22,6 +22,7 @@ const login = async function(req, res) {
         if(valid === null){
             return res.send({
                 status: 400,
+                username: req.body.username,
                 msg: 'Wrong username or password.'
             })
         }

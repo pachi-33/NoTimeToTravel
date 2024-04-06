@@ -1,8 +1,505 @@
 # Server End
 
-### users  TABLE
+# Database
 
-| uid  | username     | password     | auth                          |
-| ---- | ------------ | ------------ | ----------------------------- |
-| INT  | VARCHAR(255) | VARCHAR(255) | ENUM('admin','user','review') |
+
+
+## users   Table
+
+| column   | alias    | type                            | constraint                   |
+| -------- | -------- | ------------------------------- | ---------------------------- |
+| uid      | 用户编号 | INT                             | PK   NotNull   AutoIncrement |
+| username | 账号     | VARCHAR(255)                    | PK   NotNull                 |
+| password | 密码     | VARCHAR(255)                    | PK   NotNull                 |
+| auth     | 权限     | ENUM('admin', 'user', 'review') | NotNull                      |
+| nickname | 昵称     | VARCHAR(255)                    | PK   default: `游客+uid`     |
+| avatar   | 头像     | VARCHAR(255)                    |                              |
+
+
+
+## travelNote   Table
+
+| column         | alias    | type           | constraint                   |
+| -------------- | -------- | -------------- | ---------------------------- |
+| noteId         | 游记编号 | INT            | PK   AutoIncrement   NotNull |
+| noteTitle      | 标题     | VARCHAR(255)   | NotNull                      |
+| noteContent    | 正文     | VARCHAR(65535) | NotNull                      |
+| updateBy       | 作者 uid | INT            | FK   NotNull                 |
+| viewNum        | 浏览量   | INT            | NotNull                      |
+| likeNum        | 获赞量   | INT            | NotNull                      |
+| collectNum     | 收藏量   | INT            | NotNull                      |
+| uploadTime     | 上传时间 | DATETIME       | NotNull                      |
+| lastModifyTime | 修改时间 | DATETIME       | NotNull                      |
+| location       | 分享地点 | VARCHAR(255)   | NotNull                      |
+
+
+
+## review   Table
+
+| column     | alias           | type                                                 | constraint   |
+| ---------- | --------------- | ---------------------------------------------------- | ------------ |
+| reviewId   | 审核编号        | INT                                                  | PK   NotNull |
+| noteId     | 游记编号 noteId | INT                                                  | FK   NotNull |
+| reviewTime | 审核时间        | DATETIME                                             |              |
+| reviewerId | 审核员编号 uid  | INT                                                  | FK           |
+| status     | 审核状态        | ENUM('waiting', 'approved', 'disapproved', 'delete') | NotNull      |
+| comment    | 注释            | VARCHAR(255)                                         |              |
+
+
+
+## resources   Table
+
+| column    | alias    | type                 | constraint                        |
+| --------- | -------- | -------------------- | --------------------------------- |
+| noteId    | 游记编号 | INT                  | PK   FK   AutoIncrement   NotNull |
+| index     | 序号     | INT                  | NotNull                           |
+| mediaType | 媒体类型 | ENUM('img', 'video') | NotNull                           |
+| url       | 路径     | VARCHAR(255)         | NotNull                           |
+|           |          |                      |                                   |
+
+
+
+## comments Table
+
+| column         | alias         | type           | constraint         |
+| -------------- | ------------- | -------------- | ------------------ |
+| commentId      | 评论编号      | INT            | PK   AutoIncrement |
+| noteId         | 游记编号      | INT            | FK   NotNull       |
+| commentBy      | 评论用户  uid | INT            | NotNull            |
+| commentContent | 内容          | VARCHAR(65535) | NotNull            |
+| commentTime    | 评论时间      | DATETIME       | NotNull            |
+
+
+
+
+
+# Interface conventions
+
+domain name: ctrip.x3322.net
+
+port: 3000
+
+接口:  domainName:port/api/~
+
+
+
+## travelDiary
+
+用户登录
+
+[POST]	.../travelDiary/login
+
+```js
+req.body = {
+    username,
+    password
+}
+
+假如身份不是user
+res.body = {
+    status: 400,
+    username: req.body.username,
+    msg: 'Wrong identity.'
+}
+
+账号或密码错误
+res.body = {
+    status: 400,
+    username: req.body.username,
+    msg: 'Wrong username or password.'
+}
+
+验证成功
+res.body = {
+    status: 200,
+    msg: 'Login success.',
+    username: username,
+    auth: 'user',
+    token: token
+}
+
+```
+
+
+
+用户注册
+
+[POST]	.../travelDiary/register
+
+```js
+req.body = {
+    username,
+    password
+}
+
+用户名已被注册
+res.body = {
+    status: 400,
+    msg: 'Duplicate username.',
+    username,
+    auth: 'user'
+}
+
+注册成功
+res.body = {
+    status: 200,
+    msg: 'Register success.',
+    username,
+    auth: 'user'
+}
+```
+
+
+
+获取用户信息
+
+[POST]	.../travelDiary/getUserInfo
+
+```js
+req.body = {
+    username,
+    token
+}
+
+获取成功
+res.body = {
+    status: 200,
+    username,
+    auth,
+    nickname,
+    avatarUrl,
+    newToken,
+    msg: 'Get user info success.',
+}
+
+验证失败
+res.body = {
+    status: 401,
+    username,
+    token,
+    msg: 'Validation failed.',
+}
+
+token过期
+res.body = {
+    status: 401,
+    username,
+    token,
+    msg: 'Authentication expires.',
+}
+```
+
+
+
+设置头像
+
+[POST]	.../travelDiary/setAvatar
+
+```js
+req.body = {
+    username,
+    token,
+    img: 'base64...'
+}
+
+上传成功
+res.body = {
+    status: 200,
+    username,
+    newToken,
+    avatarUrl
+}
+
+上传途中出错
+res.body = {
+    status: 500,
+    msg
+}
+
+验证失败
+res.body = {
+    status: 401,
+    username,
+    token,
+    msg: 'Validation failed.',
+}
+
+token过期
+res.body = {
+    status: 401,
+    username,
+    token,
+    msg: 'Authentication expires.',
+}
+```
+
+
+
+设置昵称
+
+[POST]	.../travelDiary/setNickName
+
+```js
+req.body = {
+    username,
+    token,
+    nickName
+}
+
+修改成功
+res.body = {
+    status: 200,
+    username,
+    newToken,
+    nickName
+}
+
+昵称重复
+res.body = {
+    status: 400,
+    username,
+    nickName,
+    msg: 'Duplicate nickname.'
+}
+
+验证失败
+res.body = {
+    status: 401,
+    username,
+    token,
+    msg: 'Validation failed.',
+}
+
+token过期
+res.body = {
+    status: 401,
+    username,
+    token,
+    msg: 'Authentication expires.',
+}
+```
+
+
+
+按时间获取一定数量的游记列表
+
+[POST]	.../travelDiary/getNoteListByTime
+
+```js
+res.body = {
+    
+}
+```
+
+
+
+
+
+搜索游记标题获得列表
+
+[GET]	.../travelDiary/getNoteListBySearchTitle
+
+
+
+
+
+搜索作者获取游记列表
+
+[GET]	.../travelDiary/getNoteListBySearchAuthor
+
+
+
+
+
+获取游记详情内容
+
+[GET]	.../travelDiary/getNoteDetails
+
+
+
+
+
+获取游记评论区列表
+
+[GET]	.../travelDiary/getNoteComments
+
+
+
+
+
+点赞
+
+[POST]	.../travelDiary/likeNote
+
+
+
+
+
+留下浏览记录
+
+[POST]	.../travelDiary/viewNote
+
+
+
+
+
+收藏
+
+[POST]	.../travelDiary/collectNote
+
+
+
+
+
+评论
+
+[POST]	.../travelDiary/makeComment
+
+
+
+
+
+上传游记
+
+[POST]	.../travelDiary/uploadNote
+
+
+
+
+
+获得我的游记列表
+
+[GET]	.../travelDiary/getMyNoteListWithStatus
+
+
+
+
+
+
+
+
+
+## moderationPlatform
+
+审核员登录
+
+[POST]	.../moderationPlatform/login
+
+
+
+
+
+获取游记信息
+
+[GET]	.../moderationPlatform/getNoteInfo
+
+
+
+
+
+通过
+
+[POST]	.../moderationPlatform/approveNote
+
+
+
+
+
+通过
+
+[POST]	.../moderationPlatform/approveNote
+
+
+
+
+
+不通过
+
+[POST]	.../moderationPlatform/disapproveNote
+
+
+
+
+
+删除
+
+[POST]	.../moderationPlatform/deleteNote
+
+
+
+
+
+撤回到待审核
+
+[POST]	.../moderationPlatform/restoreNote
+
+
+
+
+
+
+
+按标题搜索游记获得列表
+
+[GET]	.../moderationPlatform/getNoteListBySearchTitle
+
+
+
+
+
+按作者搜索游记获得列表
+
+[GET]	.../moderationPlatform/getNoteListBySearchAuthor
+
+
+
+
+
+获取待审核游记列表
+
+[GET]	.../moderationPlatform/getWaitingNoteList
+
+
+
+
+
+获取已通过游记列表
+
+[GET]	.../moderationPlatform/getApprovedNoteList
+
+
+
+
+
+获取不通过游记列表
+
+[GET]	.../moderationPlatform/getDisapprovedNoteList
+
+
+
+
+
+获取已删除游记列表
+
+[GET]	.../moderationPlatform/getDeleteNoteList
+
+
+
+
+
+获取本审核员审核过的游记列表
+
+[GET]	.../moderationPlatform/getMyReviewNote
+
+
+
+
+
+
+
+
+
+
+
+
 
