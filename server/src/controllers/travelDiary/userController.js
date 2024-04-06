@@ -1,6 +1,6 @@
-const User = require('../models/UserModel');
-const runtimeLog = require('../utils/logger');
-const secretKey = require('../config/secretKey');
+const User = require('../../models/UserModel');
+const runtimeLog = require('../../utils/logger');
+const secretKey = require('../../config/secretKey');
 const jwt = require('jsonwebtoken');
 
 const validation = (username, password)=>{
@@ -18,8 +18,15 @@ const login = async function(req, res) {
     try{
         const { username, password } = req.body;
         const valid= await validation(username, password);
-        console.log(valid);
-        if(valid){
+
+        if(valid === null){
+            return res.send({
+                status: 400,
+                msg: 'Wrong username or password.'
+            })
+        }
+
+        if(valid.auth === 'user'){
             const curToken = jwt.sign(
                 {
                     username: req.body.username,
@@ -36,12 +43,15 @@ const login = async function(req, res) {
             res.send({
                 status: 202,
                 msg: 'User login successfully.',
+                username: req.body.username,
+                auth: 'user',
                 token: curToken
             })
         }else{
             res.send({
                 status: 400,
-                msg: 'Wrong username or password.'
+                username: req.body.username,
+                msg: 'Wrong identity.'
             })
         }
     } catch(err) {

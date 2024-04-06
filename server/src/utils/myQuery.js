@@ -5,7 +5,8 @@ const dbPool = mysql.createPool({
     host,
     user,
     password,
-    database
+    database,
+    port: dbport
   });
 
 const myQuery = function(sql, values){
