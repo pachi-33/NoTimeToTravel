@@ -10,7 +10,7 @@
 | -------- | -------- | ------------------------------- | ---------------------------- |
 | uid      | 用户编号 | INT                             | PK   NotNull   AutoIncrement |
 | username | 账号     | VARCHAR(255)                    | PK   NotNull                 |
-| password | 密码     | VARCHAR(255)                    | PK   NotNull                 |
+| password | 密码     | VARCHAR(255)                    | PK                           |
 | auth     | 权限     | ENUM('admin', 'user', 'review') | NotNull                      |
 | nickname | 昵称     | VARCHAR(255)                    | PK   default: `游客+uid`     |
 | avatar   | 头像     | VARCHAR(255)                    |                              |
@@ -90,63 +90,22 @@ port: 3000
 [POST]	.../travelDiary/login
 
 ```js
-req.body = {
-    username,
-    password
+req.data = {
+    code
 }
 
-假如身份不是user
-res.body = {
-    status: 400,
-    username: req.body.username,
-    msg: 'Wrong identity.'
-}
-
-账号或密码错误
-res.body = {
-    status: 400,
-    username: req.body.username,
-    msg: 'Wrong username or password.'
-}
-
-验证成功
-res.body = {
+成功
+res.data = {
     status: 200,
     msg: 'Login success.',
-    username: username,
-    auth: 'user',
-    token: token
+    loginKey: {
+        openid,
+        session_key,
+        auth: 'user',
+        token
+    } 
 }
 
-```
-
-
-
-用户注册
-
-[POST]	.../travelDiary/register
-
-```js
-req.body = {
-    username,
-    password
-}
-
-用户名已被注册
-res.body = {
-    status: 400,
-    msg: 'Duplicate username.',
-    username,
-    auth: 'user'
-}
-
-注册成功
-res.body = {
-    status: 200,
-    msg: 'Register success.',
-    username,
-    auth: 'user'
-}
 ```
 
 
@@ -156,35 +115,39 @@ res.body = {
 [POST]	.../travelDiary/getUserInfo
 
 ```js
-req.body = {
-    username,
-    token
+req.data = {
+    loginKey: {
+        openid,
+        session_key,
+        auth: 'user',
+        token
+    } 
 }
 
 获取成功
-res.body = {
+res.data = {
     status: 200,
-    username,
+    newloginKey: {
+        openid,
+        session_key,
+        auth: 'user',
+        newToken
+    } 
     auth,
     nickname,
     avatarUrl,
-    newToken,
     msg: 'Get user info success.',
 }
 
 验证失败
-res.body = {
+res.data = {
     status: 401,
-    username,
-    token,
     msg: 'Validation failed.',
 }
 
 token过期
-res.body = {
+res.data = {
     status: 401,
-    username,
-    token,
     msg: 'Authentication expires.',
 }
 ```
@@ -196,39 +159,43 @@ res.body = {
 [POST]	.../travelDiary/setAvatar
 
 ```js
-req.body = {
-    username,
-    token,
+req.data = {
+    loginKey: {
+        openid,
+        session_key,
+        auth: 'user',
+        token
+    },
     img: 'base64...'
 }
 
 上传成功
-res.body = {
+res.data = {
     status: 200,
-    username,
-    newToken,
+    newloginKey: {
+        openid,
+        session_key,
+        auth: 'user',
+        newToken
+    },
     avatarUrl
 }
 
 上传途中出错
-res.body = {
+res.data = {
     status: 500,
-    msg
+    msg: "Upload failed."
 }
 
 验证失败
-res.body = {
+res.data = {
     status: 401,
-    username,
-    token,
     msg: 'Validation failed.',
 }
 
 token过期
-res.body = {
+res.data = {
     status: 401,
-    username,
-    token,
     msg: 'Authentication expires.',
 }
 ```
@@ -240,41 +207,43 @@ res.body = {
 [POST]	.../travelDiary/setNickName
 
 ```js
-req.body = {
-    username,
-    token,
+req.data = {
+    loginKey: {
+        openid,
+        session_key,
+        auth: 'user',
+        token
+    },
     nickName
 }
 
 修改成功
-res.body = {
+res.data = {
     status: 200,
-    username,
-    newToken,
+    newloginKey: {
+        openid,
+        session_key,
+        auth: 'user',
+        newToken
+    },
     nickName
 }
 
 昵称重复
-res.body = {
+res.data = {
     status: 400,
-    username,
-    nickName,
     msg: 'Duplicate nickname.'
 }
 
 验证失败
-res.body = {
+res.data = {
     status: 401,
-    username,
-    token,
     msg: 'Validation failed.',
 }
 
 token过期
-res.body = {
+res.data = {
     status: 401,
-    username,
-    token,
     msg: 'Authentication expires.',
 }
 ```
@@ -286,42 +255,263 @@ res.body = {
 [POST]	.../travelDiary/getNoteListByTime
 
 ```js
-res.body = {
+req.data = {
+    loginKey: {
+        openid,
+        session_key,
+        auth: 'user',
+        token
+    },
+    beforeWhen: 'YYYY-MM-DD HH:mm:ss', //获取该时间之前上传的游记，设置为当前时间即最新游记
+    listLength: 100
+}
+
+res.data = {
+    status: 200,
+    newloginKey: {
+        openid,
+        session_key,
+        auth: 'user',
+        newToken
+    },
+    noteList: {
+        length: xx,
+        content: {
+            note001: {
+                noteId,
+                title,
+                coverImg: url,
+                authorNickname,
+                authorAvatar: url,
+                likeNume,
+                uploadTime	//较新的
+            },
+            note002: {
+                noteId,
+                title,
+                coverImg: url,
+                authorNickname,
+                authorAvatar: url,
+                likeNume,
+                uploadTime	//较久的
+            },
+            ......
+            ......
+        }
+    }
+}
     
+验证失败
+res.data = {
+    status: 401,
+    msg: 'Validation failed.',
+}
+
+token过期
+res.data = {
+    status: 401,
+    msg: 'Authentication expires.',
 }
 ```
 
 
 
-
-
 搜索游记标题获得列表
 
-[GET]	.../travelDiary/getNoteListBySearchTitle
+[POST]	.../travelDiary/getNoteListBySearchTitle
 
+```js
+req.data = {
+    loginKey: {
+        openid,
+        session_key,
+        auth: 'user',
+        token
+    },
+    keyWord,
+    listLength: 100
+}
 
+res.data = {
+    status: 200,
+    newloginKey: {
+        openid,
+        session_key,
+        auth: 'user',
+        newToken
+    },
+    noteList: {
+        length: xx,
+        content: {
+            note001: {
+                noteId,
+                title,
+                coverImg: url,
+                authorNickname,
+                authorAvatar: url,
+                likeNume,
+                uploadTime	//较新的
+            },
+            note002: {
+                noteId,
+                title,
+                coverImg: url,
+                authorNickname,
+                authorAvatar: url,
+                likeNume,
+                uploadTime	//较久的
+            },
+            ......
+            ......
+        }
+    }
+}
+    
+验证失败
+res.data = {
+    status: 401,
+    msg: 'Validation failed.',
+}
+
+token过期
+res.data = {
+    status: 401,
+    msg: 'Authentication expires.',
+}
+```
 
 
 
 搜索作者获取游记列表
 
-[GET]	.../travelDiary/getNoteListBySearchAuthor
+[POST]	.../travelDiary/getNoteListBySearchAuthor
 
+```js
+req.data = {
+    loginKey: {
+        openid,
+        session_key,
+        auth: 'user',
+        token
+    },
+    authorNickname,
+    listLength: 100
+}
 
+res.data = {
+    status: 200,
+    newloginKey: {
+        openid,
+        session_key,
+        auth: 'user',
+        newToken
+    },
+    noteList: {
+        length: xx,
+        content: {
+            note001: {
+                noteId,
+                title,
+                coverImg: url,
+                authorNickname,
+                authorAvatar: url,
+                likeNume,
+                uploadTime	//较新的
+            },
+            note002: {
+                noteId,
+                title,
+                coverImg: url,
+                authorNickname,
+                authorAvatar: url,
+                likeNume,
+                uploadTime	//较久的
+            },
+            ......
+            ......
+        }
+    }
+}
+    
+验证失败
+res.data = {
+    status: 401,
+    msg: 'Validation failed.',
+}
+
+token过期
+res.data = {
+    status: 401,
+    msg: 'Authentication expires.',
+}
+```
 
 
 
 获取游记详情内容
 
-[GET]	.../travelDiary/getNoteDetails
+[POST]	.../travelDiary/getNoteDetails
 
+```js
+req.data = {
+    loginKey: {
+        openid,
+        session_key,
+        auth: 'user',
+        token
+    },
+    noteId
+}
 
+res.data = {
+	newloginKey: {
+        openid,
+        session_key,
+        auth: 'user',
+        newtoken
+    },
+    content: {
+        noteTitle,
+        noteContent,
+        authorNickname,
+        viewNum,
+        likeNum,
+        collectNum,
+        lastModifyTime,
+        location,
+        resources: {
+            index01: {
+                mediaType,
+                url
+            },
+            index02: {
+                mediaType,
+                url
+            },
+            ......
+            ......
+        }
+    }
+}
+
+验证失败
+res.data = {
+    status: 401,
+    msg: 'Validation failed.',
+}
+
+token过期
+res.data = {
+    status: 401,
+    msg: 'Authentication expires.',
+}
+```
 
 
 
 获取游记评论区列表
 
-[GET]	.../travelDiary/getNoteComments
+[POST]	.../travelDiary/getNoteComments
 
 
 
