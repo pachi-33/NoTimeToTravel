@@ -938,6 +938,7 @@ res.data = {
         authorNickname,
         lastModifyTime,
         location,
+        status,
         resources: [
             index01: {
                 mediaType,
@@ -1005,14 +1006,13 @@ res.data = {
 
 
 
-按作者搜索游记获得列表
+获得游记完整列表
 
 [POST]	.../moderationPlatform/getNoteListBySearchAuthor
 
 ```js
 req.data = {
-    token,
-    authorNickname,
+    token
 }
 
 res.data = {
@@ -1025,6 +1025,7 @@ res.data = {
             coverImg: url,
             authorNickname,
             authorAvatar: url,
+        	status,
             uploadTime	//较新的
         },
     	note002: {
@@ -1033,6 +1034,7 @@ res.data = {
             coverImg: url,
             authorNickname,
             authorAvatar: url,
+            status,
             uploadTime	//较久的
     	},
         ......
@@ -1055,13 +1057,14 @@ res.data = {
 
 
 
-获取本审核员审核过的游记列表
+获取某审核员审核过的游记列表
 
 [POST]	.../moderationPlatform/getMyReviewNote
 
 ```js
 req.data = {
-    token
+    token,
+    reviewId
 }
 
 res.data = {
@@ -1074,6 +1077,7 @@ res.data = {
             coverImg: url,
             authorNickname,
             authorAvatar: url,
+        	status
             uploadTime	//较新的
         },
         note002: {
@@ -1082,6 +1086,7 @@ res.data = {
             coverImg: url,
             authorNickname,
             authorAvatar: url,
+            status,
             uploadTime	//较久的
         },
         ......
