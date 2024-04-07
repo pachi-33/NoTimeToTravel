@@ -6,14 +6,24 @@
 
 ## users   Table
 
-| column   | alias    | type                            | constraint                   |
-| -------- | -------- | ------------------------------- | ---------------------------- |
-| uid      | 用户编号 | INT                             | PK   NotNull   AutoIncrement |
-| username | 账号     | VARCHAR(255)                    | PK   NotNull                 |
-| password | 密码     | VARCHAR(255)                    | PK                           |
-| auth     | 权限     | ENUM('admin', 'user', 'review') | NotNull                      |
-| nickname | 昵称     | VARCHAR(255)                    | PK   default: `游客+uid`     |
-| avatar   | 头像     | VARCHAR(255)                    |                              |
+| column      | alias        | type         | constraint                   |
+| ----------- | ------------ | ------------ | ---------------------------- |
+| uid         | 用户编号     | INT          | PK   NotNull   AutoIncrement |
+| openid      | 用户唯一标识 | VARCHAR(255) | PK   NotNull                 |
+| session_key | 会话密钥     | VARCHAR(255) | NotNull                      |
+| nickname    | 昵称         | VARCHAR(255) | PK   default: `游客+uid`     |
+| avatar      | 头像         | VARCHAR(255) |                              |
+
+
+
+## reviewers   Table
+
+| column     | alias      | type                    | constraint                   |
+| ---------- | ---------- | ----------------------- | ---------------------------- |
+| reviewerId | 审核员编号 | INT                     | PK   NotNull   AutoIncrement |
+| username   | 账号       | VARCHAR(255)            | PK   NotNull                 |
+| password   | 密码       | VARCHAR(255)            | PK                           |
+| auth       | 权限       | ENUM('admin', 'review') | NotNull                      |
 
 
 
@@ -36,14 +46,14 @@
 
 ## review   Table
 
-| column     | alias           | type                                                 | constraint   |
-| ---------- | --------------- | ---------------------------------------------------- | ------------ |
-| reviewId   | 审核编号        | INT                                                  | PK   NotNull |
-| noteId     | 游记编号 noteId | INT                                                  | FK   NotNull |
-| reviewTime | 审核时间        | DATETIME                                             |              |
-| reviewerId | 审核员编号 uid  | INT                                                  | FK           |
-| status     | 审核状态        | ENUM('waiting', 'approved', 'disapproved', 'delete') | NotNull      |
-| comment    | 注释            | VARCHAR(255)                                         |              |
+| column     | alias           | type                                                 | constraint        |
+| ---------- | --------------- | ---------------------------------------------------- | ----------------- |
+| reviewId   | 审核编号        | INT                                                  | PK   FK   NotNull |
+| noteId     | 游记编号 noteId | INT                                                  | FK   NotNull      |
+| reviewTime | 审核时间        | DATETIME                                             |                   |
+| reviewerId | 审核员编号 uid  | INT                                                  | FK                |
+| status     | 审核状态        | ENUM('waiting', 'approved', 'disapproved', 'delete') | NotNull           |
+| comment    | 注释            | VARCHAR(255)                                         |                   |
 
 
 
@@ -55,7 +65,6 @@
 | index     | 序号     | INT                  | NotNull                           |
 | mediaType | 媒体类型 | ENUM('img', 'video') | NotNull                           |
 | url       | 路径     | VARCHAR(255)         | NotNull                           |
-|           |          |                      |                                   |
 
 
 
@@ -106,12 +115,7 @@ req.data = {
 res.data = {
     status: 200,
     msg: 'Login success.',
-    loginKey: {
-        openid,
-        session_key,
-        auth: 'user',
-        token
-    } 
+    token
 }
 
 ```
@@ -124,25 +128,13 @@ res.data = {
 
 ```js
 req.data = {
-    loginKey: {
-        openid,
-        session_key,
-        auth: 'user',
-        token
-    } 
+    token 
 }
 
 获取成功
 res.data = {
     status: 200,
-    newloginKey: {
-        openid,
-        session_key,
-        auth: 'user',
-        newToken
-    },
-    uid,
-    auth,
+    freshToken,
     nickname,
     avatarUrl,
     msg: 'Get user info success.',
@@ -169,24 +161,14 @@ res.data = {
 
 ```js
 req.data = {
-    loginKey: {
-        openid,
-        session_key,
-        auth: 'user',
-        token
-    },
+    token,
     img: 'base64...'
 }
 
 上传成功
 res.data = {
     status: 200,
-    newloginKey: {
-        openid,
-        session_key,
-        auth: 'user',
-        newToken
-    },
+    freshToken,
     avatarUrl
 }
 
@@ -217,24 +199,14 @@ res.data = {
 
 ```js
 req.data = {
-    loginKey: {
-        openid,
-        session_key,
-        auth: 'user',
-        token
-    },
+    token,
     nickName
 }
 
 修改成功
 res.data = {
     status: 200,
-    newloginKey: {
-        openid,
-        session_key,
-        auth: 'user',
-        newToken
-    },
+    freshToken,
     nickName
 }
 
@@ -265,24 +237,14 @@ res.data = {
 
 ```js
 req.data = {
-    loginKey: {
-        openid,
-        session_key,
-        auth: 'user',
-        token
-    },
+    token,
     beforeWhen: 'YYYY-MM-DD HH:mm:ss', //获取该时间之前上传的游记，设置为当前时间即最新游记
     listLength: 100
 }
 
 res.data = {
     status: 200,
-    newloginKey: {
-        openid,
-        session_key,
-        auth: 'user',
-        newToken
-    },
+    freshToken,
     noteList: [
         note001: {
             noteId,
@@ -328,25 +290,15 @@ res.data = {
 
 ```js
 req.data = {
-    loginKey: {
-        openid,
-        session_key,
-        auth: 'user',
-        token
-    },
+    token,
     beforeWhen: 'YYYY-MM-DD HH:mm:ss', //获取该时间之前上传的游记，设置为当前时间即最新游记
-    keyWord,
+    keyWords,
     listLength: 100
 }
 
 res.data = {
     status: 200,
-    newloginKey: {
-        openid,
-        session_key,
-        auth: 'user',
-        newToken
-    },
+    freshToken,
     noteList: [
         note001: {
             noteId,
@@ -392,12 +344,7 @@ res.data = {
 
 ```js
 req.data = {
-    loginKey: {
-        openid,
-        session_key,
-        auth: 'user',
-        token
-    },
+    token,
     beforeWhen: 'YYYY-MM-DD HH:mm:ss', //获取该时间之前上传的游记，设置为当前时间即最新游记
     authorNickname,
     listLength: 100
@@ -405,12 +352,7 @@ req.data = {
 
 res.data = {
     status: 200,
-    newloginKey: {
-        openid,
-        session_key,
-        auth: 'user',
-        newToken
-    },
+    freshToken,
     noteList: [
         note001: {
             noteId,
@@ -450,30 +392,21 @@ res.data = {
 
 
 
-获取游记详情内容
+获取游记详情内容 同时浏览量加一
 
 [POST]	.../travelDiary/getNoteDetails
 
 ```js
 req.data = {
-    loginKey: {
-        openid,
-        session_key,
-        auth: 'user',
-        token
-    },
+    token,
     noteId
 }
 
 res.data = {
     status: 200,
-	newloginKey: {
-        openid,
-        session_key,
-        auth: 'user',
-        newtoken
-    },
+	freshToken,
     content: {
+        noteId
         noteTitle,
         noteContent,
         authorNickname,
@@ -518,12 +451,7 @@ res.data = {
 
 ```js
 req.data = {
-    loginKey: {
-        openid,
-        session_key,
-        auth: 'user',
-        token
-    },
+    token,
     noteId
 }
 
@@ -568,39 +496,13 @@ res.data = {
 
 ```js
 req.data = {
-	loginKey: {
-        openid,
-        session_key,
-        auth: 'user',
-        token
-    },
+	token,
     noteId
 }
 
 res.data = {
-    status: 200
-}
-```
-
-
-
-留下浏览记录
-
-[POST]	.../travelDiary/viewNote
-
-```js
-req.data = {
-	loginKey: {
-        openid,
-        session_key,
-        auth: 'user',
-        token
-    },
-    noteId
-}
-
-res.data = {
-    status: 200
+    status: 200,
+    freshToken
 }
 ```
 
@@ -612,17 +514,25 @@ res.data = {
 
 ```js
 req.data = {
-	loginKey: {
-        openid,
-        session_key,
-        auth: 'user',
-        token
-    },
+	token,
     noteId
 }
 
 res.data = {
-    status: 200
+    status: 200,
+    freshToken
+}
+
+验证失败
+res.data = {
+    status: 401,
+    msg: 'Validation failed.',
+}
+
+token过期
+res.data = {
+    status: 401,
+    msg: 'Authentication expires.',
 }
 ```
 
@@ -634,25 +544,14 @@ res.data = {
 
 ```js
 req.data = {
-	loginKey: {
-        openid,
-        session_key,
-        auth: 'user',
-        token
-    },
+	token,
     noteId,
-    commentorId,
     commentContent
 }
 
 res.data = {
     status:200,
-    newloginKey: {
-        openid,
-        session_key,
-        auth: 'user',
-        newToken
-    },
+    freshToken,
     reflectMyComment: {
         commentId,
         commentorNickname,
@@ -660,6 +559,18 @@ res.data = {
         commentTime: 'YYYY-MM-DD HH:mm:ss',
         content
     }
+}
+
+验证失败
+res.data = {
+    status: 401,
+    msg: 'Validation failed.',
+}
+
+token过期
+res.data = {
+    status: 401,
+    msg: 'Authentication expires.',
 }
 ```
 
@@ -670,20 +581,33 @@ res.data = {
 [POST]	.../travelDiary/uploadFile
 
 ```js
-用 wx.uploadFile 
+//用 wx.uploadFile 
  wx.uploadFile({
-      url: 'https://example.weixin.qq.com/upload', //仅为示例，非真实的接口地址
+      url: '.../travelDiary/uploadFile', //仅为示例，非真实的接口地址
       filePath: tempFilePath,
       name: 'file',
       formData: {
         'mediaType': 'img' or 'video'
-      }
+      },
+     callback()
     })
 
 res.data = {
     status: 200,
     url,
     mediaType
+}
+
+验证失败
+res.data = {
+    status: 401,
+    msg: 'Validation failed.',
+}
+
+token过期
+res.data = {
+    status: 401,
+    msg: 'Authentication expires.',
 }
 
 ```
@@ -694,18 +618,12 @@ res.data = {
 
 [POST]	.../travelDiary/uploadNote
 
-```
+```js
 req.data = {
-	loginKey: {
-        openid,
-        session_key,
-        auth: 'user',
-        token
-    },
+	token,
     content: {
         noteTitle,
         noteContent,
-        authorUid,
         location,
         resources: [
             index01: {
@@ -720,7 +638,46 @@ req.data = {
             ......
         ]
     }
-    
+}
+
+res.data = {
+	status: 200,
+    freshToken,
+	reflectMyNote: {
+	    noteId
+        noteTitle,
+        noteContent,
+        authorNickname,
+        viewNum,
+        likeNum,
+        collectNum,
+        lastModifyTime,
+        location,
+        resources: [
+            index01: {
+                mediaType,
+                url
+            },
+            index02: {
+                mediaType,
+                url
+            },
+            ......
+            ......
+        ]
+	}
+}
+
+验证失败
+res.data = {
+    status: 401,
+    msg: 'Validation failed.',
+}
+
+token过期
+res.data = {
+    status: 401,
+    msg: 'Authentication expires.',
 }
 ```
 
@@ -732,22 +689,12 @@ req.data = {
 
 ```js
 req.data = {
-	loginKey: {
-        openid,
-        session_key,
-        auth: 'user',
-        token
-    }
+	token
 }
 
 res.data = {
     status: 200,
-    newloginKey: {
-        openid,
-        session_key,
-        auth: 'user',
-        newToken
-    },
+    freshToken,
     noteList: [
         //按照收藏顺序
         note001: {
@@ -772,6 +719,18 @@ res.data = {
         ......
     ]
 }
+
+验证失败
+res.data = {
+    status: 401,
+    msg: 'Validation failed.',
+}
+
+token过期
+res.data = {
+    status: 401,
+    msg: 'Authentication expires.',
+}
 ```
 
 
@@ -782,22 +741,12 @@ res.data = {
 
 ```js
 req.data = {
-	loginKey: {
-        openid,
-        session_key,
-        auth: 'user',
-        token
-    }
+	token
 }
 
 res.data = {
     status: 200,
-    newloginKey: {
-        openid,
-        session_key,
-        auth: 'user',
-        newToken
-    },
+    freshToken,
     noteList: [
         note001: {
             noteId,
@@ -825,6 +774,18 @@ res.data = {
         ......
    ]
 }
+
+验证失败
+res.data = {
+    status: 401,
+    msg: 'Validation failed.',
+}
+
+token过期
+res.data = {
+    status: 401,
+    msg: 'Authentication expires.',
+}
 ```
 
 
@@ -843,39 +804,116 @@ req.data = {
 
 res.data = {
     status: 200,
-    loginKey: {
-        username,
-        auth,
-        token
-    }
+    token,
+    reviewerId
+}
+
+用户密码错误
+res.data = {
+    status: 401,
+    msg: 'Login failed.',
 }
 ```
 
 
 
-获取用户信息
+获取审核员列表
 
-[POST]	.../moderationPlatform/getUserInfo
+[POST]	.../moderationPlatform/getReviewerList
 
 ```js
 req.data = {
-    loginKey: {
-        username,
-        auth,
-        token
-    }
+    token
 }
 
 res.data = {
     status: 200,
-    newloginKey: {
-        username,
-        auth,
-        newToken
-    },
-    uid,
-    nickname,
-    avatar: url
+    freshToken,
+    reviewerList: [
+        index01: {
+        	reviewerId,
+        	username
+        },
+    	index02: {
+        	reviewerId,
+            username
+        },
+        ......
+        ......
+    ]
+}
+
+验证失败
+res.data = {
+    status: 401,
+    msg: 'Validation failed.',
+}
+
+token过期
+res.data = {
+    status: 401,
+    msg: 'Authentication expires.',
+}
+```
+
+
+
+删除审核员
+
+[POST]	.../moderationPlatform/deleteReviewer
+
+```js
+req.data = {
+    token,
+    reviewerId
+}
+
+res.data = {
+    freshToken,
+    status: 200
+}
+
+验证失败
+res.data = {
+    status: 401,
+    msg: 'Validation failed.',
+}
+
+token过期
+res.data = {
+    status: 401,
+    msg: 'Authentication expires.',
+}
+```
+
+
+
+增加审核员
+
+[POST]	.../moderationPlatform/registerReviewer
+
+```js
+req.data = {
+    token,
+    username,
+    password
+}
+
+res.data = {
+    freshToken,
+    status: 200
+}
+
+验证失败
+res.data = {
+    status: 401,
+    msg: 'Validation failed.',
+}
+
+token过期
+res.data = {
+    status: 401,
+    msg: 'Authentication expires.',
 }
 ```
 
@@ -887,20 +925,13 @@ res.data = {
 
 ```js
 req.data = {
-    loginKey: {
-        username,
-        auth,
-        token
-    },
+    token,
     noteId
 }
 
 res.data = {
-    newloginKey: {
-        username,
-        auth,
-        newToken
-    },
+    status: 200,
+    freshToken,
     content: {
         noteTitle,
         noteContent,
@@ -921,109 +952,54 @@ res.data = {
         ]
     }
 }
+
+验证失败
+res.data = {
+    status: 401,
+    msg: 'Validation failed.',
+}
+
+token过期
+res.data = {
+    status: 401,
+    msg: 'Authentication expires.',
+}
 ```
 
 
 
-通过
+审核操作
 
 [POST]	.../moderationPlatform/approveNote
 
 ```js
 req.data = {
-    loginKey: {
-        username,
-        auth,
-        token
-    },
-    noteId
+    token,
+    noteId，
+    action: 'approve' or 'disapprove' or 'delete' or 'restore'//退回到waiting
 }
 
 res.data = {
-    newloginKey: {
-        username,
-        auth,
-        newToken
-    },
+    freshToken,
     status: 200
 }
-```
 
-
-
-不通过
-
-[POST]	.../moderationPlatform/disapproveNote
-
-```js
-req.data = {
-    loginKey: {
-        username,
-        auth,
-        token
-    },
-    noteId
-}
-
+操作有误
 res.data = {
-    newloginKey: {
-        username,
-        auth,
-        newToken
-    },
-    status: 200
-}
-```
-
-
-
-删除
-
-[POST]	.../moderationPlatform/deleteNote
-
-```js
-req.data = {
-    loginKey: {
-        username,
-        auth,
-        token
-    },
-    noteId
+    status: 401,
+    msg: 'Illegal process',
 }
 
+验证失败
 res.data = {
-    newloginKey: {
-        username,
-        auth,
-        newToken
-    },
-    status: 200
-}
-```
-
-
-
-撤回到待审核
-
-[POST]	.../moderationPlatform/restoreNote
-
-```js
-req.data = {
-    loginKey: {
-        username,
-        auth,
-        token
-    },
-    noteId
+    status: 401,
+    msg: 'Validation failed.',
 }
 
+token过期
 res.data = {
-    newloginKey: {
-        username,
-        auth,
-        newToken
-    },
-    status: 200
+    status: 401,
+    msg: 'Authentication expires.',
 }
 ```
 
@@ -1035,24 +1011,13 @@ res.data = {
 
 ```js
 req.data = {
-    loginKey: {
-        username
-        auth,
-        token
-    },
+    token,
     authorNickname,
-    beforeWhen: 'YYYY-MM-DD HH:mm:ss', //获取该时间之前上传的游记，设置为当前时间即最新游记
-    listLength: 100
 }
 
 res.data = {
     status: 200,
-    newloginKey: {
-        openid,
-        session_key,
-        auth
-        newToken
-    },
+    freshToken,
     noteList: [
         note001: {
             noteId,
@@ -1096,23 +1061,12 @@ res.data = {
 
 ```js
 req.data = {
-    loginKey: {
-        username
-        auth,
-        token
-    },
-    beforeWhen: 'YYYY-MM-DD HH:mm:ss', //获取该时间之前上传的游记，设置为当前时间即最新游记
-    listLength: 100
+    token
 }
 
 res.data = {
     status: 200,
-    newloginKey: {
-        openid,
-        session_key,
-        auth
-        newToken
-    },
+    freshToken,
     noteList: [
         note001: {
             noteId,
