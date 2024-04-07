@@ -71,6 +71,14 @@
 
 
 
+## collect   Table
+
+| column      | alias      | type     | constraint   |
+| ----------- | ---------- | -------- | ------------ |
+| uid         | 收藏者     | INT      | PK   NotNull |
+| noteId      | 收藏的游记 | INT      | PK   NotNull |
+| collectTime | 收藏时间   | DATETIME | NotNull      |
+
 
 
 # Interface conventions
@@ -329,6 +337,7 @@ req.data = {
         auth: 'user',
         token
     },
+    beforeWhen: 'YYYY-MM-DD HH:mm:ss', //获取该时间之前上传的游记，设置为当前时间即最新游记
     keyWord,
     listLength: 100
 }
@@ -395,6 +404,7 @@ req.data = {
         auth: 'user',
         token
     },
+    beforeWhen: 'YYYY-MM-DD HH:mm:ss', //获取该时间之前上传的游记，设置为当前时间即最新游记
     authorNickname,
     listLength: 100
 }
@@ -465,6 +475,7 @@ req.data = {
 }
 
 res.data = {
+    status: 200,
 	newloginKey: {
         openid,
         session_key,
@@ -526,6 +537,7 @@ req.data = {
 }
 
 res.data = {
+    status: 200,
     listLength,
     comments: {
         index0001: {
@@ -574,6 +586,10 @@ req.data = {
     },
     noteId
 }
+
+res.data = {
+    status: 200
+}
 ```
 
 
@@ -592,6 +608,10 @@ req.data = {
     },
     noteId
 }
+
+res.data = {
+    status: 200
+}
 ```
 
 
@@ -609,6 +629,10 @@ req.data = {
         token
     },
     noteId
+}
+
+res.data = {
+    status: 200
 }
 ```
 
@@ -632,6 +656,7 @@ req.data = {
 }
 
 res.data = {
+    status:200,
     newloginKey: {
         openid,
         session_key,
@@ -642,10 +667,35 @@ res.data = {
         commentId,
         commentorNickname,
         commentorAvatar: url,
-        commentTime: 'YYYY:MM:DD:HH:mm',
+        commentTime: 'YYYY-MM-DD HH:mm:ss',
         content
     }
 }
+```
+
+
+
+上传文件
+
+[POST]	.../travelDiary/uploadFile
+
+```js
+用 wx.uploadFile 
+ wx.uploadFile({
+      url: 'https://example.weixin.qq.com/upload', //仅为示例，非真实的接口地址
+      filePath: tempFilePath,
+      name: 'file',
+      formData: {
+        'mediaType': 'img' or 'video'
+      }
+    })
+
+res.data = {
+    status: 200,
+    url,
+    mediaType
+}
+
 ```
 
 
@@ -654,7 +704,36 @@ res.data = {
 
 [POST]	.../travelDiary/uploadNote
 
-
+```
+req.data = {
+	loginKey: {
+        openid,
+        session_key,
+        auth: 'user',
+        token
+    },
+    content: {
+        noteTitle,
+        noteContent,
+        authorUid,
+        location,
+        mediaLength: xxx,
+        resources: {
+            index01: {
+                mediaType,
+                url
+            },
+            index02: {
+                mediaType,
+                url
+            },
+            ......
+            ......
+        }
+    }
+    
+}
+```
 
 
 
@@ -675,6 +754,7 @@ req.data = {
 }
 
 res.data = {
+    status: 200,
     newloginKey: {
         openid,
         session_key,
@@ -727,6 +807,7 @@ req.data = {
 }
 
 res.data = {
+    status: 200,
     newloginKey: {
         openid,
         session_key,
@@ -773,15 +854,93 @@ res.data = {
 
 [POST]	.../moderationPlatform/login
 
+```js
+req.data = {
+    username,
+    password
+}
 
+res.data = {
+    status: 200,
+    loginKey: {
+        username,
+        auth,
+        token
+    }
+}
+```
+
+
+
+获取用户信息
+
+[POST]	.../moderationPlatform/getUserInfo
+
+```js
+req.data = {
+    loginKey: {
+        username,
+        auth,
+        token
+    }
+}
+
+res.data = {
+    status: 200,
+    newloginKey: {
+        username,
+        auth,
+        newToken
+    },
+    uid,
+    nickname,
+    avatar: url
+}
+```
 
 
 
 获取游记信息
 
-[GET]	.../moderationPlatform/getNoteInfo
+[POST]	.../moderationPlatform/getNoteInfo
 
+```js
+req.data = {
+    loginKey: {
+        username,
+        auth,
+        token
+    },
+    noteId
+}
 
+res.data = {
+    newloginKey: {
+        username,
+        auth,
+        newToken
+    },
+    content: {
+        noteTitle,
+        noteContent,
+        authorNickname,
+        lastModifyTime,
+        location,
+        resources: {
+            index01: {
+                mediaType,
+                url
+            },
+            index02: {
+                mediaType,
+                url
+            },
+            ......
+            ......
+        }
+    }
+}
+```
 
 
 
@@ -789,15 +948,25 @@ res.data = {
 
 [POST]	.../moderationPlatform/approveNote
 
+```js
+req.data = {
+    loginKey: {
+        username,
+        auth,
+        token
+    },
+    noteId
+}
 
-
-
-
-通过
-
-[POST]	.../moderationPlatform/approveNote
-
-
+res.data = {
+    newloginKey: {
+        username,
+        auth,
+        newToken
+    },
+    status: 200
+}
+```
 
 
 
@@ -805,7 +974,25 @@ res.data = {
 
 [POST]	.../moderationPlatform/disapproveNote
 
+```js
+req.data = {
+    loginKey: {
+        username,
+        auth,
+        token
+    },
+    noteId
+}
 
+res.data = {
+    newloginKey: {
+        username,
+        auth,
+        newToken
+    },
+    status: 200
+}
+```
 
 
 
@@ -813,7 +1000,25 @@ res.data = {
 
 [POST]	.../moderationPlatform/deleteNote
 
+```js
+req.data = {
+    loginKey: {
+        username,
+        auth,
+        token
+    },
+    noteId
+}
 
+res.data = {
+    newloginKey: {
+        username,
+        auth,
+        newToken
+    },
+    status: 200
+}
+```
 
 
 
@@ -821,65 +1026,468 @@ res.data = {
 
 [POST]	.../moderationPlatform/restoreNote
 
+```js
+req.data = {
+    loginKey: {
+        username,
+        auth,
+        token
+    },
+    noteId
+}
 
-
-
+res.data = {
+    newloginKey: {
+        username,
+        auth,
+        newToken
+    },
+    status: 200
+}
+```
 
 
 
 按标题搜索游记获得列表
 
-[GET]	.../moderationPlatform/getNoteListBySearchTitle
+[POST]	.../moderationPlatform/getNoteListBySearchTitle
 
+```js
+req.data = {
+    loginKey: {
+        username
+        auth,
+        token
+    },
+    keyWord,
+    beforeWhen: 'YYYY-MM-DD HH:mm:ss', //获取该时间之前上传的游记，设置为当前时间即最新游记
+    listLength: 100
+}
 
+res.data = {
+    status: 200,
+    newloginKey: {
+        openid,
+        session_key,
+        auth
+        newToken
+    },
+    noteList: {
+        listLength: xx,
+        content: {
+            note001: {
+                noteId,
+                title,
+                coverImg: url,
+                authorNickname,
+                authorAvatar: url,
+                uploadTime	//较新的
+            },
+            note002: {
+                noteId,
+                title,
+                coverImg: url,
+                authorNickname,
+                authorAvatar: url,
+                uploadTime	//较久的
+            },
+            ......
+            ......
+        }
+    }
+}
+    
+验证失败
+res.data = {
+    status: 401,
+    msg: 'Validation failed.',
+}
+
+token过期
+res.data = {
+    status: 401,
+    msg: 'Authentication expires.',
+}
+```
 
 
 
 按作者搜索游记获得列表
 
-[GET]	.../moderationPlatform/getNoteListBySearchAuthor
+[POST]	.../moderationPlatform/getNoteListBySearchAuthor
 
+```js
+req.data = {
+    loginKey: {
+        username
+        auth,
+        token
+    },
+    authorNickname,
+    beforeWhen: 'YYYY-MM-DD HH:mm:ss', //获取该时间之前上传的游记，设置为当前时间即最新游记
+    listLength: 100
+}
 
+res.data = {
+    status: 200,
+    newloginKey: {
+        openid,
+        session_key,
+        auth
+        newToken
+    },
+    noteList: {
+        listLength: xx,
+        content: {
+            note001: {
+                noteId,
+                title,
+                coverImg: url,
+                authorNickname,
+                authorAvatar: url,
+                uploadTime	//较新的
+            },
+            note002: {
+                noteId,
+                title,
+                coverImg: url,
+                authorNickname,
+                authorAvatar: url,
+                uploadTime	//较久的
+            },
+            ......
+            ......
+        }
+    }
+}
+    
+验证失败
+res.data = {
+    status: 401,
+    msg: 'Validation failed.',
+}
+
+token过期
+res.data = {
+    status: 401,
+    msg: 'Authentication expires.',
+}
+```
 
 
 
 获取待审核游记列表
 
-[GET]	.../moderationPlatform/getWaitingNoteList
+[POST]	.../moderationPlatform/getWaitingNoteList
 
+```js
+req.data = {
+    loginKey: {
+        username
+        auth,
+        token
+    },
+    beforeWhen: 'YYYY-MM-DD HH:mm:ss', //获取该时间之前上传的游记，设置为当前时间即最新游记
+    listLength: 100
+}
 
+res.data = {
+    status: 200,
+    newloginKey: {
+        openid,
+        session_key,
+        auth
+        newToken
+    },
+    noteList: {
+        listLength: xx,
+        content: {
+            note001: {
+                noteId,
+                title,
+                coverImg: url,
+                authorNickname,
+                authorAvatar: url,
+                uploadTime	//较新的
+            },
+            note002: {
+                noteId,
+                title,
+                coverImg: url,
+                authorNickname,
+                authorAvatar: url,
+                uploadTime	//较久的
+            },
+            ......
+            ......
+        }
+    }
+}
+    
+验证失败
+res.data = {
+    status: 401,
+    msg: 'Validation failed.',
+}
+
+token过期
+res.data = {
+    status: 401,
+    msg: 'Authentication expires.',
+}
+```
 
 
 
 获取已通过游记列表
 
-[GET]	.../moderationPlatform/getApprovedNoteList
+[POST]	.../moderationPlatform/getApprovedNoteList
 
+```js
+req.data = {
+    loginKey: {
+        username
+        auth,
+        token
+    },
+    beforeWhen: 'YYYY-MM-DD HH:mm:ss', //获取该时间之前上传的游记，设置为当前时间即最新游记
+    listLength: 100
+}
 
+res.data = {
+    status: 200,
+    newloginKey: {
+        openid,
+        session_key,
+        auth
+        newToken
+    },
+    noteList: {
+        listLength: xx,
+        content: {
+            note001: {
+                noteId,
+                title,
+                coverImg: url,
+                authorNickname,
+                authorAvatar: url,
+                uploadTime	//较新的
+            },
+            note002: {
+                noteId,
+                title,
+                coverImg: url,
+                authorNickname,
+                authorAvatar: url,
+                uploadTime	//较久的
+            },
+            ......
+            ......
+        }
+    }
+}
+    
+验证失败
+res.data = {
+    status: 401,
+    msg: 'Validation failed.',
+}
+
+token过期
+res.data = {
+    status: 401,
+    msg: 'Authentication expires.',
+}
+```
 
 
 
 获取不通过游记列表
 
-[GET]	.../moderationPlatform/getDisapprovedNoteList
+[POST]	.../moderationPlatform/getDisapprovedNoteList
 
+```js
+req.data = {
+    loginKey: {
+        username
+        auth,
+        token
+    },
+    beforeWhen: 'YYYY-MM-DD HH:mm:ss', //获取该时间之前上传的游记，设置为当前时间即最新游记
+    listLength: 100
+}
 
+res.data = {
+    status: 200,
+    newloginKey: {
+        openid,
+        session_key,
+        auth
+        newToken
+    },
+    noteList: {
+        listLength: xx,
+        content: {
+            note001: {
+                noteId,
+                title,
+                coverImg: url,
+                authorNickname,
+                authorAvatar: url,
+                uploadTime	//较新的
+            },
+            note002: {
+                noteId,
+                title,
+                coverImg: url,
+                authorNickname,
+                authorAvatar: url,
+                uploadTime	//较久的
+            },
+            ......
+            ......
+        }
+    }
+}
+    
+验证失败
+res.data = {
+    status: 401,
+    msg: 'Validation failed.',
+}
+
+token过期
+res.data = {
+    status: 401,
+    msg: 'Authentication expires.',
+}
+```
 
 
 
 获取已删除游记列表
 
-[GET]	.../moderationPlatform/getDeleteNoteList
+[POST]	.../moderationPlatform/getDeleteNoteList
 
+```js
+req.data = {
+    loginKey: {
+        username
+        auth,
+        token
+    },
+    beforeWhen: 'YYYY-MM-DD HH:mm:ss', //获取该时间之前上传的游记，设置为当前时间即最新游记
+    listLength: 100
+}
 
+res.data = {
+    status: 200,
+    newloginKey: {
+        openid,
+        session_key,
+        auth
+        newToken
+    },
+    noteList: {
+        listLength: xx,
+        content: {
+            note001: {
+                noteId,
+                title,
+                coverImg: url,
+                authorNickname,
+                authorAvatar: url,
+                uploadTime	//较新的
+            },
+            note002: {
+                noteId,
+                title,
+                coverImg: url,
+                authorNickname,
+                authorAvatar: url,
+                uploadTime	//较久的
+            },
+            ......
+            ......
+        }
+    }
+}
+    
+验证失败
+res.data = {
+    status: 401,
+    msg: 'Validation failed.',
+}
+
+token过期
+res.data = {
+    status: 401,
+    msg: 'Authentication expires.',
+}
+```
 
 
 
 获取本审核员审核过的游记列表
 
-[GET]	.../moderationPlatform/getMyReviewNote
+[POST]	.../moderationPlatform/getMyReviewNote
 
+```js
+req.data = {
+    loginKey: {
+        username
+        auth,
+        token
+    },
+    beforeWhen: 'YYYY-MM-DD HH:mm:ss', //获取该时间之前上传的游记，设置为当前时间即最新游记
+    listLength: 100
+}
 
+res.data = {
+    status: 200,
+    newloginKey: {
+        openid,
+        session_key,
+        auth
+        newToken
+    },
+    noteList: {
+        listLength: xx,
+        content: {
+            note001: {
+                noteId,
+                title,
+                coverImg: url,
+                authorNickname,
+                authorAvatar: url,
+                uploadTime	//较新的
+            },
+            note002: {
+                noteId,
+                title,
+                coverImg: url,
+                authorNickname,
+                authorAvatar: url,
+                uploadTime	//较久的
+            },
+            ......
+            ......
+        }
+    }
+}
+    
+验证失败
+res.data = {
+    status: 401,
+    msg: 'Validation failed.',
+}
+
+token过期
+res.data = {
+    status: 401,
+    msg: 'Authentication expires.',
+}
+```
 
 
 
