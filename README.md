@@ -132,7 +132,8 @@ res.data = {
         session_key,
         auth: 'user',
         newToken
-    } 
+    },
+    uid,
     auth,
     nickname,
     avatarUrl,
@@ -275,7 +276,7 @@ res.data = {
         newToken
     },
     noteList: {
-        length: xx,
+        listLength: xx,
         content: {
             note001: {
                 noteId,
@@ -341,7 +342,7 @@ res.data = {
         newToken
     },
     noteList: {
-        length: xx,
+        listLength: xx,
         content: {
             note001: {
                 noteId,
@@ -407,7 +408,7 @@ res.data = {
         newToken
     },
     noteList: {
-        length: xx,
+        listLength: xx,
         content: {
             note001: {
                 noteId,
@@ -513,7 +514,49 @@ res.data = {
 
 [POST]	.../travelDiary/getNoteComments
 
+```js
+req.data = {
+    loginKey: {
+        openid,
+        session_key,
+        auth: 'user',
+        token
+    },
+    noteId
+}
 
+res.data = {
+    listLength,
+    comments: {
+        index0001: {
+            commentId,
+            commentBy: nickname,
+            commentContent,
+            commentTime	//较新的
+        },
+        index0002: {
+            commentId,
+            commentBy: nickname,
+            commentContent,
+            commentTime	//较久的
+        },
+        ......
+        ......
+    }
+}
+
+验证失败
+res.data = {
+    status: 401,
+    msg: 'Validation failed.',
+}
+
+token过期
+res.data = {
+    status: 401,
+    msg: 'Authentication expires.',
+}
+```
 
 
 
@@ -521,7 +564,17 @@ res.data = {
 
 [POST]	.../travelDiary/likeNote
 
-
+```js
+req.data = {
+	loginKey: {
+        openid,
+        session_key,
+        auth: 'user',
+        token
+    },
+    noteId
+}
+```
 
 
 
@@ -529,7 +582,17 @@ res.data = {
 
 [POST]	.../travelDiary/viewNote
 
-
+```js
+req.data = {
+	loginKey: {
+        openid,
+        session_key,
+        auth: 'user',
+        token
+    },
+    noteId
+}
+```
 
 
 
@@ -537,7 +600,17 @@ res.data = {
 
 [POST]	.../travelDiary/collectNote
 
-
+```js
+req.data = {
+	loginKey: {
+        openid,
+        session_key,
+        auth: 'user',
+        token
+    },
+    noteId
+}
+```
 
 
 
@@ -545,7 +618,35 @@ res.data = {
 
 [POST]	.../travelDiary/makeComment
 
+```js
+req.data = {
+	loginKey: {
+        openid,
+        session_key,
+        auth: 'user',
+        token
+    },
+    noteId,
+    commentorId,
+    commentContent
+}
 
+res.data = {
+    newloginKey: {
+        openid,
+        session_key,
+        auth: 'user',
+        newToken
+    },
+    reflectMyComment: {
+        commentId,
+        commentorNickname,
+        commentorAvatar: url,
+        commentTime: 'YYYY:MM:DD:HH:mm',
+        content
+    }
+}
+```
 
 
 
@@ -557,15 +658,112 @@ res.data = {
 
 
 
+
+
+获得收藏的游记列表
+
+[POST]	.../travelDiary/getMyCollect
+
+```js
+req.data = {
+	loginKey: {
+        openid,
+        session_key,
+        auth: 'user',
+        token
+    }
+}
+
+res.data = {
+    newloginKey: {
+        openid,
+        session_key,
+        auth: 'user',
+        newToken
+    },
+    noteList: {
+        listLength: xxx,
+        content: {
+            //按照收藏顺序
+            note001: {
+                noteId,
+                title,
+                coverImg: url,
+                authorNickname,
+                authorAvatar: url,
+                likeNume,
+                uploadTime
+            },
+            note002: {
+                noteId,
+                title,
+                coverImg: url,
+                authorNickname,
+                authorAvatar: url,
+                likeNume,
+                uploadTime
+            },
+            ......
+            ......
+        }
+    }
+}
+```
+
+
+
 获得我的游记列表
 
-[GET]	.../travelDiary/getMyNoteListWithStatus
+[POST]	.../travelDiary/getMyNoteListWithStatus
 
+```js
+req.data = {
+	loginKey: {
+        openid,
+        session_key,
+        auth: 'user',
+        token
+    }
+}
 
-
-
-
-
+res.data = {
+    newloginKey: {
+        openid,
+        session_key,
+        auth: 'user',
+        newToken
+    },
+    noteList: {
+        listLength: xxx,
+        content: {
+            note001: {
+                noteId,
+                title,
+                coverImg: url,
+                authorNickname,
+                authorAvatar: url,
+                likeNume,
+                status,
+                reviewComment,
+                uploadTime //较新的
+            },
+            note002: {
+                noteId,
+                title,
+                coverImg: url,
+                authorNickname,
+                authorAvatar: url,
+                likeNume,
+                status,
+                reviewComment,
+                uploadTime //较久的
+            },
+            ......
+            ......
+        }
+    }
+}
+```
 
 
 
