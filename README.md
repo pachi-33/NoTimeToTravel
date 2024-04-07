@@ -283,31 +283,28 @@ res.data = {
         auth: 'user',
         newToken
     },
-    noteList: {
-        listLength: xx,
-        content: {
-            note001: {
-                noteId,
-                title,
-                coverImg: url,
-                authorNickname,
-                authorAvatar: url,
-                likeNume,
-                uploadTime	//较新的
-            },
-            note002: {
-                noteId,
-                title,
-                coverImg: url,
-                authorNickname,
-                authorAvatar: url,
-                likeNume,
-                uploadTime	//较久的
-            },
-            ......
-            ......
-        }
-    }
+    noteList: [
+        note001: {
+            noteId,
+            title,
+            coverImg: url,
+            authorNickname,
+            authorAvatar: url,
+            likeNume,
+            uploadTime	//较新的
+        },
+    	note002: {
+        	noteId,
+            title,
+            coverImg: url,
+            authorNickname,
+            authorAvatar: url,
+            likeNume,
+            uploadTime	//较久的
+   	 	},
+        ......
+        ......
+    ]
 }
     
 验证失败
@@ -350,31 +347,28 @@ res.data = {
         auth: 'user',
         newToken
     },
-    noteList: {
-        listLength: xx,
-        content: {
-            note001: {
-                noteId,
-                title,
-                coverImg: url,
-                authorNickname,
-                authorAvatar: url,
-                likeNume,
-                uploadTime	//较新的
-            },
-            note002: {
-                noteId,
-                title,
-                coverImg: url,
-                authorNickname,
-                authorAvatar: url,
-                likeNume,
-                uploadTime	//较久的
-            },
-            ......
-            ......
-        }
-    }
+    noteList: [
+        note001: {
+            noteId,
+            title,
+            coverImg: url,
+            authorNickname,
+            authorAvatar: url,
+            likeNume,
+            uploadTime	//较新的
+        },
+    	note002: {
+        	noteId,
+            title,
+            coverImg: url,
+            authorNickname,
+            authorAvatar: url,
+            likeNume,
+            uploadTime	//较久的
+    	},
+        ......
+        ......
+    ]
 }
     
 验证失败
@@ -417,31 +411,28 @@ res.data = {
         auth: 'user',
         newToken
     },
-    noteList: {
-        listLength: xx,
-        content: {
-            note001: {
-                noteId,
-                title,
-                coverImg: url,
-                authorNickname,
-                authorAvatar: url,
-                likeNume,
-                uploadTime	//较新的
-            },
-            note002: {
-                noteId,
-                title,
-                coverImg: url,
-                authorNickname,
-                authorAvatar: url,
-                likeNume,
-                uploadTime	//较久的
-            },
-            ......
-            ......
-        }
-    }
+    noteList: [
+        note001: {
+            noteId,
+            title,
+            coverImg: url,
+            authorNickname,
+            authorAvatar: url,
+            likeNume,
+            uploadTime	//较新的
+        },
+    	note002: {
+        	noteId,
+            title,
+            coverImg: url,
+            authorNickname,
+            authorAvatar: url,
+            likeNume,
+            uploadTime	//较久的
+    	},
+        ......
+        ......
+    ]
 }
     
 验证失败
@@ -491,7 +482,7 @@ res.data = {
         collectNum,
         lastModifyTime,
         location,
-        resources: {
+        resources: [
             index01: {
                 mediaType,
                 url
@@ -502,7 +493,7 @@ res.data = {
             },
             ......
             ......
-        }
+        ]
     }
 }
 
@@ -538,8 +529,7 @@ req.data = {
 
 res.data = {
     status: 200,
-    listLength,
-    comments: {
+    comments: [
         index0001: {
             commentId,
             commentBy: nickname,
@@ -554,7 +544,7 @@ res.data = {
         },
         ......
         ......
-    }
+    ]
 }
 
 验证失败
@@ -717,8 +707,7 @@ req.data = {
         noteContent,
         authorUid,
         location,
-        mediaLength: xxx,
-        resources: {
+        resources: [
             index01: {
                 mediaType,
                 url
@@ -729,7 +718,7 @@ req.data = {
             },
             ......
             ......
-        }
+        ]
     }
     
 }
@@ -759,32 +748,29 @@ res.data = {
         auth: 'user',
         newToken
     },
-    noteList: {
-        listLength: xxx,
-        content: {
-            //按照收藏顺序
-            note001: {
-                noteId,
-                title,
-                coverImg: url,
-                authorNickname,
-                authorAvatar: url,
-                likeNume,
-                uploadTime
-            },
-            note002: {
-                noteId,
-                title,
-                coverImg: url,
-                authorNickname,
-                authorAvatar: url,
-                likeNume,
-                uploadTime
-            },
-            ......
-            ......
-        }
-    }
+    noteList: [
+        //按照收藏顺序
+        note001: {
+            noteId,
+            title,
+            coverImg: url,
+            authorNickname,
+            authorAvatar: url,
+            likeNume,
+            uploadTime
+        },
+    	note002: {
+        	noteId,
+            title,
+            coverImg: url,
+            authorNickname,
+            authorAvatar: url,
+            likeNume,
+            uploadTime
+    	},
+        ......
+        ......
+    ]
 }
 ```
 
@@ -812,35 +798,32 @@ res.data = {
         auth: 'user',
         newToken
     },
-    noteList: {
-        listLength: xxx,
-        content: {
-            note001: {
-                noteId,
-                title,
-                coverImg: url,
-                authorNickname,
-                authorAvatar: url,
-                likeNume,
-                status,
-                reviewComment,
-                uploadTime //较新的
-            },
-            note002: {
-                noteId,
-                title,
-                coverImg: url,
-                authorNickname,
-                authorAvatar: url,
-                likeNume,
-                status,
-                reviewComment,
-                uploadTime //较久的
-            },
-            ......
-            ......
-        }
-    }
+    noteList: [
+        note001: {
+            noteId,
+            title,
+            coverImg: url,
+            authorNickname,
+            authorAvatar: url,
+            likeNume,
+            status,
+            reviewComment,
+            uploadTime //较新的
+        },
+    	note002: {
+        	noteId,
+            title,
+            coverImg: url,
+            authorNickname,
+            authorAvatar: url,
+            likeNume,
+            status,
+            reviewComment,
+            uploadTime //较久的
+    	},
+        ......
+        ......
+   ]
 }
 ```
 
@@ -924,7 +907,7 @@ res.data = {
         authorNickname,
         lastModifyTime,
         location,
-        resources: {
+        resources: [
             index01: {
                 mediaType,
                 url
@@ -935,7 +918,7 @@ res.data = {
             },
             ......
             ......
-        }
+        ]
     }
 }
 ```
@@ -1070,29 +1053,26 @@ res.data = {
         auth
         newToken
     },
-    noteList: {
-        listLength: xx,
-        content: {
-            note001: {
-                noteId,
-                title,
-                coverImg: url,
-                authorNickname,
-                authorAvatar: url,
-                uploadTime	//较新的
-            },
-            note002: {
-                noteId,
-                title,
-                coverImg: url,
-                authorNickname,
-                authorAvatar: url,
-                uploadTime	//较久的
-            },
-            ......
-            ......
-        }
-    }
+    noteList: [
+        note001: {
+            noteId,
+            title,
+            coverImg: url,
+            authorNickname,
+            authorAvatar: url,
+            uploadTime	//较新的
+        },
+    	note002: {
+        	noteId,
+            title,
+            coverImg: url,
+            authorNickname,
+            authorAvatar: url,
+            uploadTime	//较久的
+    	},
+        ......
+        ......
+    ]
 }
     
 验证失败
@@ -1133,29 +1113,26 @@ res.data = {
         auth
         newToken
     },
-    noteList: {
-        listLength: xx,
-        content: {
-            note001: {
-                noteId,
-                title,
-                coverImg: url,
-                authorNickname,
-                authorAvatar: url,
-                uploadTime	//较新的
-            },
-            note002: {
-                noteId,
-                title,
-                coverImg: url,
-                authorNickname,
-                authorAvatar: url,
-                uploadTime	//较久的
-            },
-            ......
-            ......
-        }
-    }
+    noteList: [
+        note001: {
+            noteId,
+            title,
+            coverImg: url,
+            authorNickname,
+            authorAvatar: url,
+            uploadTime	//较新的
+        },
+        note002: {
+            noteId,
+            title,
+            coverImg: url,
+            authorNickname,
+            authorAvatar: url,
+            uploadTime	//较久的
+        },
+        ......
+        ......
+     ]
 }
     
 验证失败
