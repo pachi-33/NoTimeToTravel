@@ -1,2 +1,21 @@
-<!--pages/createStory/index.wxml-->
-<text>pages/createStory/index.wxml</text>
+<!-- pages/createStory/index.wxml -->
+<view style="margin-top: {{menuTop+menuHeight}}px;" class="main-container">
+    <view>
+        <view class="header">
+            <view class="title">发布我的故事</view>
+            <button class="upload-btn" size="mini" bindtap="bindSubmit">发布</button>
+        </view>
+    </view>
+    <scroll-view type="custom" scroll-y show-scrollbar="{{false}}" class="input-area">
+        <textarea placeholder="请输入故事内容" class="textarea" auto-height="true" auto-focus bindblur="bindTextAreaBlur" value="{{inputVal}}"></textarea>
+        <view class="media-upload-content">
+            <view class="uploadpic-container">
+                <image class="upload-media"  src="../../pics/uploadPic.png" mode="" bindtap="bindChooseMedia" />
+            </view>
+            <view class="media-list" wx:for="{{mediaList}}" data-index="{{index}}" bindtap="bindPreviewMedia" wx:key="index">
+                <image src="{{item}}" mode="" />
+                <view class="del" catchtap="catchDelImg" data-index="{{index}}">x</view>
+            </view>
+        </view>
+    </scroll-view>
+</view>

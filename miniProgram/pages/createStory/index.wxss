@@ -1,1 +1,69 @@
 /* pages/createStory/index.wxss */
+.main-contaner{
+    width: 100%;
+    height: 100%;
+}
+
+.input-area{
+    width: 100%;
+    margin-top: 2px;
+    height: 100vh;
+}
+
+.upload-btn{
+    width: 30px;
+}
+
+.textarea{
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 5%;
+    font-size: 16px;
+    border: 1px solid black;
+
+}
+
+
+
+.input-container{
+    width: 22%;
+    height: 22vw;
+    border: 1px solid #ccc;
+}
+
+.media-upload-content{
+    width: 90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 3%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
+
+}
+
+.media-list{
+    width: 22%;
+    height: 22vw;
+}
+
+.uploadpic-container{
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    width: 20vw;
+    height: 20vw;
+    border: 2px solid #ccc;
+}
+
+.upload-media{
+    width: 40px;
+    height: 40px;
+}
+
+
+.media-item-container{
+    width: 20%;
+    height: 20vw;
+}

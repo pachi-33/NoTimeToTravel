@@ -1,0 +1,42 @@
+<!-- index.wxml -->
+<scroll-view type="custom" scroll-y show-scrollbar="{{false}}" scroll-into-view="{{intoView}}" class="scroll-view" bindscrolltolower="bindSrollToLower" style="margin-top: {{menuTop}}px;">
+ 
+    <sticky-section push-pinned-header="{{false}}">
+        <sticky-header>
+            <view class="sticky-header">
+                <view class="search" style="height: {{menuHeight}}px;line-height: {{menuHeight}}px; margin-right: {{menuLeft}}px;">
+                    <input placeholder="找找去哪儿玩～" />
+                </view>
+            </view>
+        </sticky-header>
+    </sticky-section>
+ 
+    <sticky-section push-pinned-header="{{false}}">
+        <grid-view type="masonry" 
+            cross-axis-count="{{crossAxisCount}}" 
+            cross-axis-gap="{{crossAxisGap}}" 
+            main-axis-gap="{{mainAxisGap}}">
+            <view wx:for="{{bottomList}}" class="grid-box">
+ 
+                <image referrerPolicy="no-referrer" src="{{item.image_url}}" mode="widthFix"></image>
+ 
+                <view class="content-box">
+                    <text>这里的风景好美～</text>
+ 
+                    <view class="profile-text">
+                        <view class="left">
+                            <image  src="https://res.wx.qq.com/op_res/lS41C5Xp6y6mfUbelCW8PArEcMwWRuhSohPO46vAiELbhAf56_CwONEDgM2vIVxOlT5KDcSxCkV8xIJ6cg3x2Q"></image>
+                            <text>binnie</text>
+                        </view>
+                        <view class="right">
+                            <image  src="https://res.wx.qq.com/community/dist/community/images/disagree_icon_fab2b7.svg"></image>
+                            <text>666</text>
+                        </view>
+                    </view>
+                </view>
+            </view>
+        </grid-view>
+ 
+    </sticky-section>
+ 
+</scroll-view>
