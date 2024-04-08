@@ -1,8 +1,14 @@
+// 根据 openid 查询用户
+// 根据 openid, session_key 更新用户？
+// 根据 openid, session_key 创建用户
+// 设置昵称
+// 设置头像
+
 const myQuery = require('../utils/myQuery');
 const runtimeLog = require('../utils/logger');
 
-const User = {
-    append: async function(username, password, auth){
+const Users = {
+    append: async function(openid, session_key){
         const sql = ` INSERT INTO users (username, password, auth) VALUES \
         ${username, password, auth};\
         `;

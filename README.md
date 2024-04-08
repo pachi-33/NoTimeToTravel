@@ -9,9 +9,9 @@
 | column      | alias        | type         | constraint                   |
 | ----------- | ------------ | ------------ | ---------------------------- |
 | uid         | 用户编号     | INT          | PK   NotNull   AutoIncrement |
-| openid      | 用户唯一标识 | VARCHAR(255) | PK   NotNull                 |
+| openid      | 用户唯一标识 | VARCHAR(255) | NotNull                      |
 | session_key | 会话密钥     | VARCHAR(255) | NotNull                      |
-| nickname    | 昵称         | VARCHAR(255) | PK   default: `游客+uid`     |
+| nickname    | 昵称         | VARCHAR(255) | default: `游客+uid`          |
 | avatar      | 头像         | VARCHAR(255) |                              |
 
 
@@ -21,39 +21,39 @@
 | column     | alias      | type                    | constraint                   |
 | ---------- | ---------- | ----------------------- | ---------------------------- |
 | reviewerId | 审核员编号 | INT                     | PK   NotNull   AutoIncrement |
-| username   | 账号       | VARCHAR(255)            | PK   NotNull                 |
-| password   | 密码       | VARCHAR(255)            | PK                           |
+| username   | 账号       | VARCHAR(255)            | NotNull                      |
+| password   | 密码       | VARCHAR(255)            |                              |
 | auth       | 权限       | ENUM('admin', 'review') | NotNull                      |
 
 
 
 ## travelNote   Table
 
-| column         | alias    | type           | constraint                   |
-| -------------- | -------- | -------------- | ---------------------------- |
-| noteId         | 游记编号 | INT            | PK   AutoIncrement   NotNull |
-| noteTitle      | 标题     | VARCHAR(255)   | NotNull                      |
-| noteContent    | 正文     | VARCHAR(65535) | NotNull                      |
-| updateBy       | 作者 uid | INT            | FK   NotNull                 |
-| viewNum        | 浏览量   | INT            | NotNull                      |
-| likeNum        | 获赞量   | INT            | NotNull                      |
-| collectNum     | 收藏量   | INT            | NotNull                      |
-| uploadTime     | 上传时间 | DATETIME       | NotNull                      |
-| lastModifyTime | 修改时间 | DATETIME       | NotNull                      |
-| location       | 分享地点 | VARCHAR(255)   | NotNull                      |
+| column         | alias    | type          | constraint                   |
+| -------------- | -------- | ------------- | ---------------------------- |
+| noteId         | 游记编号 | INT           | PK   AutoIncrement   NotNull |
+| noteTitle      | 标题     | VARCHAR(255)  | NotNull                      |
+| noteContent    | 正文     | VARCHAR(4096) | NotNull                      |
+| updateBy       | 作者 uid | INT           | FK   NotNull                 |
+| viewNum        | 浏览量   | INT           | NotNull                      |
+| likeNum        | 获赞量   | INT           | NotNull                      |
+| collectNum     | 收藏量   | INT           | NotNull                      |
+| uploadTime     | 上传时间 | DATETIME      | NotNull                      |
+| lastModifyTime | 修改时间 | DATETIME      | NotNull                      |
+| location       | 分享地点 | VARCHAR(255)  | NotNull                      |
 
 
 
 ## review   Table
 
-| column     | alias           | type                                                 | constraint        |
-| ---------- | --------------- | ---------------------------------------------------- | ----------------- |
-| reviewId   | 审核编号        | INT                                                  | PK   FK   NotNull |
-| noteId     | 游记编号 noteId | INT                                                  | FK   NotNull      |
-| reviewTime | 审核时间        | DATETIME                                             |                   |
-| reviewerId | 审核员编号 uid  | INT                                                  | FK                |
-| status     | 审核状态        | ENUM('waiting', 'approved', 'disapproved', 'delete') | NotNull           |
-| comment    | 注释            | VARCHAR(255)                                         |                   |
+| column     | alias           | type                                                 | constraint         |
+| ---------- | --------------- | ---------------------------------------------------- | ------------------ |
+| reviewId   | 审核编号        | INT                                                  | PK   AutoIncrement |
+| noteId     | 游记编号 noteId | INT                                                  | FK   NotNull       |
+| reviewTime | 审核时间        | DATETIME                                             |                    |
+| reviewerId | 审核员编号 uid  | INT                                                  | FK                 |
+| status     | 审核状态        | ENUM('waiting', 'approved', 'disapproved', 'delete') | NotNull            |
+| comment    | 注释            | VARCHAR(1024)                                        |                    |
 
 
 
@@ -62,7 +62,7 @@
 | column    | alias    | type                 | constraint                        |
 | --------- | -------- | -------------------- | --------------------------------- |
 | noteId    | 游记编号 | INT                  | PK   FK   AutoIncrement   NotNull |
-| index     | 序号     | INT                  | NotNull                           |
+| idx       | 序号     | INT                  | PK NotNull                        |
 | mediaType | 媒体类型 | ENUM('img', 'video') | NotNull                           |
 | url       | 路径     | VARCHAR(255)         | NotNull                           |
 
@@ -70,17 +70,17 @@
 
 ## comments Table
 
-| column         | alias         | type           | constraint         |
-| -------------- | ------------- | -------------- | ------------------ |
-| commentId      | 评论编号      | INT            | PK   AutoIncrement |
-| noteId         | 游记编号      | INT            | FK   NotNull       |
-| commentBy      | 评论用户  uid | INT            | NotNull            |
-| commentContent | 内容          | VARCHAR(65535) | NotNull            |
-| commentTime    | 评论时间      | DATETIME       | NotNull            |
+| column         | alias         | type          | constraint         |
+| -------------- | ------------- | ------------- | ------------------ |
+| commentId      | 评论编号      | INT           | PK   AutoIncrement |
+| noteId         | 游记编号      | INT           | FK   NotNull       |
+| commentBy      | 评论用户  uid | INT           | FK NotNull         |
+| commentContent | 内容          | VARCHAR(4096) | NotNull            |
+| commentTime    | 评论时间      | DATETIME      | NotNull            |
 
 
 
-## collect   Table
+## collection   Table
 
 | column      | alias      | type     | constraint   |
 | ----------- | ---------- | -------- | ------------ |
@@ -238,7 +238,8 @@ res.data = {
 ```js
 req.data = {
     token,
-    beforeWhen: 'YYYY-MM-DD HH:mm:ss', //获取该时间之前上传的游记，设置为当前时间即最新游记
+    beforeWhen: 'YYYY-MM-DD HH:mm:ss', //获取该时间之前上传的游记，设置为当前时间即最新游记,
+    beforeNoteId,
     listLength: 100
 }
 
@@ -292,6 +293,7 @@ res.data = {
 req.data = {
     token,
     beforeWhen: 'YYYY-MM-DD HH:mm:ss', //获取该时间之前上传的游记，设置为当前时间即最新游记
+    beforeNoteId,
     keyWords,
     listLength: 100
 }
@@ -346,6 +348,7 @@ res.data = {
 req.data = {
     token,
     beforeWhen: 'YYYY-MM-DD HH:mm:ss', //获取该时间之前上传的游记，设置为当前时间即最新游记
+    beforeNoteId,
     authorNickname,
     listLength: 100
 }
