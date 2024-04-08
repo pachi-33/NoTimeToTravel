@@ -22,11 +22,14 @@
       {
         "pagePath": "pages/myStory/index",
         "text": "我的"
+      },
+      {
+        "pagePath": "pages/login/index",
+        "text": "登录"
       }
     ]
   },
   "renderer": "skyline",
-  "lazyCodeLoading": "requiredComponents",
   "rendererOptions": {
     "skyline": {
       "defaultDisplayBlock": true,
@@ -35,5 +38,6 @@
   },
   "componentFramework": "glass-easel",
   "style": "v2",
-  "sitemapLocation": "sitemap.json"
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
 }
