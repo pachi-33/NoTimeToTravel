@@ -808,7 +808,8 @@ req.data = {
 res.data = {
     status: 200,
     token,
-    reviewerId
+    reviewerId,
+    permission
 }
 
 用户密码错误
@@ -822,7 +823,7 @@ res.data = {
 
 获取审核员列表
 
-[POST]	.../moderationPlatform/getReviewerList
+[GET]	.../moderationPlatform/getReviewerList
 
 ```js
 req.data = {
@@ -868,7 +869,7 @@ res.data = {
 ```js
 req.data = {
     token,
-    reviewerId
+    reviewerId: []
 }
 
 res.data = {
@@ -979,7 +980,7 @@ res.data = {
 ```js
 req.data = {
     token,
-    noteId，
+    noteId: [],
     action: 'approve' or 'disapprove' or 'delete' or 'restore'//退回到waiting
 }
 
@@ -1011,7 +1012,7 @@ res.data = {
 
 获得游记完整列表
 
-[POST]	.../moderationPlatform/getNoteListBySearchAuthor
+[GET]	.../moderationPlatform/getNoteListBySearchAuthor
 
 ```js
 req.data = {

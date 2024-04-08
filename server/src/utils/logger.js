@@ -39,4 +39,4 @@ class CustomLogger {
 }
 
 const runtimeLog = new CustomLogger();
-module.exports = runtimeLog;
+module.exports = {runtimeLog};

@@ -28,4 +28,4 @@ const myQuery = function(sql, values){
     })
 }
 
-module.exports = myQuery;
+module.exports = {myQuery};
