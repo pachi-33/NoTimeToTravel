@@ -10,7 +10,7 @@
 
 const { myQuery } = require('../utils/myQuery');
 const { runtimeLog }= require('../utils/logger');
-const { tellTime } = require('../utils/tellTime')
+const { tellTime } = require('../utils/tellTime');
 
 
 const TravelNote = {
@@ -18,10 +18,10 @@ const TravelNote = {
         const { year, month, day, hour, minute, second } = tellTime();
         const formatTime = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second
         const sql = `INSERT INTO travelNote (noteTitle, noteContent, updateBy, viewNum, likeNum, collectNum, uploadTime, lastModifyTime, location) \
-        VALUES (${noteTitle}, ${noteContent}, ${updateBy}, 0, 0, 0, ${formatTime}, ${formatTime}, ${location})\
+        VALUES (?, ?, ?, 0, 0, 0, ?, ?, ?)\
         `;
         try {
-            const feedback = await myQuery(sql);
+            const feedback = await myQuery(sql, [noteTitle, noteContent, updateBy, formatTime, formatTime, location]);
             console.log('Added a new travel note: ', feedback);
             runtimeLog.info('Added a new travel note: ',feedback);
         } catch(err) {
@@ -32,17 +32,17 @@ const TravelNote = {
 
     modify: async function (noteId, noteTitle, noteContent, updateBy, location){
         const { year, month, day, hour, minute, second } = tellTime();
-        const formatTime = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second
+        const formatTime = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
         const sql = `UPDATE travelNote\
-        SET noteTitile = ${noteTitle}\
-        noteContent = ${noteContent}\
-        updateBy = ${updateBy}\
-        location = ${location}\
-        lastModifyTime = ${formatTime}\
-        WHERE noteId = ${noteId}\
+        SET noteTitile = ?\
+        noteContent = ?\
+        updateBy = ?\
+        location = ?\
+        lastModifyTime = ?\
+        WHERE noteId = ?\
         `;
         try {
-            const feedback = await myQuery(sql);
+            const feedback = await myQuery(sql, [noteTitle, noteContent, updateBy, location, formatTime, noteId]);
             console.log('Modified a travel note: ', feedback);
             runtimeLog.info('Modified a travel note: ',feedback);
         } catch(err) {
@@ -52,9 +52,9 @@ const TravelNote = {
     },
 
     getNoteDetail: async function (noteId){
-        const sql = `SELECT * FROM travelNote WHERE noteId = ${noteId}`;
+        const sql = `SELECT * FROM travelNote WHERE noteId = ?`;
         try {
-            const row = await myQuery(sql);
+            const row = await myQuery(sql, [noteId]);
             return row;
         } catch(err) {
             console.log('Error when get travel note detail: ', err);
@@ -63,9 +63,12 @@ const TravelNote = {
     },
 
     getNoteListByTime: async function (before, len){
-        const sql = `SELECT * FROM travelNote WHERE uploadTime < ${before} LIMIT ${len} `;
+        const sql = `SELECT * FROM travelNote \
+        WHERE uploadTime < ? \
+        ORDER BY uploadTime DESC \
+        LIMIT ? `;
         try {
-            const row = await myQuery(sql);
+            const row = await myQuery(sql, [before, len]);
             return row;
         } catch(err) {
             console.log('Error when get travel note list by time: ', err);
@@ -74,9 +77,12 @@ const TravelNote = {
     },
 
     getNoteListById: async function (before, len){
-        const sql = `SELECT * FROM travelNote WHERE noteId > ${before} LIMIT ${len} `;
+        const sql = `SELECT * FROM travelNote \
+        WHERE noteId > ? \
+        ORDER BY noteId ASC \
+        LIMIT ? `;
         try {
-            const row = await myQuery(sql);
+            const row = await myQuery(sql, [before, len]);
             return row;
         } catch(err) {
             console.log('Error when get travel note list by id: ', err);
@@ -86,10 +92,11 @@ const TravelNote = {
 
     getNoteListSearchTitleByTime: async function (beforeTime, keywords, len){
         const sql = `SELECT * FROM travelNote \
-        WHERE uploadTime < ${beforeTime} and noteTitle REGEXP ${keywords}\
-        LIMIT ${len}`;
+        WHERE uploadTime < ? and noteTitle REGEXP ? \
+        ORDER BY uploadTime DESC \
+        LIMIT ?`;
         try {
-            const row = await myQuery(sql);
+            const row = await myQuery(sql, [beforeTime, keywords, len]);
             return row;
         } catch(err) {
             console.log('Error when searching title before time: ', err);
@@ -99,10 +106,11 @@ const TravelNote = {
 
     getNoteListSearchTitleById: async function (beforeId, keywords, len){
         const sql = `SELECT * FROM travelNote \
-        WHERE uploadTime < ${beforeId} and noteTitle REGEXP ${keywords}\
-        LIMIT ${len}`;
+        WHERE uploadTime < ? and noteTitle REGEXP ?\
+        ORDER BY noteId ASC \
+        LIMIT ?`;
         try {
-            const row = await myQuery(sql);
+            const row = await myQuery(sql, [beforeId, keywords, len]);
             return row;
         } catch(err) {
             console.log('Error when searching title before id: ', err);
@@ -112,64 +120,65 @@ const TravelNote = {
 
     getNoteListSearchNicknameByTime: async function (beforeTime, keywords, len){
         const sql = `SELECT * FROM travelNote \
-        WHERE uploadTime < ${beforeTime} and \
+        WHERE uploadTime < ? and \
         updateBy IN \
-        (SELECT nickname FROM users WHERE nickname REGEXP ${keywords})\
-        LIMIT ${len}`;
+        (SELECT nickname FROM users WHERE nickname REGEXP ?)\
+        ORDER BY uploadTime DESC \
+        LIMIT ?`;
         try {
-            const row = await myQuery(sql);
+            const row = await myQuery(sql, [beforeTime, keywords, len]);
             return row;
         } catch(err) {
-            console.log('Error when searching title before time: ', err);
-            runtimeLog.error('Error when searching title before time: ', err);
+            console.log('Error when searching nickname before time: ', err);
+            runtimeLog.error('Error when searching nickname before time: ', err);
         }
     },
 
     getNoteListSearchNicknameById: async function (beforeId, keywords, len){
         const sql = `SELECT * FROM travelNote \
-        WHERE uploadTime < ${beforeId} and \
+        WHERE uploadTime < ? and \
         updateBy IN \
-        (SELECT nickname FROM users WHERE nickname REGEXP ${keywords})\
-        LIMIT ${len}`;
+        (SELECT nickname FROM users WHERE nickname REGEXP ?)\
+        ORDER BY uploadTime ASC \
+        LIMIT ?`;
         try {
-            const row = await myQuery(sql);
+            const row = await myQuery(sql, [beforeId, keywords, len]);
             return row;
         } catch(err) {
-            console.log('Error when searching title before id: ', err);
-            runtimeLog.error('Error when searching title before id: ', err);
+            console.log('Error when searching nickname before id: ', err);
+            runtimeLog.error('Error when searching nickname before id: ', err);
         }
     },
 
     addLike: async function (noteId){
-        const sql = `UPDATE travelNote SET likeNum = likeNum+1 WHERE noteId = ${noteId}`;
+        const sql = `UPDATE travelNote SET likeNum = likeNum+1 WHERE noteId = ?`;
         try {
-            await myQuery(sql);
+            await myQuery(sql, [noteId]);
         } catch(err) {
-            console.log('Error when searching title before id: ', err);
-            runtimeLog.error('Error when searching title before id: ', err);
+            console.log('Error when adding like num: ', err);
+            runtimeLog.error('Error when adding like num: ', err);
         }
     },
 
     addView: async function (noteId){
-        const sql = `UPDATE travelNote SET viewNum = viewNum+1 WHERE noteId = ${noteId}`;
+        const sql = `UPDATE travelNote SET viewNum = viewNum+1 WHERE noteId = ?`;
         try {
-            await myQuery(sql);
+            await myQuery(sql, [noteId]);
         } catch(err) {
-            console.log('Error when searching title before id: ', err);
-            runtimeLog.error('Error when searching title before id: ', err);
+            console.log('Error when adding view num: ', err);
+            runtimeLog.error('Error when adding view num: ', err);
         }
     },
 
     addCollect: async function (noteId){
-        const sql = `UPDATE travelNote SET collectNum = collectNum+1 WHERE noteId = ${noteId}`;
+        const sql = `UPDATE travelNote SET collectNum = collectNum+1 WHERE noteId = ?`;
         try {
-            await myQuery(sql);
+            await myQuery(sql, [noteId]);
         } catch(err) {
-            console.log('Error when searching title before id: ', err);
-            runtimeLog.error('Error when searching title before id: ', err);
+            console.log('Error when adding collect num: ', err);
+            runtimeLog.error('Error when adding collect num: ', err);
         }
     }
-
 }
 
 module.exports = {TravelNote}
