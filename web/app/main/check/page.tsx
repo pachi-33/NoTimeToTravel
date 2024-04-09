@@ -31,26 +31,37 @@ import { PlusIcon } from "../../icons/PlusIcon";
 import { VerticalDotsIcon } from "../../icons/VerticalDotsIcon";
 import { SearchIcon } from "../../icons/SearchIcon";
 import { ChevronDownIcon } from "../../icons/ChevronDownIcon";
-import { columns, users, statusOptions } from "./components/data";
+import { columns, notes, statusOptions } from "./components/data";
 import { EditIcon } from "../../icons/EditIcon";
 import { DeleteIcon } from "../../icons/DeleteIcon";
 import { EyeIcon } from "../../icons/EyeIcon";
+import Image from "next/image";
+import API from "@/app/utils/api";
+import { error, success } from "@/app/utils/message";
 
-interface userType {
-  id: number;
-  name: string;
+interface noteType {
+  noteId: number;
   title: string;
-  time: string;
-  status: string;
+  coverImg: string;
+  authorNickname: string;
+  authorAvatar: string;
+  status: "waiting" | "approved" | "disapproved" | "delete";
+  uploadTime: string; //TODO:questioned
 }
 
 const statusColorMap = {
-  passed: "success",
-  failed: "danger",
-  checking: "primary",
+  approved: "success",
+  disapproved: "danger",
+  waiting: "primary",
 };
 
-const INITIAL_VISIBLE_COLUMNS = ["name", "title", "time", "status", "actions"];
+const INITIAL_VISIBLE_COLUMNS = [
+  "authorNickname",
+  "title",
+  "uploadTime",
+  "status",
+  "actions",
+];
 
 export default function App() {
   // input value
@@ -66,7 +77,7 @@ export default function App() {
   // rows per page
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "age",
+    column: "time",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
@@ -96,27 +107,30 @@ export default function App() {
   const hasSearchFilter = Boolean(filterValue);
 
   const filteredItems = React.useMemo(() => {
-    let filteredUsers = [...users];
+    let filteredNotes = [...notes];
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase())
+      filteredNotes = filteredNotes.filter((note) =>
+        note.authorNickname.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
     if (
       statusFilter !== "all" &&
       Array.from(statusFilter).length !== statusOptions.length
     ) {
-      filteredUsers = filteredUsers.filter((user) =>
-        Array.from(statusFilter).includes(user.status)
+      filteredNotes = filteredNotes.filter((note) =>
+        Array.from(statusFilter).includes(note.status)
       );
     }
 
-    return filteredUsers;
-  }, [users, filterValue, statusFilter]);
+    return filteredNotes;
+  }, [notes, filterValue, statusFilter]);
 
   const headerColumns = React.useMemo(() => {
-    if (visibleColumns.size >= filteredItems.length || `${visibleColumns}` === "all")
+    if (
+      visibleColumns.size >= filteredItems.length ||
+      `${visibleColumns}` === "all"
+    )
       return columns;
 
     return columns.filter((column) =>
@@ -143,8 +157,61 @@ export default function App() {
     });
   }, [sortDescriptor, items]);
 
+  interface noteDetailsType {
+    noteTitle: string;
+    noteContent: string;
+    authorNickname: string;
+    lastModifyTime: string; //TODO:questioned
+    location: string;
+    status: "waiting" | "approved" | "disapproved" | "delete";
+    resources: Array<{ mediaType: "img" | "video"; url: string }>;
+  }
+
+  const [noteDetails, setNoteDetails] = React.useState({
+    noteTitle: "noteTitle",
+    noteContent: "noteContent",
+    authorNickname: "authorNickname",
+    lastModifyTime: "lastModifyTime", //TODO:questione
+    location: "location",
+    status: "waiting",
+    resources: [
+      {
+        mediaType: "img",
+        url: "https://timelord.cn/Nicholas/img/drawing/3.jpg",
+      },
+      {
+        mediaType: "img",
+        url: "https://timelord.cn/Nicholas/img/drawing/3.jpg",
+      },
+    ],
+  });
   const handleViewDetails = (id: number) => {
-    console.log(id);
+    // console.log(id);
+    try {
+      API.CheckServiceApi.getNoteInfo(id)
+        .then((res) => {
+          if (res.status === 200) {
+            if (res.data.status === 200) {
+              if (res.data.content) setNoteDetails(res.data.content);
+              if (res.data.freshToken)
+                localStorage.setItem("Authorization", res.data.freshToken);
+              success("获取游记详情成功");
+            } else {
+              error("获取游记详情失败！");
+              if (res.data.status === 401) {
+                console.log(res.data?.msg);
+              }
+            }
+          }
+        })
+        .catch((err: any) => {
+          console.log("Get Note Info Error: ", err);
+          error("Get Note Info Error: " + err);
+        });
+    } catch (err: any) {
+      console.log("Get Note Info Error: ", err);
+      error("Get Note Info Error: " + err);
+    }
     setShowDetails(true);
     // axios get details
     onDetailsOpen();
@@ -167,8 +234,8 @@ export default function App() {
   const handlePassSelected = () => {
     let selectedArray: Array<number> = [];
     if (`${selectedKeys}` == "all") {
-      users.forEach((value) => {
-        selectedArray.push(value.id);
+      notes.forEach((value) => {
+        selectedArray.push(value.noteId);
       });
     } else {
       selectedKeys.forEach((value) => {
@@ -181,8 +248,8 @@ export default function App() {
   const handleRejectSelected = () => {
     let selectedArray: Array<number> = [];
     if (`${selectedKeys}` == "all") {
-      users.forEach((value) => {
-        selectedArray.push(value.id);
+      notes.forEach((value) => {
+        selectedArray.push(value.noteId);
       });
     } else {
       selectedKeys.forEach((value) => {
@@ -195,8 +262,8 @@ export default function App() {
   const handleDeleteSelected = () => {
     let selectedArray: Array<number> = [];
     if (`${selectedKeys}` == "all") {
-      users.forEach((value) => {
-        selectedArray.push(value.id);
+      notes.forEach((value) => {
+        selectedArray.push(value.noteId);
       });
     } else {
       selectedKeys.forEach((value) => {
@@ -206,19 +273,33 @@ export default function App() {
     console.log(selectedArray);
   };
 
-  const renderCell = React.useCallback((user: userType, columnKey: Key) => {
-    const cellValue = user[columnKey as keyof typeof user];
+  const renderCell = React.useCallback((note: noteType, columnKey: Key) => {
+    const cellValue = note[columnKey as keyof typeof note];
 
     switch (columnKey) {
-      case "name":
+      case "authorNickname":
         return (
-          <p className="text-bold text-blue-500 text-md capitalize">
+          <p className="text-bold text-blue-500 text-md capitalize flex items-center gap-2">
+            <Image
+              width={50}
+              height={50}
+              alt="avatar"
+              src={note.authorAvatar}
+              className="w-[50px] h-[50px]"
+            ></Image>
             {cellValue}
           </p>
         );
       case "title":
         return (
-          <p className="text-bold text-blue-500 text-md capitalize">
+          <p className="text-bold text-blue-500 text-md capitalize flex items-center gap-2">
+            <Image
+              width={50}
+              height={50}
+              alt="avatar"
+              src={note.coverImg}
+              className="w-[50px] h-[50px]"
+            ></Image>
             {cellValue}
           </p>
         );
@@ -227,10 +308,10 @@ export default function App() {
           <Chip
             className="capitalize"
             color={
-              statusColorMap[user.status as keyof typeof statusColorMap] ===
+              statusColorMap[note.status as keyof typeof statusColorMap] ===
               "success"
                 ? "success"
-                : statusColorMap[user.status as keyof typeof statusColorMap] ===
+                : statusColorMap[note.status as keyof typeof statusColorMap] ===
                   "danger"
                 ? "danger"
                 : "primary"
@@ -248,7 +329,7 @@ export default function App() {
               <span
                 className="text-lg text-default-400 cursor-pointer active:opacity-50"
                 onClick={() => {
-                  handleViewDetails(user.id);
+                  handleViewDetails(note.noteId);
                 }}
               >
                 <EyeIcon />
@@ -258,7 +339,7 @@ export default function App() {
               <span
                 className="text-lg text-default-400 cursor-pointer active:opacity-50"
                 onClick={() => {
-                  handleChangeStatus(user.id);
+                  handleChangeStatus(note.noteId);
                 }}
               >
                 <EditIcon />
@@ -268,7 +349,7 @@ export default function App() {
               <span
                 className="text-lg text-danger cursor-pointer active:opacity-50"
                 onClick={() => {
-                  handleDeleteDiary(user.id);
+                  handleDeleteDiary(note.noteId);
                 }}
               >
                 <DeleteIcon />
@@ -398,7 +479,7 @@ export default function App() {
         </div>
         <div className="flex justify-between items-center">
           <span className="text-default-400 text-small">
-            Total {users.length} users
+            Total {notes.length} notes
           </span>
           <label className="flex items-center text-default-400 text-small">
             Rows per page:
@@ -419,7 +500,7 @@ export default function App() {
     statusFilter,
     visibleColumns,
     onRowsPerPageChange,
-    users.length,
+    notes.length,
     onSearchChange,
     hasSearchFilter,
     isMultiple,
@@ -537,7 +618,7 @@ export default function App() {
         </TableHeader>
         <TableBody emptyContent={"暂无游记"} items={sortedItems}>
           {(item) => (
-            <TableRow key={item.id}>
+            <TableRow key={item.noteId}>
               {(columnKey) => (
                 <TableCell>{renderCell(item, columnKey)}</TableCell>
               )}
@@ -555,7 +636,33 @@ export default function App() {
                   游记详情
                 </ModalHeader>
                 <ModalBody>
-                  <p>rmt</p>
+                  <div>noteTitle: {noteDetails.noteTitle}</div>
+                  <div>authorNickname: {noteDetails.authorNickname}</div>
+                  <div>lastModifyTime: {noteDetails.lastModifyTime}</div>
+                  <div>location: {noteDetails.location}</div>
+                  <div>noteContent: {noteDetails.noteContent}</div>
+                  <div>status: {noteDetails.status}</div>
+                  <div className="flex flex-wrap">
+                    {noteDetails.resources.map((resource) => {
+                      return (
+                        <>
+                          {resource.mediaType === "img" && (
+                            <Image
+                              height={50}
+                              width={50}
+                              src={resource.url}
+                              alt="img"
+                            />
+                          )}
+                          {
+                            resource.mediaType === "video"&&(
+                              <video src={resource.url} className="w-[50px] h-[50px]"></video>
+                            )
+                          }
+                        </>
+                      );
+                    })}
+                  </div>
                 </ModalBody>
                 <ModalFooter>
                   <Button color="primary" variant="light" onPress={onClose}>
