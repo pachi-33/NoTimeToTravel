@@ -124,7 +124,7 @@ res.data = {
 
 获取用户信息
 
-[POST]	.../travelDiary/getUserInfo
+[GET]	.../travelDiary/getUserInfo
 
 ```js
 req.data = {
@@ -397,7 +397,7 @@ res.data = {
 
 获取游记详情内容 同时浏览量加一
 
-[POST]	.../travelDiary/getNoteDetails
+[GET]	.../travelDiary/getNoteDetails
 
 ```js
 req.data = {
@@ -450,7 +450,7 @@ res.data = {
 
 获取游记评论区列表
 
-[POST]	.../travelDiary/getNoteComments
+[GET]	.../travelDiary/getNoteComments
 
 ```js
 req.data = {
@@ -688,7 +688,7 @@ res.data = {
 
 获得收藏的游记列表
 
-[POST]	.../travelDiary/getMyCollect
+[GET]	.../travelDiary/getMyCollect
 
 ```js
 req.data = {
@@ -740,7 +740,7 @@ res.data = {
 
 获得我的游记列表
 
-[POST]	.../travelDiary/getMyNoteListWithStatus
+[GET]	.../travelDiary/getMyNoteListWithStatus
 
 ```js
 req.data = {
@@ -925,7 +925,7 @@ res.data = {
 
 获取游记信息
 
-[POST]	.../moderationPlatform/getNoteInfo
+[GET]	.../moderationPlatform/getNoteInfo
 
 ```js
 req.data = {
@@ -1063,7 +1063,7 @@ res.data = {
 
 获取某审核员审核过的游记列表
 
-[POST]	.../moderationPlatform/getMyReviewNote
+[GET]	.../moderationPlatform/getMyReviewNote
 
 ```js
 req.data = {

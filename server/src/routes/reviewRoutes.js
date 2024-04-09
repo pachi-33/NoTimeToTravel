@@ -1,5 +1,5 @@
 const express = require('express');
-const userController = require('../controllers/travelDiary/userController');
+const userController = require('../controllers/travelDiary/login');
 const reviewerController = require('../controllers/moderationPlatform/reviewerController');
 
 const router = express.Router();
