@@ -22,7 +22,6 @@ const formatPast = (date, format) => {
   let t = date.getTime(),s;
   // 获取js 时间戳
   let time = new Date().getTime();
-  console.log("hello");
   // 当前时间戳 - 传入时间戳
   time = Number.parseInt(`${time - t}`);
   if (time < 10000) {

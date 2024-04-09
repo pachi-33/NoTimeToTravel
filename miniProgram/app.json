@@ -6,7 +6,8 @@
     "pages/regist/index",
     "pages/myStory/index",
     "pages/createStory/index",
-    "pages/storyDetail/index"
+    "pages/storyDetail/index",
+    "pages/searchDetail/index"
   ],
   "tabBar": {
     "borderStyle": "white",

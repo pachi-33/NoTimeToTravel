@@ -1,16 +1,20 @@
 <!-- index.wxml -->
-<scroll-view type="custom" scroll-y show-scrollbar="{{false}}" scroll-into-view="{{intoView}}" class="scroll-view" bindscrolltolower="bindSrollToLower" bindscrolltoupper="bindScrollToUpper" style="margin-top: {{menuTop}}px;">
+<scroll-view type="custom" scroll-y show-scrollbar="{{false}}" scroll-into-view="{{intoView}}" class="scroll-view" bindscrolltolower="bindSrollToLower" bindscrolltoupper="bindScrollToUpper" style="margin-top: {{menuTop}}px;" bindtap="hideSearchOption">
   <sticky-section push-pinned-header="{{false}}">
     <sticky-header>
       <view class="sticky-header">
         <view class="search" style="height: {{menuHeight}}px;line-height: {{menuHeight}}px; margin-right: {{menuLeft}}px;">
-          <input placeholder="找找去哪儿玩～" />
+          <input placeholder="寻找物语" bindinput="bindSearchInput" bindconfirm="bindSubmitSearch" bindfocus="bindSearchFocus" bindblur="bindSearchBlur" />
+        </view>
+        <view class="searchOption-container" wx:if="{{isSearching || isSearchOptionActive}}" catchtap="bindtapsearchOption">
+          <view bindtap="bindTapTitle" class="{{isSearchByTitle?'active-mode':'inactive-mode'}}">按标题</view>
+          <view bindtap="bindTapAuthor" class="{{isSearchByTitle?'inactive-mode':'active-mode'}}">按作者</view>
         </view>
       </view>
     </sticky-header>
   </sticky-section>
   <sticky-section push-pinned-header="{{false}}">
-    <grid-view type="masonry" cross-axis-count="{{crossAxisCount}}" cross-axis-gap="{{crossAxisGap}}" main-axis-gap="{{mainAxisGap}}">
+    <grid-view type="masonry" cross-axis-count="{{crossAxisCount}}" cross-axis-gap="{{crossAxisGap}}" main-axis-gap="{{mainAxisGap}}" wx:if="{{haveNoteList}}">
       <view wx:for="{{noteList}}" class="grid-box">
         <image referrerPolicy="no-referrer" src="{{item.coverImg}}" mode="widthFix"></image>
         <view class="content-box">
@@ -33,5 +37,7 @@
         </view>
       </view>
     </grid-view>
+    <view wx:if="{{!haveNoteList}}" class="no-data">似乎没有物语哦~</view>
+    <view wx:if="{{loaing}}">加载中...</view>
   </sticky-section>
 </scroll-view>

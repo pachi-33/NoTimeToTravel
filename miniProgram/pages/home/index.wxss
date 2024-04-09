@@ -17,7 +17,31 @@
     line-height: 30px;
     height: 30px;
 }
+
+.searchOption-container{
+  display: flex;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.searchOption-container view{
+  margin-left: 30px;
+}
  
+.active-mode{
+    color: #39c5bb;
+    font-weight: bold;
+}
+
+.inactive-mode{
+    color: #ccc;
+}
+
+.no-data{
+  display: flex;
+  margin-top: 30vh;
+  justify-content: center;
+
+}
  
 .top-list {
     display: flex;
