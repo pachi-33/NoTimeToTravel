@@ -251,6 +251,7 @@ res.data = {
             noteId,
             title,
             coverImg: url,
+        	mediaType,
             authorNickname,
             authorAvatar: url,
             likeNume,
@@ -260,6 +261,7 @@ res.data = {
         	noteId,
             title,
             coverImg: url,
+            mediaType,
             authorNickname,
             authorAvatar: url,
             likeNume,
@@ -306,6 +308,7 @@ res.data = {
             noteId,
             title,
             coverImg: url,
+        	mediaType,
             authorNickname,
             authorAvatar: url,
             likeNume,
@@ -315,6 +318,7 @@ res.data = {
         	noteId,
             title,
             coverImg: url,
+            mediaType,
             authorNickname,
             authorAvatar: url,
             likeNume,
@@ -361,6 +365,7 @@ res.data = {
             noteId,
             title,
             coverImg: url,
+        	mediaType,
             authorNickname,
             authorAvatar: url,
             likeNume,
@@ -370,6 +375,7 @@ res.data = {
         	noteId,
             title,
             coverImg: url,
+            mediaType,
             authorNickname,
             authorAvatar: url,
             likeNume,
@@ -495,7 +501,7 @@ res.data = {
 
 点赞
 
-[POST]	.../travelDiary/likeNote
+[GET]	.../travelDiary/likeNote
 
 ```js
 req.data = {
@@ -513,7 +519,7 @@ res.data = {
 
 收藏
 
-[POST]	.../travelDiary/collectNote
+[GET]	.../travelDiary/collectNote
 
 ```js
 req.data = {
@@ -1012,7 +1018,7 @@ res.data = {
 
 获得游记完整列表
 
-[GET]	.../moderationPlatform/getNoteListBySearchAuthor
+[GET]	.../moderationPlatform/getNoteList
 
 ```js
 req.data = {
@@ -1068,7 +1074,7 @@ res.data = {
 ```js
 req.data = {
     token,
-    reviewId
+    reviewerId
 }
 
 res.data = {
