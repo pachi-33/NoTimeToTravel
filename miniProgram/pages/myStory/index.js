@@ -5,14 +5,24 @@ Page({
    * 页面的初始数据
    */
   data: {
-
+    // 顶部布局参数
+    menuTop: 0,
+    menuHeight: 0,
+    menuLeft: 0,
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad(options) {
-
+    const res = wx.getMenuButtonBoundingClientRect();
+    let gottoken = wx.getStorageSync("token");
+    this.setData({
+      menuTop: res.top,
+      menuHeight: res.height,
+      menuLeft: res.width + 10,
+      token: gottoken || "",
+    });
   },
 
   /**

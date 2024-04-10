@@ -2,7 +2,7 @@
 import Api from "../../utils/api.js";
 Page({
   data: {
-    noteIdToSearch:0,
+    noteIdToSearch: 0,
     content: {
       noteId: "",
       noteTitle: "我是标题",
@@ -103,7 +103,6 @@ Page({
     imgheightList: [],
     userComment: "",
     current: 0,
-    token: "",
     // 顶部布局参数
     menuTop: 0,
     menuHeight: 0,
@@ -115,11 +114,8 @@ Page({
 
   onLoad: async function (options) {
     const res = wx.getMenuButtonBoundingClientRect();
-    const systeminfo = wx.getSystemInfoSync();
-    let gottoken = wx.getStorageSync("token");
-    const {noteId}=options;
+    const { noteId } = options;
     this.setData({
-      token: gottoken || "",
       menuTop: res.top,
       menuHeight: res.height,
       menuLeft: res.width + 10,
@@ -160,14 +156,10 @@ Page({
   },
   bindConfirmComment: async function () {
     const data = {
-        noteId: this.data.noteIdToSearch,
-        commentContent: this.data.userComment,
-      },
-      header = {
-        "content-type": "application/json",
-        Authorization: this.data.token,
-      };
-    let res = await Api.addComment(data, header);
+      noteId: this.data.noteIdToSearch,
+      commentContent: this.data.userComment,
+    };
+    let res = await Api.addComment(data);
     if (res.data.status !== 200) {
       //跳转到登录页面
       return;
@@ -175,14 +167,7 @@ Page({
     await getComment();
   },
   getDetail: async function () {
-    const header = {
-      "content-type": "application/json",
-      Authorization: this.data.token,
-    };
-    let res = await Api.getNoteDetails(
-      { noteId: this.data.noteIdToSearch },
-      header
-    );
+    let res = await Api.getNoteDetails({ noteId: this.data.noteIdToSearch });
     console.log("getNoteDetail的res", res);
     let newContent = res.data || {};
     this.setData({
@@ -203,13 +188,8 @@ Page({
   },
   bindTapLike: async function () {
     const data = {
-        noteId: this.data.noteIdToSearch,
-      },
-      header = {
-        "content-type": "application/json",
-        Authorization: this.data.token,
-      };
-
+      noteId: this.data.noteIdToSearch,
+    };
     this.setData({
       content: {
         ...this.data.content,
@@ -221,7 +201,7 @@ Page({
         likeImgUrl: "../../pics/like-fill.png",
       });
     }
-    let res = await Api.likeNote(data, header);
+    let res = await Api.likeNote(data);
     if (res.data.status !== 200) {
       //跳转到登录页面
       return;
@@ -230,14 +210,10 @@ Page({
   bindTapCollect: async function () {
     const data = {
         noteId: this.data.noteIdToSearch,
-      },
-      header = {
-        "content-type": "application/json",
-        Authorization: this.data.token,
       };
     let res;
     if (this.data.content.isCollected) {
-      res = await Api.cancelcollectNote(data, header);
+      res = await Api.cancelcollectNote(data);
       this.setData({
         content: {
           ...this.data.content,
@@ -246,7 +222,7 @@ Page({
         },
       });
     } else {
-      res = await Api.collectNote(data, header);
+      res = await Api.collectNote(data);
       this.setData({
         content: {
           ...this.data.content,

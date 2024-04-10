@@ -38,7 +38,7 @@
       </view>
     </grid-view>
     <view wx:if="{{!haveNoteList}}" class="no-data">似乎没有物语哦~</view>
-    <!-- <button bindtap="bindTESTTODETAIL">测试游记详情</button> -->
+    <button bindtap="bindTESTTODETAIL">测试游记详情</button>
     <view wx:if="{{loaing}}">加载中...</view>
   </sticky-section>
 </scroll-view>

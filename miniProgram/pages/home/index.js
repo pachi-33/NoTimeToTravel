@@ -7,7 +7,6 @@ import Api from "../../utils/api.js";
 Page({
   data: {
     times: 0, //测试代码内容
-    token: "111",
     noteList: [],
     isSearching: false,
     isSearchByTitle: true, //默认按照标题搜索
@@ -26,12 +25,10 @@ Page({
   },
   onLoad: async function () {
     const res = wx.getMenuButtonBoundingClientRect();
-    let gottoken = wx.getStorageSync("token");
     this.setData({
       menuTop: res.top,
       menuHeight: res.height,
       menuLeft: res.width + 10,
-      token: gottoken || "",
       loading: true,
       noteList: await this.getNewList(true) || [], //待接口完善后i需改
     });
@@ -49,81 +46,77 @@ Page({
         : this.noteList[this.noteList.length - 1].noteId,
       listLength: 100,
     };
-    let header = {
-      "content-type": "application/json",
-      Authorization: this.data.token,
-    };
-    // try {
-    //   let res = await Api.getNoteListByTime(noteListQuery, header);
-    //   console.log("getNewList的res", res)
-    //   let newList = res.data || [];
-    //   newList = newList.map((item) => {
-    //     item.pastTime = util.formatPast(
-    //       new Date(item.uploadTime.replaceAll("-", "/")),
-    //       "YYYY-mm-dd"
-    //     );
-    //     return item;
-    //   });
-    //   this.setData({
-    //     loading: false,
-    //   });
-    //   if(refresh && newList.length === 0){
-    //     this.setData({
-    //       haveNoteList: false,
-    //     });
-    //   }
-    //   else{
-    //     this.setData({
-    //       haveNoteList: true,
-    //     });
-    //   }
-    //   return newList;
-    // } catch (err) {
-    //   console.log("error:", err, "返回空数组,是否刷新",refresh);
-    //   this.setData({
-    //     loading: false,
-    //   });
-    //   if(refresh){
-    //     this.setData({
-    //       haveNoteList: false,
-    //     });
-    //   }
-    //   return [];
-    // }
-    //测试代码
-    let oldtime = this.data.times
-    this.setData({
-      times: oldtime + 1
-    })
-    const newList = new Array(20).fill(0);
-    const imgUrlList = getLandscapeImages();
-    const mediaTypeList = getMediaType();
-    let count = 0;
-    for (let i = 0; i < newList.length; i++) {
-      newList[i] = {
-        noteId: i + 1,
-        title: `helllo ${i}`,
-        uploadTime: `2024-04-06 12:12:12`,
-        likeNume: 88,
-        mediaType: mediaTypeList[count % mediaTypeList.length],
-        coverImg: imgUrlList[count % imgUrlList.length],
-        authorAvatar: "https://res.wx.qq.com/op_res/lS41C5Xp6y6mfUbelCW8PArEcMwWRuhSohPO46vAiELbhAf56_CwONEDgM2vIVxOlT5KDcSxCkV8xIJ6cg3x2Q",
-        authorNickname: "小明",
-      };
-      count++;
-      newList[i].pastTime = util.formatPast(
-        new Date(newList[i].uploadTime.replaceAll("-", "/")),
-        "YYYY-mm-dd"
-      );
-      console.log("长度",mediaTypeList.length,"count",count)
-      if( newList[i].mediaType==="video")
-      console.log("视频地址",i)
-    }
-    console.log(this.data.times)
-    this.setData({haveNoteList:true})
-    if (this.data.times < 2)
+    try {
+      let res = await Api.getNoteListByTime(noteListQuery);
+      console.log("getNewList的res", res)
+      let newList = res.data || [];
+      newList = newList.map((item) => {
+        item.pastTime = util.formatPast(
+          new Date(item.uploadTime.replaceAll("-", "/")),
+          "YYYY-mm-dd"
+        );
+        return item;
+      });
+      this.setData({
+        loading: false,
+      });
+      if(refresh && newList.length === 0){
+        this.setData({
+          haveNoteList: false,
+        });
+      }
+      else{
+        this.setData({
+          haveNoteList: true,
+        });
+      }
       return newList;
-    else return [];
+    } catch (err) {
+      console.log("error:", err, "返回空数组,是否刷新",refresh);
+      this.setData({
+        loading: false,
+      });
+      if(refresh){
+        this.setData({
+          haveNoteList: false,
+        });
+      }
+      return [];
+    }
+    //测试代码
+    // let oldtime = this.data.times
+    // this.setData({
+    //   times: oldtime + 1
+    // })
+    // const newList = new Array(20).fill(0);
+    // const imgUrlList = getLandscapeImages();
+    // const mediaTypeList = getMediaType();
+    // let count = 0;
+    // for (let i = 0; i < newList.length; i++) {
+    //   newList[i] = {
+    //     noteId: i + 1,
+    //     title: `helllo ${i}`,
+    //     uploadTime: `2024-04-06 12:12:12`,
+    //     likeNume: 88,
+    //     mediaType: mediaTypeList[count % mediaTypeList.length],
+    //     coverImg: imgUrlList[count % imgUrlList.length],
+    //     authorAvatar: "https://res.wx.qq.com/op_res/lS41C5Xp6y6mfUbelCW8PArEcMwWRuhSohPO46vAiELbhAf56_CwONEDgM2vIVxOlT5KDcSxCkV8xIJ6cg3x2Q",
+    //     authorNickname: "小明",
+    //   };
+    //   count++;
+    //   newList[i].pastTime = util.formatPast(
+    //     new Date(newList[i].uploadTime.replaceAll("-", "/")),
+    //     "YYYY-mm-dd"
+    //   );
+    //   console.log("长度",mediaTypeList.length,"count",count)
+    //   if( newList[i].mediaType==="video")
+    //   console.log("视频地址",i)
+    // }
+    // console.log(this.data.times)
+    // this.setData({haveNoteList:true})
+    // if (this.data.times < 2)
+    //   return newList;
+    // else return [];
   },
 
   bindTapTitle: function () {
@@ -149,11 +142,11 @@ Page({
       url: `/pages/storyDetail/index?noteId=${noteId}`,
     })
   },
-  // bindTESTTODETAIL:function(){
-  //   wx.navigateTo({
-  //     url: '/pages/storyDetail/index',
-  //   })
-  // },
+  bindTESTTODETAIL:function(){
+    wx.navigateTo({
+      url: '/pages/storyDetail/index',
+    })
+  },
   bindSearchInput: function (e) {
     this.setData({
       searchValue: e.detail.value,

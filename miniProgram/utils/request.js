@@ -6,9 +6,18 @@ const http = (options) =>{
       method:options.method || 'GET',
       data:options.data || {},
       header: options.header || {
-        'content-type':'application/x-www-form-urlencoded'
+        'content-type':'application/json',
+        'Authorization': wx.getStorageSync('token'),
       },
-      success:resolve,
+      success:(res)=>{
+        if (res.data && res.data.freshToken) {
+          wx.setStorage("token",res.data.freshToken)
+        }
+        else if(res.data && res.data.token){
+          wx.setStorage("token",res.data.token)
+        }
+        resolve(res)
+      },
       fail:reject
     })
   })

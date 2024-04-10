@@ -1,95 +1,94 @@
 import request from 'request.js'
 // 按时间获取一定数量的游记列表
-const getNoteListByTime = (data,header) => {
+const getNoteListByTime = (data) => {
   return request({
-    url:'/travelDiary/getNoteListByTime',
+    url: '/travelDiary/getNoteListByTime',
     method: "POST",
     data: data,
-    header:header
   })
 }
 //搜索游记标题获得列表
-const getNoteListBySearchTitle = (data,header) => {
+const getNoteListBySearchTitle = (data) => {
   return request({
-    url:'/travelDiary/getNoteListBySearchTitle',
+    url: '/travelDiary/getNoteListBySearchTitle',
     method: "POST",
-    data:data,
-    header:header
+    data: data
   })
 }
 //搜索作者获取游记列表
-const getNoteListBySearchAuthor = (data,header) => {
+const getNoteListBySearchAuthor = (data) => {
   return request({
-    url:'/travelDiary/getNoteListBySearchAuthor',
+    url: '/travelDiary/getNoteListBySearchAuthor',
     method: "POST",
-    data:data,
-    header:header
+    data: data
   })
 }
 //获取游记详情内容 同时浏览量加一
-const getNoteDetails = (data,header) => {
+const getNoteDetails = (data) => {
   return request({
-    url:'/travelDiary/getNoteDetails',
+    url: '/travelDiary/getNoteDetails',
     method: "POST",
-    data:data,
-    header:header
+    data: data
   })
 }
 
 //获取游记评论区列表
-const getNoteComments = (data,header) => {
+const getNoteComments = (data) => {
   return request({
-    url:'/travelDiary/getNoteComments',
+    url: '/travelDiary/getNoteComments',
     method: "POST",
-    data:data,
-    header:header
+    data: data
   })
 }
 
 //点赞
-const likeNote = (data,header) => {
+const likeNote = (data) => {
   return request({
-    url:'/travelDiary/likeNote',
+    url: '/travelDiary/likeNote',
     method: "POST",
-    data:data,
-    header:header
+    data: data
   })
 }
 
 //收藏
-const collectNote = (data,header) => {
+const collectNote = (data) => {
   return request({
-    url:'/travelDiary/collectNote',
+    url: '/travelDiary/collectNote',
     method: "POST",
-    data:data,
-    header:header
+    data: data
   })
 }
 
 //取消收藏
-const cancelcollectNote = (data,header) => {
+const cancelcollectNote = (data) => {
   return request({
-    url:'/travelDiary/cancelcollectNote',
+    url: '/travelDiary/cancelcollectNote',
     method: "POST",
-    data:data,
-    header:header
+    data: data
   })
 }
 
 //评论
-const makeComment = (data,header) => {
+const makeComment = (data) => {
   return request({
-    url:'/travelDiary/makeComment',
+    url: '/travelDiary/makeComment',
     method: "POST",
-    data:data,
-    header:header
+    data: data
+  })
+}
+
+//获得用户信息
+const getUserInfo = () => {
+  return request({
+    url: '/travelDiary/getUserInfo',
+    method: "GET"
   })
 }
 
 
 
 
-export default{
+export default {
   getNoteListByTime,
   getNoteListBySearchTitle,
   getNoteListBySearchAuthor,
@@ -98,5 +97,6 @@ export default{
   likeNote,
   collectNote,
   cancelcollectNote,
-  makeComment
-  }
+  makeComment,
+  getUserInfo
+}

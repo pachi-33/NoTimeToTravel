@@ -5,7 +5,6 @@ import Api from "../../utils/api.js";
 Page({
   data: {
     times: 0, //测试代码内容
-    token: "111",
     noteList: [],
     isSearching: false,
     isSearchByTitle: true, //默认按照标题搜索
@@ -24,12 +23,10 @@ Page({
   },
   onLoad: async function (options) {
     const res = wx.getMenuButtonBoundingClientRect();
-    let gottoken = wx.getStorageSync("token");
     this.setData({
       menuTop: res.top,
       menuHeight: res.height,
       menuLeft: res.width + 10,
-      token: gottoken || "",
       loading: true,
       searchValue: options.searchValue || "",
       isSearchByTitle: options.isSearchByTitle === "true" ? true : false,
@@ -57,10 +54,6 @@ Page({
       loading: true,
     });
     console.log("searchValue", this.data.searchValue);
-    let header = {
-      "content-type": "application/json",
-      Authorization: this.data.token,
-    };
     const data = {
       beforeWhen: refresh
         ? util.formatTime(new Date(), "YYYY-mm-dd HH:mm:ss")
@@ -72,7 +65,7 @@ Page({
     };
     if (this.data.isSearchByTitle) {
       data.keyWords = this.data.searchValue;
-      Api.getNoteListBySearchTitle(data, header)
+      Api.getNoteListBySearchTitle(data)
         .then((res) => {
           console.log("res", res);
           let newList = res.data || [];
@@ -97,7 +90,7 @@ Page({
         });
     } else {
       data.authorNickname = this.data.searchValue;
-      Api.getNoteListBySearchAuthor(data, header)
+      Api.getNoteListBySearchAuthor(data)
         .then((res) => {
           console.log("res", res);
           let newList = res.data || [];
