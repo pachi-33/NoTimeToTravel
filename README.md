@@ -407,7 +407,6 @@ res.data = {
 
 ```js
 req.data = {
-    token,
     noteId
 }
 
@@ -419,6 +418,7 @@ res.data = {
         noteTitle,
         noteContent,
         authorNickname,
+        avatar,
         viewNum,
         likeNum,
         collectNum,
@@ -460,7 +460,6 @@ res.data = {
 
 ```js
 req.data = {
-    token,
     noteId
 }
 
@@ -470,12 +469,14 @@ res.data = {
         index0001: {
             commentId,
             commentBy: nickname,
+        	avatar,
             commentContent,
             commentTime	//较新的
         },
         index0002: {
             commentId,
             commentBy: nickname,
+            avatar,
             commentContent,
             commentTime	//较久的
         },
@@ -560,14 +561,7 @@ req.data = {
 
 res.data = {
     status:200,
-    freshToken,
-    reflectMyComment: {
-        commentId,
-        commentorNickname,
-        commentorAvatar: url,
-        commentTime: 'YYYY-MM-DD HH:mm:ss',
-        content
-    }
+    freshToken
 }
 
 验证失败
@@ -987,7 +981,7 @@ res.data = {
 req.data = {
     token,
     noteId: [],
-    action: 'approve' or 'disapprove' or 'delete' or 'restore'//退回到waiting
+    action: 'approve' or 'disapprove' or 'delete'
 }
 
 res.data = {

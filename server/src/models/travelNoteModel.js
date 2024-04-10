@@ -62,9 +62,12 @@ const TravelNote = {
         }
     },
 
+
+    // diary user
+
     getNoteListByTime: async function (before, len){
         const sql = `SELECT * FROM travelNote \
-        WHERE uploadTime < ? \
+        WHERE uploadTime < ? AND noteId IN ( SELECT noteId FROM review WHERE status = 'approved') \
         ORDER BY uploadTime DESC \
         LIMIT ? `;
         try {
@@ -78,7 +81,7 @@ const TravelNote = {
 
     getNoteListById: async function (before, len){
         const sql = `SELECT * FROM travelNote \
-        WHERE noteId > ? \
+        WHERE noteId > ? AND noteId IN ( SELECT noteId FROM review WHERE status = 'approved')\
         ORDER BY noteId ASC \
         LIMIT ? `;
         try {
@@ -92,7 +95,7 @@ const TravelNote = {
 
     getNoteListSearchTitleByTime: async function (beforeTime, keywords, len){
         const sql = `SELECT * FROM travelNote \
-        WHERE uploadTime < ? and noteTitle REGEXP ? \
+        WHERE uploadTime < ? and noteTitle REGEXP ? AND noteId IN ( SELECT noteId FROM review WHERE status = 'approved')\
         ORDER BY uploadTime DESC \
         LIMIT ?`;
         try {
@@ -106,7 +109,7 @@ const TravelNote = {
 
     getNoteListSearchTitleById: async function (beforeId, keywords, len){
         const sql = `SELECT * FROM travelNote \
-        WHERE uploadTime < ? and noteTitle REGEXP ?\
+        WHERE uploadTime < ? and noteTitle REGEXP ? AND noteId IN ( SELECT noteId FROM review WHERE status = 'approved')\
         ORDER BY noteId ASC \
         LIMIT ?`;
         try {
@@ -122,7 +125,8 @@ const TravelNote = {
         const sql = `SELECT * FROM travelNote \
         WHERE uploadTime < ? and \
         updateBy IN \
-        (SELECT nickname FROM users WHERE nickname REGEXP ?)\
+        (SELECT nickname FROM users WHERE nickname REGEXP ?) \
+        AND noteId IN ( SELECT noteId FROM review WHERE status = 'approved') \
         ORDER BY uploadTime DESC \
         LIMIT ?`;
         try {
@@ -139,6 +143,7 @@ const TravelNote = {
         WHERE uploadTime < ? and \
         updateBy IN \
         (SELECT nickname FROM users WHERE nickname REGEXP ?)\
+        AND noteId IN ( SELECT noteId FROM review WHERE status = 'approved') \
         ORDER BY uploadTime ASC \
         LIMIT ?`;
         try {
@@ -178,7 +183,20 @@ const TravelNote = {
             console.log('Error when adding collect num: ', err);
             runtimeLog.error('Error when adding collect num: ', err);
         }
+    },
+
+    getAllList: async function (){
+        const sql = `SELECT * FROM travelNote`;
+        try {
+            const row = await myQuery(sql, [noteId]);
+            return row;
+        } catch(err) {
+            console.log('Error when get all list: ', err);
+            runtimeLog.error('Error when get all list: ', err);
+        }
     }
+
+
 }
 
 module.exports = {TravelNote}
