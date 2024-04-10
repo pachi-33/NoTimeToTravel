@@ -14,7 +14,7 @@
             </view>
             <view class="media-list" wx:for="{{mediaList}}" data-index="{{index}}" bindtap="bindPreviewMedia" wx:key="index">
                 <image src="{{item}}" mode="" />
-                <view class="del" catchtap="catchDelImg" data-index="{{index}}">x</view>
+                <view class="del" catchtap="catchDelMedia" data-index="{{index}}">x</view>
             </view>
         </view>
     </scroll-view>
