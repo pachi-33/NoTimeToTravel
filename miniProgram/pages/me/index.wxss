@@ -1,0 +1,53 @@
+/* pages/myStory/index.wxss */
+/* 头像、用户名、UID部分 */
+
+.user-profile {
+  margin-top: 15px;
+}
+
+.avatar-container {
+  display: flex;
+  justify-content: center;
+}
+
+.avatar {
+  width: 25%;
+  height: 25vw;
+  border-radius: 50%;
+  display: flex;
+}
+.user-description-container input {
+  font-size: 20px;
+  height: 30px;
+  text-align: center
+
+}
+
+.option-list button{
+  display: flex;
+  border:none !important;
+  font-weight: normal !important;
+  padding: 0 0 !important;
+  justify-content: left !important;
+  margin-left: 0 !important;
+  font-size: 1rem !important;
+}
+
+.option-list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 25px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.option-list view:first-child {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  justify-content: left;
+}
+
+.option-list view {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}

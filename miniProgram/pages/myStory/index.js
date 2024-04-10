@@ -1,10 +1,56 @@
 // pages/myStory/index.js
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
+    noteList: [{
+        noteId:0,
+        title:'震惊，怎么到现在还没写完',
+        coverImg: 'https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAOEcdM.img',
+        authorNickname:'MAple',
+        authorAvatar: 'https://res.wx.qq.com/op_res/7_miJnK0wxIrh5bV2QqvYRu0VRyVvePJ4pB4_Dvj0ytF-ovjQzMl6WMLyuCeKk3579HNjKLIeNrHE7OprTBx5w',
+        likeNume:100,
+        status:'waiting',
+        reviewComment:'',
+        pastTime:'2天前',
+        uploadTime:'2023-03-03 12:12:12' //较新的
+      },
+      {
+        noteId:1,
+        title:'我真的很想玩博德之门',
+        coverImg: 'https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAOEcdM.img',
+        authorNickname:'MAple',
+        authorAvatar: 'https://res.wx.qq.com/op_res/7_miJnK0wxIrh5bV2QqvYRu0VRyVvePJ4pB4_Dvj0ytF-ovjQzMl6WMLyuCeKk3579HNjKLIeNrHE7OprTBx5w',
+        likeNume:100,
+        status:'disapproved',
+        reviewComment:'',
+        pastTime:'2天前',
+        uploadTime:'2023-03-03 12:12:12' //较新的
+      },
+      {
+        noteId:2,
+        title:'不玩博德之门的人生是不完整的',
+        coverImg: 'https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAOEcdM.img',
+        authorNickname:'MAple',
+        authorAvatar: 'https://res.wx.qq.com/op_res/7_miJnK0wxIrh5bV2QqvYRu0VRyVvePJ4pB4_Dvj0ytF-ovjQzMl6WMLyuCeKk3579HNjKLIeNrHE7OprTBx5w',
+        likeNume:100,
+        status:'disapproved',
+        pastTime:'2天前',
+        reviewComment:'不玩不会死，但是不玩就不完整',
+        uploadTime:'2023-03-03 12:12:12' //较新的
+      },
+      {
+        noteId:3,
+        title:'不玩舞萌的人生是不完整的',
+        coverImg: 'https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAOEcdM.img',
+        authorNickname:'MAple',
+        authorAvatar: 'https://res.wx.qq.com/op_res/7_miJnK0wxIrh5bV2QqvYRu0VRyVvePJ4pB4_Dvj0ytF-ovjQzMl6WMLyuCeKk3579HNjKLIeNrHE7OprTBx5w',
+        likeNume:100,
+        status:'approved',
+        reviewComment:'舞萌是什么？',
+        pastTime:'2天前',
+        uploadTime:'2023-03-03 12:12:12' //较新的
+      },
+    ],
+    haveNoteList:true,
     // 顶部布局参数
     menuTop: 0,
     menuHeight: 0,
@@ -16,12 +62,11 @@ Page({
    */
   onLoad(options) {
     const res = wx.getMenuButtonBoundingClientRect();
-    let gottoken = wx.getStorageSync("token");
     this.setData({
       menuTop: res.top,
       menuHeight: res.height,
       menuLeft: res.width + 10,
-      token: gottoken || "",
+      times: 0,
     });
   },
 

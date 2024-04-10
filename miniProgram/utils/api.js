@@ -7,7 +7,7 @@ const getNoteListByTime = (data) => {
     data: data,
   })
 }
-//搜索游记标题获得列表
+//搜索游记标题 获得列表
 const getNoteListBySearchTitle = (data) => {
   return request({
     url: '/travelDiary/getNoteListBySearchTitle',
@@ -85,8 +85,23 @@ const getUserInfo = () => {
   })
 }
 
+//设置头像
+const setAvatar = (data) => {
+  return request({
+    url: '/travelDiary/setAvatar',
+    method: "POST",
+    data: data
+  })
+}
 
-
+//设置昵称
+const setNickname = (data) => {
+  return request({
+    url: '/travelDiary/setNickname',
+    method: "POST",
+    data: data
+  })
+}
 
 export default {
   getNoteListByTime,
@@ -98,5 +113,7 @@ export default {
   collectNote,
   cancelcollectNote,
   makeComment,
-  getUserInfo
+  getUserInfo,
+  setAvatar,
+  setNickname
 }

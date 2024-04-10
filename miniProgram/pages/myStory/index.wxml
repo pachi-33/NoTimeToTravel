@@ -1,2 +1,39 @@
-<!--pages/myStory/index.wxml-->
-<text>pages/myStory/index.wxml</text>
+<!-- pages/myStory/index.wxml -->
+<scroll-view type="custom" scroll-y show-scrollbar="{{false}}" scroll-into-view="{{intoView}}" class="scroll-view"  style="margin-top: {{menuTop}}px;">
+    <sticky-section push-pinned-header="{{false}}">
+        <sticky-header>
+            <view class="sticky-header">
+                <view class="back" style="height: {{menuHeight}}px;line-height: {{menuHeight}}px; margin-right: {{menuLeft}}px;">
+                    <image bindtap="bindTapBackIcon" src="../../pics/left.png" mode="widthFix"></image>
+                    <text>返回</text>
+                </view>
+                <view class="newCommit">
+                    发布新的游记
+                </view>
+            </view>
+        </sticky-header>
+    </sticky-section>
+    <sticky-section push-pinned-header="{{false}}">
+        <grid-view type="masonry" cross-axis-count="{{crossAxisCount}}" cross-axis-gap="{{crossAxisGap}}" main-axis-gap="{{mainAxisGap}}" wx:if="{{haveNoteList}}">
+            <view wx:for="{{noteList}}" class="grid-box">
+                <image referrerPolicy="no-referrer" src="{{item.coverImg}}" mode="widthFix"></image>
+                <view class="content-box">
+                    <text>{{item.title}}</text>
+                    <view class="profile-text">
+                        <view class="left">
+                            <text>{{item.pastTime}}</text>
+                        </view>
+                        <view class="right" style="border-color:{{item.status==='approved'?'#8BC34A':(item.status==='waiting'?'#00BCD4':'#F44336')}};color:{{item.status==='approved'?'#8BC34A':(item.status==='waiting'?'#00BCD4':'#F44336')}};">
+                        {{item.status==='approved'?'通过':(item.status==='waiting'?'等待':'拒绝')}}
+                        </view>
+                    </view>
+                    <view class="option-box">
+                        <view wx:if="{{item.status!=='approved'}}">编辑</view>
+                        <view>删除</view>
+                    </view>
+                </view>
+            </view>
+        </grid-view>
+        <view wx:if="{{!haveNoteList}}" class="no-data">你还没有发布过你的旅行物语呢~</view>
+    </sticky-section>
+</scroll-view>

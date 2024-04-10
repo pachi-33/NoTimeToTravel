@@ -54,49 +54,9 @@
   justify-content: center;
 }
 
-.top-list {
-  display: flex;
-  text-align: center;
-  justify-content: center;
-  align-items: center;
-  padding-top: 10px;
-  flex-direction: column;
-}
-
-.top-list image {
-  width: 15vw;
-  height: 15vw;
-  border-radius: 50%;
-}
-
-.top-list text {
-  padding: 10px 0;
-  font-size: 14px;
-}
-
 .sticky-header {
   background-color: #fff;
 }
-
-.sticky-header-child {
-  display: flex;
-  flex-direction: row;
-}
-
-.mini-head {
-  display: flex;
-  background-color: #f5f5f5;
-  margin: 8px 6px;
-  padding: 6px 8px;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-.current {
-  background-color: #07c160;
-  color: #fff;
-}
-
 .grid-box {
   padding: 10px;
   border-radius: 8px;

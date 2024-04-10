@@ -4,10 +4,11 @@
     "pages/logs/logs",
     "pages/login/index",
     "pages/regist/index",
-    "pages/myStory/index",
+    "pages/me/index",
     "pages/createStory/index",
     "pages/storyDetail/index",
-    "pages/searchDetail/index"
+    "pages/searchDetail/index",
+    "pages/myStory/index"
   ],
   "tabBar": {
     "borderStyle": "white",
@@ -21,7 +22,7 @@
         "text": "发布游记"
       },
       {
-        "pagePath": "pages/myStory/index",
+        "pagePath": "pages/me/index",
         "text": "我的"
       }
     ]
