@@ -23,10 +23,6 @@
       {
         "pagePath": "pages/myStory/index",
         "text": "我的"
-      },
-      {
-        "pagePath": "pages/login/index",
-        "text": "登录"
       }
     ]
   },

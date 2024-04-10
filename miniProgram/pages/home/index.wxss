@@ -100,6 +100,9 @@
 .grid-box image {
     width: 100%;
 }
+.show-vedio{
+    width: 100%;
+}
  
 .content-box {
     padding-top: 10px;

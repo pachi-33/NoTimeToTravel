@@ -1,6 +1,6 @@
 // index.js
 
-import { getLandscapeImages } from "./data";
+import { getLandscapeImages,getMediaType } from "./data";
 import util from "../../utils/util.js";
 import Api from "../../utils/api.js";
 
@@ -69,6 +69,11 @@ Page({
       });
       if(refresh && newList.length === 0){
         this.setData({
+          haveNoteList: false,
+        });
+      }
+      else{
+        this.setData({
           haveNoteList: true,
         });
       }
@@ -92,6 +97,7 @@ Page({
     // })
     // const newList = new Array(20).fill(0);
     // const imgUrlList = getLandscapeImages();
+    // const mediaTypeList = getMediaType();
     // let count = 0;
     // for (let i = 0; i < newList.length; i++) {
     //   newList[i] = {
@@ -99,16 +105,22 @@ Page({
     //     title: `helllo ${i}`,
     //     uploadTime: `2024-04-06 12:12:12`,
     //     likeNume: 88,
-    //     coverImg: imgUrlList[count++ % imgUrlList.length],
+    //     mediaType: mediaTypeList[count % mediaTypeList.length],
+    //     coverImg: imgUrlList[count % imgUrlList.length],
     //     authorAvatar: "https://res.wx.qq.com/op_res/lS41C5Xp6y6mfUbelCW8PArEcMwWRuhSohPO46vAiELbhAf56_CwONEDgM2vIVxOlT5KDcSxCkV8xIJ6cg3x2Q",
     //     authorNickname: "小明",
     //   };
+    //   count++;
     //   newList[i].pastTime = util.formatPast(
     //     new Date(newList[i].uploadTime.replaceAll("-", "/")),
     //     "YYYY-mm-dd"
     //   );
+    //   console.log("长度",mediaTypeList.length,"count",count)
+    //   if( newList[i].mediaType==="video")
+    //   console.log("视频地址",i)
     // }
     // console.log(this.data.times)
+    // this.setData({haveNoteList:true})
     // if (this.data.times < 2)
     //   return newList;
     // else return [];
@@ -129,6 +141,11 @@ Page({
     wx.navigateTo({
       url: `/pages/searchDetail/index?searchValue=${this.data.searchValue}&isSearchByTitle=${this.data.isSearchByTitle}`,
     });
+  },
+  bindTESTTODETAIL:function(){
+    wx.navigateTo({
+      url: '/pages/storyDetail/index',
+    })
   },
   bindSearchInput: function (e) {
     this.setData({
