@@ -48,8 +48,9 @@ const Users = {
     setAvatar: async function(openid, avatarUrl){
         const sql = ` UPDATE users SET avatar = ? WHERE openid = ? `;
         try {
-            const rows = await myQuery(sql, [avatarUrl, openid]);
-            return rows;
+            const feedback = await myQuery(sql, [avatarUrl, openid]);
+            console.log('Set avatar.', feedback);
+            runtimeLog.info('Set avatar.', feedback);
         } catch(err) {
             console.log('Error when set avatar: ', err);
             runtimeLog.error('Error when set avatar: ', err);
@@ -59,8 +60,9 @@ const Users = {
     setNickname: async function(openid, newNickname){
         const sql = ` UPDATE users SET nickname = ? WHERE openid = ? `;
         try {
-            const rows = await myQuery(sql, [newNickname, openid]);
-            return rows;
+            const feedback = await myQuery(sql, [newNickname, openid]);
+            console.log('Set nickname.', feedback);
+            runtimeLog.info('Set nickname.', feedback);
         } catch(err) {
             console.log('Error when set nickname: ', err);
             runtimeLog.error('Error when set nickname: ', err);

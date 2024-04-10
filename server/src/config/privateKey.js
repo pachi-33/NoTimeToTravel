@@ -1,2 +1,2 @@
 const key = 'noTimeToTravel';
-module.exports = key;
+module.exports = {key};

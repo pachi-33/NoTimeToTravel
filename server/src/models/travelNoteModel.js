@@ -66,8 +66,11 @@ const TravelNote = {
     // diary user
 
     getNoteListByTime: async function (before, len){
-        const sql = `SELECT * FROM travelNote \
-        WHERE uploadTime < ? AND noteId IN ( SELECT noteId FROM review WHERE status = 'approved') \
+        const sql = ` SELECT noteId, noteTitle, url, mediaType, nickname, avatar, likeNum, uploadTime
+        (SELECT noteId, noteTitle, nickname, avatar, likeNum, uploadTime \
+        FROM (travelNote JOIN users ON travelNote.updateBy = users.uid) \
+        WHERE uploadTime < ? AND noteId IN ( SELECT noteId FROM review WHERE status = 'approved') ) t1\
+        JOIN resourse ON t1.noteId = resources.noteId \
         ORDER BY uploadTime DESC \
         LIMIT ? `;
         try {

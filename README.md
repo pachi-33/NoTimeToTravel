@@ -124,7 +124,7 @@ res.data = {
 
 获取用户信息
 
-[GET]	.../travelDiary/getUserInfo
+[GET]	.../travelDiary/verification/getUserInfo
 
 ```js
 req.data = {
@@ -157,19 +157,18 @@ res.data = {
 
 设置头像
 
-[POST]	.../travelDiary/setAvatar
+[POST]	.../travelDiary/verification/setAvatar
 
 ```js
 req.data = {
     token,
-    img: 'base64...'
+    img: url
 }
 
 上传成功
 res.data = {
     status: 200,
-    freshToken,
-    avatarUrl
+    freshToken
 }
 
 上传途中出错
@@ -195,7 +194,7 @@ res.data = {
 
 设置昵称
 
-[POST]	.../travelDiary/setNickName
+[POST]	.../travelDiary/verification/setNickName
 
 ```js
 req.data = {
@@ -206,8 +205,7 @@ req.data = {
 修改成功
 res.data = {
     status: 200,
-    freshToken,
-    nickName
+    freshToken
 }
 
 昵称重复
@@ -233,7 +231,7 @@ res.data = {
 
 按时间获取一定数量的游记列表
 
-[POST]	.../travelDiary/getNoteListByTime
+[POST]	.../travelDiary/verification/getNoteListByTime
 
 ```js
 req.data = {
@@ -289,7 +287,7 @@ res.data = {
 
 搜索游记标题获得列表
 
-[POST]	.../travelDiary/getNoteListBySearchTitle
+[POST]	.../travelDiary/verification/getNoteListBySearchTitle
 
 ```js
 req.data = {
@@ -346,7 +344,7 @@ res.data = {
 
 搜索作者获取游记列表
 
-[POST]	.../travelDiary/getNoteListBySearchAuthor
+[POST]	.../travelDiary/verification/getNoteListBySearchAuthor
 
 ```js
 req.data = {
@@ -401,12 +399,13 @@ res.data = {
 
 
 
-获取游记详情内容 同时浏览量加一
+获取游记详情内容 同时浏览量加一 token
 
 [GET]	.../travelDiary/getNoteDetails
 
 ```js
 req.data = {
+    token,
     noteId
 }
 
@@ -422,6 +421,7 @@ res.data = {
         viewNum,
         likeNum,
         collectNum,
+        isCollected,
         lastModifyTime,
         location,
         resources: [
@@ -502,7 +502,7 @@ res.data = {
 
 点赞
 
-[GET]	.../travelDiary/likeNote
+[GET]	.../travelDiary/verification/likeNote
 
 ```js
 req.data = {
@@ -520,7 +520,7 @@ res.data = {
 
 收藏
 
-[GET]	.../travelDiary/collectNote
+[GET]	.../travelDiary/verification/collectNote
 
 ```js
 req.data = {
@@ -548,9 +548,47 @@ res.data = {
 
 
 
+取消收藏
+
+[GET]	.../travelDiary/verification/cancelCollectNote
+
+```js
+req.data = {
+	token,
+    noteId
+}
+
+res.data = {
+    status: 200,
+    freshToken
+}
+
+未收藏
+res.data = {
+    status: 401,
+    msg: 'Have not collected.',
+}
+
+验证失败
+res.data = {
+    status: 401,
+    msg: 'Validation failed.',
+}
+
+token过期
+res.data = {
+    status: 401,
+    msg: 'Authentication expires.',
+}
+```
+
+
+
+
+
 评论
 
-[POST]	.../travelDiary/makeComment
+[POST]	.../travelDiary/verification/makeComment
 
 ```js
 req.data = {
@@ -581,7 +619,7 @@ res.data = {
 
 上传文件
 
-[POST]	.../travelDiary/uploadFile
+[POST]	.../travelDiary/verification/uploadFile
 
 ```js
 //用 wx.uploadFile 
@@ -619,7 +657,7 @@ res.data = {
 
 上传游记
 
-[POST]	.../travelDiary/uploadNote
+[POST]	.../travelDiary/verification/uploadNote
 
 ```js
 req.data = {
@@ -686,9 +724,117 @@ res.data = {
 
 
 
+修改游记
+
+[POST]	.../travelDiary/verification/uploadNote
+
+```js
+req.data = {
+	token,
+    content: {
+        noteId,
+        noteTitle,
+        noteContent,
+        location,
+        resources: [
+            index01: {
+                mediaType,
+                url
+            },
+            index02: {
+                mediaType,
+                url
+            },
+            ......
+            ......
+        ]
+    }
+}
+
+res.data = {
+	status: 200,
+    freshToken,
+	reflectMyNote: {
+	    noteId
+        noteTitle,
+        noteContent,
+        authorNickname,
+        viewNum,
+        likeNum,
+        collectNum,
+        lastModifyTime,
+        location,
+        resources: [
+            index01: {
+                mediaType,
+                url
+            },
+            index02: {
+                mediaType,
+                url
+            },
+            ......
+            ......
+        ]
+	}
+}
+
+验证失败
+res.data = {
+    status: 401,
+    msg: 'Validation failed.',
+}
+
+token过期
+res.data = {
+    status: 401,
+    msg: 'Authentication expires.',
+}
+```
+
+
+
+删除游记
+
+[POST]	.../travelDiary/verification/deleteNote
+
+```js
+req.data = {
+	token,
+    noteId
+}
+
+res.data = {
+	status: 200,
+    freshToken
+}
+
+删除失败
+res.data = {
+    status: 401,
+    msg: 'Delete failed.',
+}
+
+验证失败
+res.data = {
+    status: 401,
+    msg: 'Validation failed.',
+}
+
+token过期
+res.data = {
+    status: 401,
+    msg: 'Authentication expires.',
+}
+```
+
+
+
+
+
 获得收藏的游记列表
 
-[GET]	.../travelDiary/getMyCollect
+[GET]	.../travelDiary/verification/getMyCollect
 
 ```js
 req.data = {
@@ -740,7 +886,7 @@ res.data = {
 
 获得我的游记列表
 
-[GET]	.../travelDiary/getMyNoteListWithStatus
+[GET]	.../travelDiary/verification/getMyNoteListWithStatus
 
 ```js
 req.data = {
@@ -823,7 +969,7 @@ res.data = {
 
 获取审核员列表
 
-[GET]	.../moderationPlatform/getReviewerList
+[GET]	.../moderationPlatform/verification/getReviewerList
 
 ```js
 req.data = {
@@ -864,7 +1010,7 @@ res.data = {
 
 删除审核员
 
-[POST]	.../moderationPlatform/deleteReviewer
+[POST]	.../moderationPlatform/verification/deleteReviewer
 
 ```js
 req.data = {
@@ -894,7 +1040,7 @@ res.data = {
 
 增加审核员
 
-[POST]	.../moderationPlatform/registerReviewer
+[POST]	.../moderationPlatform/verification/registerReviewer
 
 ```js
 req.data = {
@@ -925,7 +1071,7 @@ res.data = {
 
 获取游记信息
 
-[GET]	.../moderationPlatform/getNoteInfo
+[GET]	.../moderationPlatform/verification/getNoteInfo
 
 ```js
 req.data = {
@@ -975,7 +1121,7 @@ res.data = {
 
 审核操作
 
-[POST]	.../moderationPlatform/approveNote
+[POST]	.../moderationPlatform/verification/approveNote
 
 ```js
 req.data = {
@@ -1012,7 +1158,7 @@ res.data = {
 
 获得游记完整列表
 
-[GET]	.../moderationPlatform/getNoteList
+[GET]	.../moderationPlatform/verification/getNoteList
 
 ```js
 req.data = {
@@ -1063,7 +1209,7 @@ res.data = {
 
 获取某审核员审核过的游记列表
 
-[GET]	.../moderationPlatform/getMyReviewNote
+[GET]	.../moderationPlatform/verification/getMyReviewNote
 
 ```js
 req.data = {
