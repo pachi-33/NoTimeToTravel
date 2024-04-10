@@ -56,10 +56,20 @@ const likeNote = (data,header) => {
   })
 }
 
-//点赞
+//收藏
 const collectNote = (data,header) => {
   return request({
     url:'/travelDiary/collectNote',
+    method: "POST",
+    data:data,
+    header:header
+  })
+}
+
+//取消收藏
+const cancelcollectNote = (data,header) => {
+  return request({
+    url:'/travelDiary/cancelcollectNote',
     method: "POST",
     data:data,
     header:header
@@ -87,5 +97,6 @@ export default{
   getNoteComments,
   likeNote,
   collectNote,
+  cancelcollectNote,
   makeComment
   }

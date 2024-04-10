@@ -22,6 +22,7 @@
       <text class="title">{{content.noteTitle}}</text>
       <view class="author-profile">
         <view class="left">
+          <image src="{{content.avatar}}"></image>
           <text>{{content.authorNickname}}</text>
         </view>
         <view class="right">
@@ -35,11 +36,11 @@
           <text>{{content.viewNum}}</text>
         </view>
         <view>
-          <image src="../../pics/like.png"></image>
+          <image bindtap="bindTapLike" src="{{likeImgUrl}}"></image>
           <text>{{content.likeNum}}</text>
         </view>
         <view>
-          <image src="../../pics/star.png"></image>
+          <image bindtap="bindTapCollect" src="{{content.isCollected?'../../pics/star-fill.png':'../../pics/star.png'}}"></image>
           <text>{{content.collectNum}}</text>
         </view>
       </view>
@@ -49,9 +50,13 @@
       </view>
     </view>
     <list-view class="comment">
+      <text class="comment-total">共{{comments.length}}条评论</text>
       <block wx:for="{{comments}}" wx:key="commentId" wx:if="{{haveCommentList}}">
         <view class="comment-list-box" data-id="{{item.commentId}}">
-          <text class="comment-author">{{item.commentBy}}</text>
+          <view class="comment-author">
+            <image src="{{content.avatar}}"></image>
+            <text class="comment-username">{{item.commentBy}}</text>
+          </view>
           <text class="comment-content">{{item.commentContent}}</text>
           <text class="comment-time">{{item.commentTime}}</text>
         </view>
@@ -59,7 +64,7 @@
       <view wx:if="{{!haveCommentList}}" class="no-data">还没有评论呢~</view>
     </list-view>
   </scroll-view>
-  <view style="bottom:{{inputBottom}}px" class="comment-box" >
+  <view  class="comment-box">
     <input placeholder="快来发表评论吧~" bindinput="bindCommentInput" bindconfirm="bindConfirmComment" bindfocus="bindCommentFocus" bindblur="bindCommentBlur" />
   </view>
 </view>

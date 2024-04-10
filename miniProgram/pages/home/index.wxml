@@ -15,9 +15,8 @@
   </sticky-section>
   <sticky-section push-pinned-header="{{false}}">
     <grid-view type="masonry" cross-axis-count="{{crossAxisCount}}" cross-axis-gap="{{crossAxisGap}}" main-axis-gap="{{mainAxisGap}}" wx:if="{{haveNoteList}}">
-      <view wx:for="{{noteList}}" class="grid-box">
-        <video wx:if="{{item.mediaType==='video'}}" controls="{{false}}" class="show-vedio" 	object-fit="contain" src="{{item.coverImg}}" ></video>
-        <image wx:if="{{item.mediaType==='image'}}" referrerPolicy="no-referrer" src="{{item.coverImg}}" mode="widthFix"></image>
+      <view wx:for="{{noteList}}" wx:key="index" class="grid-box" data-id="{{item.noteId}}" bindtap="bindTapMasonryItem">
+        <image referrerPolicy="no-referrer" src="{{item.coverImg}}" mode="widthFix"></image>
         <view class="content-box">
           <text>{{item.title}}</text>
           <view class="profile-text">
@@ -39,7 +38,7 @@
       </view>
     </grid-view>
     <view wx:if="{{!haveNoteList}}" class="no-data">似乎没有物语哦~</view>
-    <button bindtap="bindTESTTODETAIL">测试游记详情</button>
+    <!-- <button bindtap="bindTESTTODETAIL">测试游记详情</button> -->
     <view wx:if="{{loaing}}">加载中...</view>
   </sticky-section>
 </scroll-view>

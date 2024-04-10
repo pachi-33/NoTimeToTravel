@@ -35,6 +35,13 @@
 }
 .author-profile .left{
   width: 50%;
+  display: flex;
+}
+.author-profile .left image{
+  width: 30px; 
+  height: 30px; 
+  border-radius: 50%; 
+  margin-right: 10px; 
 }
 .author-profile .right{
   display: flex;
@@ -79,12 +86,31 @@
   width: 100%;
 }
 
+
+.comment-total{
+  margin-left: 10px;
+  margin-top: 20px;
+  font-size: 15px;
+  font-weight: bold;
+}
+
 .comment-list-box {
   padding: 10px;
   border-bottom: 1px solid #ddd;
 }
 
 .comment-author {
+  display: flex;
+  align-items: left; 
+}
+
+.comment-author image {
+  width: 30px; 
+  height: 30px; 
+  border-radius: 50%; 
+  margin-right: 10px; 
+}
+.comment-username {
   font-weight: bold;
 }
 
