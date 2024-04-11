@@ -7,7 +7,7 @@
                     <image bindtap="bindTapBackIcon" src="../../pics/left.png" mode="widthFix"></image>
                     <text>返回</text>
                 </view>
-                <view class="newCommit">
+                <view class="newCommit" bind:tap="bindTapNewStroy">
                     发布新的游记
                 </view>
             </view>
@@ -15,7 +15,7 @@
     </sticky-section>
     <sticky-section push-pinned-header="{{false}}">
         <grid-view type="masonry" cross-axis-count="{{crossAxisCount}}" cross-axis-gap="{{crossAxisGap}}" main-axis-gap="{{mainAxisGap}}" wx:if="{{haveNoteList}}">
-            <view wx:for="{{noteList}}" class="grid-box">
+            <view wx:for="{{noteList}}" class="grid-box" wx:key="index" data-id="{{item.noteId}}" bindtap="bindTapMasonryItem">
                 <image referrerPolicy="no-referrer" src="{{item.coverImg}}" mode="widthFix"></image>
                 <view class="content-box">
                     <text>{{item.title}}</text>
@@ -24,12 +24,15 @@
                             <text>{{item.pastTime}}</text>
                         </view>
                         <view class="right" style="border-color:{{item.status==='approved'?'#8BC34A':(item.status==='waiting'?'#00BCD4':'#F44336')}};color:{{item.status==='approved'?'#8BC34A':(item.status==='waiting'?'#00BCD4':'#F44336')}};">
-                        {{item.status==='approved'?'通过':(item.status==='waiting'?'等待':'拒绝')}}
+                        {{item.status==='approved'?'审核通过':(item.status==='waiting'?'待审核':'审核拒绝')}}
                         </view>
                     </view>
+                    <view wx:if="{{item.status==='disapproved'}}" class="reject-reason-container">
+                      <text>拒绝原因：{{item.reviewComment||'暂无'}}</text>
+                    </view>
                     <view class="option-box">
-                        <view wx:if="{{item.status!=='approved'}}">编辑</view>
-                        <view>删除</view>
+                        <view wx:if="{{item.status!=='approved'}}" bind:tap="bindTapEdit">编辑</view>
+                        <view bind:tap="bindTapDelete">删除</view>
                     </view>
                 </view>
             </view>

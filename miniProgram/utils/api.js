@@ -1,4 +1,13 @@
 import request from 'request.js'
+
+const diaryLogin = (data) => {
+  return request({
+    url: '/travelDiary/login',
+    method: "POST",
+    data: data
+  })
+}
+
 // 按时间获取一定数量的游记列表
 const getNoteListByTime = (data) => {
   return request({
@@ -103,6 +112,24 @@ const setNickname = (data) => {
   })
 }
 
+//编辑游记
+const uploadNote = (data) => {
+  return request({
+    url: '/travelDiary/uploadNote',
+    method: "POST",
+    data: data
+  })
+}
+
+//删除游记
+const deleteNote = (data) => {
+  return request({
+    url: '/travelDiary/deleteNote',
+    method: "POST",
+    data: data
+  })
+}
+
 export default {
   getNoteListByTime,
   getNoteListBySearchTitle,
@@ -115,5 +142,7 @@ export default {
   makeComment,
   getUserInfo,
   setAvatar,
-  setNickname
+  setNickname,
+  uploadNote,
+  deleteNote
 }

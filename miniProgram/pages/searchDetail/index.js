@@ -116,6 +116,12 @@ Page({
     }
 
   },
+  bindTapMasonryItem:function(e){
+    const noteId = e.currentTarget.dataset.id;
+    wx.navigateTo({
+      url: `/pages/storyDetail/index?noteId=${noteId}`,
+    })
+  },
   bindSubmitSearch: async function () {
     let newList = await this.getNewSearchList(true);
     if(newList.length === 0){

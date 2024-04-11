@@ -23,7 +23,7 @@
     </sticky-section>
     <sticky-section push-pinned-header="{{false}}">
         <grid-view type="masonry" cross-axis-count="{{crossAxisCount}}" cross-axis-gap="{{crossAxisGap}}" main-axis-gap="{{mainAxisGap}}" wx:if="{{haveNoteList}}">
-            <view wx:for="{{noteList}}" class="grid-box">
+            <view wx:for="{{noteList}}" class="grid-box" wx:key="index" data-id="{{item.noteId}}" bindtap="bindTapMasonryItem">
                 <image referrerPolicy="no-referrer" src="{{item.coverImg}}" mode="widthFix"></image>
                 <view class="content-box">
                     <text>{{item.title}}</text>

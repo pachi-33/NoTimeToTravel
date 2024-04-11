@@ -35,6 +35,7 @@
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
 .searchOption-container view {
   margin-left: 30px;
 }
@@ -57,6 +58,7 @@
 .sticky-header {
   background-color: #fff;
 }
+
 .grid-box {
   padding: 10px;
   border-radius: 8px;
@@ -87,7 +89,7 @@
 }
 
 .profile-text .left {
-  width: 70%;
+  width: 50%;
 }
 
 .left image {
@@ -115,15 +117,21 @@
   margin: 0 3px;
 }
 
-.option-box{
+.option-box {
   display: flex;
   margin-top: 20px;
   justify-content: space-around;
 }
 
-.option-box view{
+.option-box view {
   width: 40%;
   text-align: center;
   border-radius: 5px;
   border: solid 1px #888;
+}
+
+.reject-reason-container text {
+  margin-top: 10px;
+  color: #888;
+  font-size: 14px;
 }

@@ -1,4 +1,5 @@
 // pages/myStory/index.js
+import Api from "../../utils/api";
 Page({
   data: {
     noteList: [{
@@ -10,7 +11,7 @@ Page({
         likeNume:100,
         status:'waiting',
         reviewComment:'',
-        pastTime:'2天前',
+        pastTime:'2023-03-03',
         uploadTime:'2023-03-03 12:12:12' //较新的
       },
       {
@@ -22,7 +23,7 @@ Page({
         likeNume:100,
         status:'disapproved',
         reviewComment:'',
-        pastTime:'2天前',
+        pastTime:'2023-03-03',
         uploadTime:'2023-03-03 12:12:12' //较新的
       },
       {
@@ -33,7 +34,7 @@ Page({
         authorAvatar: 'https://res.wx.qq.com/op_res/7_miJnK0wxIrh5bV2QqvYRu0VRyVvePJ4pB4_Dvj0ytF-ovjQzMl6WMLyuCeKk3579HNjKLIeNrHE7OprTBx5w',
         likeNume:100,
         status:'disapproved',
-        pastTime:'2天前',
+        pastTime:'2023-03-03',
         reviewComment:'不玩不会死，但是不玩就不完整',
         uploadTime:'2023-03-03 12:12:12' //较新的
       },
@@ -69,7 +70,33 @@ Page({
       times: 0,
     });
   },
-
+  bindTapBackIcon:function(){
+    wx.navigateBack();
+  },
+  bindTapNewStroy:function(){
+    wx.navigateTo({
+      url: '/pages/createStory/index',
+    })
+  },
+  bindTapEdit:function(e){
+    const noteId = e.currentTarget.dataset.id;
+    wx.navigateTo({
+      url: `/pages/createStory/index?noteId=${noteId}`,
+    })
+  },
+  bindTapDelete:async function(e){
+    const noteId = e.currentTarget.dataset.id;
+    await Api.deleteNote({
+      noteId:noteId
+    });
+    console.log("删除",noteId)
+  },
+  bindTapMasonryItem:function(e){
+    const noteId = e.currentTarget.dataset.id;
+    wx.navigateTo({
+      url: `/pages/storyDetail/index?noteId=${noteId}`,
+    })
+  },
   /**
    * 生命周期函数--监听页面初次渲染完成
    */

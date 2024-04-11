@@ -6,6 +6,7 @@ Page({
   data: {
     mediaList: [],
     inputValue: "",
+    mode: "create",//create or edit
     // 顶部布局参数
     menuTop: 0,
     menuHeight: 0,
@@ -15,14 +16,23 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad(options) {
+  onLoad:async function(options) {
     const res = wx.getMenuButtonBoundingClientRect();
     this.setData({
       menuTop: res.top,
       menuHeight: res.height,
       menuLeft: res.width + 10,
-      times: 0,
+      mode: "create"
     });
+    if(options.noteId){
+      this.setData({
+        mode:"edit"
+      })
+      const res = await Api.getNoteDetails({
+        noteId:options.noteId
+      });
+    }
+
   },
   bindTextAreaBlur: function (e) {
     this.setData({
