@@ -1,15 +1,12 @@
-<!-- pages/myStory/index.wxml -->
-<scroll-view type="custom" scroll-y show-scrollbar="{{false}}" scroll-into-view="{{intoView}}" class="scroll-view"  style="margin-top: {{menuTop}}px;">
+<!--pages/myCollection/index.wxml-->
+<scroll-view type="custom" scroll-y show-scrollbar="{{false}}" scroll-into-view="{{intoView}}" class="scroll-view" bindscrolltolower="bindSrollToLower" bindscrolltoupper="bindScrollToUpper" style="margin-top: {{menuTop}}px;" bindtap="hideSearchOption">
     <sticky-section push-pinned-header="{{false}}">
         <sticky-header>
             <view class="sticky-header">
                 <view class="back" style="height: {{menuHeight}}px;line-height: {{menuHeight}}px; margin-right: {{menuLeft}}px;">
                     <image bindtap="bindTapBackIcon" src="../../pics/left.png" mode="widthFix"></image>
                     <text bindtap="bindTapBackIcon">返回</text>
-                    <text class="title">我的游记</text>
-                </view>
-                <view class="newCommit" bind:tap="bindTapNewStroy">
-                    发布新的游记
+                    <text class="title">我的收藏</text>
                 </view>
             </view>
         </sticky-header>
@@ -22,22 +19,22 @@
                     <text>{{item.title}}</text>
                     <view class="profile-text">
                         <view class="left">
+                            <image src="{{item.authorAvatar}}"></image>
+                            <text>{{item.authorNickname}}</text>
+                        </view>
+                        <view class="right">
+                            <image src="https://res.wx.qq.com/community/dist/community/images/disagree_icon_fab2b7.svg"></image>
+                            <text>{{item.likeNume}}</text>
+                        </view>
+                    </view>
+                    <view class="profile-text">
+                        <view class="left">
                             <text>{{item.pastTime}}</text>
                         </view>
-                        <view class="right" style="border-color:{{item.status==='approved'?'#8BC34A':(item.status==='waiting'?'#00BCD4':'#F44336')}};color:{{item.status==='approved'?'#8BC34A':(item.status==='waiting'?'#00BCD4':'#F44336')}};">
-                        {{item.status==='approved'?'审核通过':(item.status==='waiting'?'待审核':'审核拒绝')}}
-                        </view>
-                    </view>
-                    <view wx:if="{{item.status==='disapproved'}}" class="reject-reason-container">
-                      <text>拒绝原因：{{item.reviewComment||'暂无'}}</text>
-                    </view>
-                    <view class="option-box">
-                        <view wx:if="{{item.status!=='approved'}}" bind:tap="bindTapEdit">编辑</view>
-                        <view bind:tap="bindTapDelete">删除</view>
                     </view>
                 </view>
             </view>
         </grid-view>
-        <view wx:if="{{!haveNoteList}}" class="no-data">你还没有发布过你的旅行物语呢~</view>
+        <view wx:if="{{!haveNoteList}}" class="no-data">似乎没有你搜索的物语哦~</view>
     </sticky-section>
 </scroll-view>

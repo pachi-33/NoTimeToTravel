@@ -1,5 +1,6 @@
 // pages/storyDetail/index.js
 import Api from "../../utils/api.js";
+import util from "../../utils/util.js";
 Page({
   data: {
     noteIdToSearch: 0,
@@ -112,7 +113,7 @@ Page({
     likeImgUrl: "../../pics/like.png",
   },
 
-  onLoad: async function (options) {
+  onLoad: function (options) {
     const res = wx.getMenuButtonBoundingClientRect();
     const { noteId } = options;
     this.setData({
@@ -121,8 +122,8 @@ Page({
       menuLeft: res.width + 10,
       noteIdToSearch: noteId,
     });
-    await this.getDetail();
-    await this.getComment();
+    this.getDetail();
+    this.getComment();
   },
 
   bindChange: function (e) {
@@ -161,7 +162,9 @@ Page({
     };
     let res = await Api.addComment(data);
     if (res.data.status !== 200) {
-      //跳转到登录页面
+      wx.navigateTo({
+        url: "/pages/login/index",
+      });
       return;
     }
     await getComment();
@@ -203,7 +206,9 @@ Page({
     }
     let res = await Api.likeNote(data);
     if (res.data.status !== 200) {
-      //跳转到登录页面
+      wx.navigateTo({
+        url: "/pages/login/index",
+      });
       return;
     }
   },
@@ -232,13 +237,16 @@ Page({
       });
     }
     if (res.data.status !== 200) {
-      //跳转到登录页面
+      wx.navigateTo({
+        url: "/pages/login/index",
+      });
       return;
     }
   },
-  /**
-   * 用户点击右上角分享
-   */
+  bindCommentFocus: function () {
+    console.log("focus");
+    util.checkUserLogin();
+  },
   onShareAppMessage() {
     const { noteTitle, noteId } = this.data.content;
     const { imageUrl } = this.data.content.resources[0].url;

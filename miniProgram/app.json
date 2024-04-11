@@ -1,29 +1,37 @@
 {
   "pages": [
+    "pages/login/index",
     "pages/home/index",
     "pages/logs/logs",
-    "pages/login/index",
-    "pages/regist/index",
+
     "pages/me/index",
     "pages/createStory/index",
     "pages/storyDetail/index",
     "pages/searchDetail/index",
-    "pages/myStory/index"
+    "pages/myStory/index",
+    "pages/myCollection/index"
   ],
   "tabBar": {
     "borderStyle": "white",
+    "selectedColor": "#39c5bb",
     "list": [
       {
         "pagePath": "pages/home/index",
-        "text": "首页"
+        "text": "首页",
+
+        "iconPath": "pics/home.png",
+        "selectedIconPath": "pics/home-active.png"
       },
       {
         "pagePath": "pages/createStory/index",
-        "text": "发布游记"
+        "text": "发布游记",
+        "iconPath": "pics/plus-circle-fill.png"
       },
       {
         "pagePath": "pages/me/index",
-        "text": "我的"
+        "text": "我的",
+        "iconPath": "pics/user.png",
+        "selectedIconPath": "pics/user-active.png"
       }
     ]
   },

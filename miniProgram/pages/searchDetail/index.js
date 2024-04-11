@@ -30,10 +30,8 @@ Page({
       loading: true,
       searchValue: options.searchValue || "",
       isSearchByTitle: options.isSearchByTitle === "true" ? true : false,
-      noteList: await this.getNewSearchList(true) || [], //待接口完善后i需改
-
     });
-    console.log("现在在searchDetail页面",this.data);
+    this.bindScrollToUpper();
   },
 
   bindTapTitle: function () {
@@ -47,7 +45,7 @@ Page({
     });
   },
   getNewSearchList: async function (refresh = false) {
-    console.log("submit search")
+    console.log("submit search");
     this.setData({
       isSearching: false,
       isSearchOptionActive: false,
@@ -114,24 +112,33 @@ Page({
           return [];
         });
     }
-
   },
-  bindTapMasonryItem:function(e){
+  bindTapMasonryItem: function (e) {
     const noteId = e.currentTarget.dataset.id;
     wx.navigateTo({
       url: `/pages/storyDetail/index?noteId=${noteId}`,
-    })
+    });
   },
   bindSubmitSearch: async function () {
-    let newList = await this.getNewSearchList(true);
-    if(newList.length === 0){
+    try{
+      let newList = await this.getNewSearchList();
+      if (newList.length === 0) {
+        this.setData({
+          haveNoteList: false,
+        });
+      }
       this.setData({
-        haveNoteList: false,
+        noteList: newList,
       });
     }
-    this.setData({
-      noteList: newList,
-    });
+    catch(err){
+      wx.showToast({
+        title: "搜索失败",
+        icon: "none",
+        duration: 2000,
+      });
+      console.log("err",err);
+    }
   },
   bindSearchInput: function (e) {
     this.setData({
@@ -162,29 +169,47 @@ Page({
     wx.navigateBack();
   },
   bindSrollToLower: async function () {
-    let newList = await this.getNewSearchList();
-    console.log("newlist", newList);
-    if (newList.length === 0) {
+    try {
+      let newList = await this.getNewSearchList();
+      console.log("newlist", newList);
+      if (newList.length === 0) {
+        wx.showToast({
+          title: "你居然看完了全部的物语~",
+          icon: "none",
+          duration: 2000,
+        });
+        return;
+      }
+      this.setData({
+        noteList: this.data.noteList.concat(newList),
+      });
+    } catch (err) {
       wx.showToast({
-        title: "你居然看完了全部的物语~",
+        title: "出错了~",
         icon: "none",
         duration: 2000,
       });
-      return;
+      console.log("error:", err);
     }
-    this.setData({
-      noteList: this.data.noteList.concat(newList),
-    });
   },
   bindScrollToUpper: async function () {
-    let newList = await this.getNewSearchList(true);
-    if(newList.length === 0){
+    try {
+      let newList = await this.getNewSearchList(true);
+      if (newList.length === 0) {
+        this.setData({
+          haveNoteList: false,
+        });
+      }
       this.setData({
-        haveNoteList: false,
+        noteList: newList,
       });
+    } catch (err) {
+      wx.showToast({
+        title: "出错了~",
+        icon: "none",
+        duration: 2000,
+      });
+      console.log("error:", err);
     }
-    this.setData({
-      noteList: newList,
-    });
   },
 });

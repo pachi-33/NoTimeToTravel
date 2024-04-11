@@ -1,2 +1,15 @@
-<!--pages/login/index.wxml-->
-<text>pages/login/index.wxml</text>
+<!-- pages/login/index.wxml -->
+<view style="margin-top: {{menuTop}}px;" >
+  <view class="back" style="height: {{menuHeight}}px;line-height: {{menuHeight}}px; margin-right: {{menuLeft}}px;">
+    <image bindtap="bindTapBackIcon" src="../../pics/left.png" mode="widthFix"></image>
+    <text bindtap="bindTapBackIcon">返回首页</text>
+  </view>
+  <view class="main-container">
+    <view class="middle-container">
+      <view class="title">旅行物语</view>
+      <view class="slogan">记录属于你的旅行物语</view>
+      <view class="tips">刚刚的区域需要登录后才能探索哦</view>
+      <button bindtap="login">授权登录</button>
+    </view>
+  </view>
+</view>

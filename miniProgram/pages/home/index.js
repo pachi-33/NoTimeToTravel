@@ -1,6 +1,6 @@
 // index.js
 
-import { getLandscapeImages,getMediaType } from "./data";
+import { getLandscapeImages, getMediaType } from "./data";
 import util from "../../utils/util.js";
 import Api from "../../utils/api.js";
 
@@ -30,8 +30,8 @@ Page({
       menuHeight: res.height,
       menuLeft: res.width + 10,
       loading: true,
-      noteList: await this.getNewList(true) || [], //待接口完善后i需改
     });
+    this.bindScrollToUpper();
     console.log(this.data.noteList);
   },
 
@@ -48,7 +48,7 @@ Page({
     };
     try {
       let res = await Api.getNoteListByTime(noteListQuery);
-      console.log("getNewList的res", res)
+      console.log("getNewList的res", res);
       let newList = res.data || [];
       newList = newList.map((item) => {
         item.pastTime = util.formatPast(
@@ -60,23 +60,22 @@ Page({
       this.setData({
         loading: false,
       });
-      if(refresh && newList.length === 0){
+      if (refresh && newList.length === 0) {
         this.setData({
           haveNoteList: false,
         });
-      }
-      else{
+      } else {
         this.setData({
           haveNoteList: true,
         });
       }
       return newList;
     } catch (err) {
-      console.log("error:", err, "返回空数组,是否刷新",refresh);
+      console.log("error:", err, "返回空数组,是否刷新", refresh);
       this.setData({
         loading: false,
       });
-      if(refresh){
+      if (refresh) {
         this.setData({
           haveNoteList: false,
         });
@@ -135,17 +134,17 @@ Page({
       url: `/pages/searchDetail/index?searchValue=${this.data.searchValue}&isSearchByTitle=${this.data.isSearchByTitle}`,
     });
   },
-  bindTapMasonryItem:function(e){
+  bindTapMasonryItem: function (e) {
     const noteId = e.currentTarget.dataset.id;
-    console.log("点击了",noteId)
+    console.log("点击了", noteId);
     wx.navigateTo({
       url: `/pages/storyDetail/index?noteId=${noteId}`,
-    })
+    });
   },
-  bindTESTTODETAIL:function(){
+  bindTESTTODETAIL: function () {
     wx.navigateTo({
-      url: '/pages/storyDetail/index',
-    })
+      url: "/pages/storyDetail/index",
+    });
   },
   bindSearchInput: function (e) {
     this.setData({
@@ -173,24 +172,44 @@ Page({
     });
   },
   bindSrollToLower: async function () {
-    let newList = await this.getNewList();
-    console.log("newlist", newList);
-    if (newList.length === 0) {
+    try {
+      let newList = await this.getNewList();
+      console.log("newlist", newList);
+      if (newList.length === 0) {
+        wx.showToast({
+          title: "你居然看完了全部的物语~",
+          icon: "none",
+          duration: 2000,
+        });
+        return;
+      }
+      this.setData({
+        noteList: this.data.noteList.concat(newList),
+      });
+    } catch (err) {
       wx.showToast({
-        title: "你居然看完了全部的物语~",
+        title: "出错了~",
         icon: "none",
         duration: 2000,
       });
-      return;
+      console.log("error:", err);
     }
-    this.setData({
-      noteList: this.data.noteList.concat(newList),
-    });
   },
   bindScrollToUpper: async function () {
-    let newList = await this.getNewList(true);
-    this.setData({
-      noteList: newList,
-    });
+    try{
+      let newList = await this.getNewList(true);
+      this.setData({
+        noteList: newList,
+      });
+    }
+    catch(err){
+      wx.showToast({
+        title: "出错了~",
+        icon: "none",
+        duration: 2000,
+      });
+      console.log("error:", err);
+    }
+
   },
 });
