@@ -62,7 +62,7 @@ Page({
   bindChooseAvatar: function (e) {
     const tmpURL = e.detail.avatarUrl;
     wx.uploadFile({
-      url: "https://ctrip.x3322.net:3000/api/travelDiary/uploadFile", //仅为示例，非真实的接口地址
+      url: "https://xtrip.x3322.net:3000/api/travelDiary/verification/uploadFile", //仅为示例，非真实的接口地址
       filePath: tmpURL,
       name: "avatar",
       formData: {

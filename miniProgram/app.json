@@ -1,14 +1,13 @@
 {
   "pages": [
-    "pages/login/index",
-    "pages/home/index",
-    "pages/logs/logs",
 
+    "pages/home/index",
     "pages/me/index",
     "pages/createStory/index",
     "pages/storyDetail/index",
     "pages/searchDetail/index",
     "pages/myStory/index",
+    "pages/login/index",
     "pages/myCollection/index"
   ],
   "tabBar": {

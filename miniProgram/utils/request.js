@@ -1,4 +1,4 @@
-const pubUrl = "https://ctrip.x3322.net:3000/api/"//这是我要请求的数据接口的公共部分
+const pubUrl = "https://xtrip.x3322.net:3000/api/"//这是我要请求的数据接口的公共部分
 const http = (options) =>{
   return new Promise((resolve,reject) => {
     wx.request({

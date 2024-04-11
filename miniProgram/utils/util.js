@@ -45,11 +45,6 @@ const formatPast = (date, format) => {
   }
 };
 
-const formatNumber = (n) => {
-  n = n.toString();
-  return n[1] ? n : `0${n}`;
-};
-
 const checkUserLogin = async () => {
   try {
     let res = await Api.getUserInfo();

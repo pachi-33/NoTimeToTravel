@@ -69,7 +69,7 @@ Page({
           wx.uploadFile({
             filePath: tempFiles[i].tempFilePath,
             name: tempFiles[i].fileType == "image" ? "imageFile" : "videoFile",
-            url: 'https://ctrip.x3322.net:3000/api/travelDiary/uploadFile',
+            url: 'https://xtrip.x3322.net:3000/api/travelDiary/verification/uploadFile',
             formData: {
               mediaType: tempFiles[i].fileType == "image" ? "img" : "video"
             },
