@@ -1,5 +1,5 @@
 const express = require('express');
-const { prefix, travelDiary_urls, moderationPlatform_urls } = require('./src/config/InterfaceURL');
+const { prefix, travelDiary_urls, moderationPlatform_urls } = require('../config/InterfaceURL');
 const { login } = require('../controllers/moderationPlatform/login');
 const { getReviewerList } = require('../controllers/moderationPlatform/getReviewerList');
 const { deleteReviewer } = require('../controllers/moderationPlatform/deleteReviewer');

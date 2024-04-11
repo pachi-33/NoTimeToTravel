@@ -14,7 +14,7 @@ const clipCover = async function (url) {
     }
 };
 
-const collectNote = async function (req, res) {
+const getMyCollect = async function (req, res) {
     try {
         const { openid, noteId, uid } = req.data;
         const rows = await Collection.queryCollectionListByOpenid(openid);
@@ -45,4 +45,4 @@ const collectNote = async function (req, res) {
       }
 };
 
-module.exports = {collectNote};
+module.exports = {getMyCollect};

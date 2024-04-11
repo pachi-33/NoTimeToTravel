@@ -3,7 +3,7 @@ const { runtimeLog } = require('../../utils/logger');
 const { privateKey } = require('../../config/privateKey');
 const { jwt } = require('jsonwebtoken');
 
-const login = async function (req, res) {
+const registerReviewer = async function (req, res) {
     try {
         const { username, password } = req.data;
         await Reviewers.append(username, password);
@@ -19,4 +19,4 @@ const login = async function (req, res) {
       }
 };
 
-module.exports = {login};
+module.exports = {registerReviewer};
