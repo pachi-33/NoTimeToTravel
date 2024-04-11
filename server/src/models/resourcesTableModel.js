@@ -17,6 +17,18 @@ const Resources = {
         }
     },
 
+    flush: async function (noteId) {
+        const sql = `DELETE FROM resources WHERE noteId = ?`;
+        try {
+            const feedback = await myQuery(sql, [noteId]);
+            console.log('Flush resources: ', feedback);
+            runtimeLog.info('Flush resources: ',feedback);
+        } catch(err) {
+            console.log('Error when flush resources: ', err);
+            runtimeLog.error('Error when flush resources: ', err);
+        }
+    },
+
     queryList: async function (noteid){
         const sql = `SELECT * FROM resources WHERE noteId = ?\
         ORDERED BY idx ASC`;

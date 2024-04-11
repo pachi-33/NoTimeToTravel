@@ -84,7 +84,7 @@
 
 | column      | alias      | type     | constraint   |
 | ----------- | ---------- | -------- | ------------ |
-| uid         | 收藏者     | INT      | PK   NotNull |
+| openid      | 收藏者     | INT      | PK   NotNull |
 | noteId      | 收藏的游记 | INT      | PK   NotNull |
 | collectTime | 收藏时间   | DATETIME | NotNull      |
 
@@ -411,7 +411,6 @@ req.data = {
 
 res.data = {
     status: 200,
-	freshToken,
     content: {
         noteId
         noteTitle,
@@ -684,29 +683,7 @@ req.data = {
 res.data = {
 	status: 200,
     freshToken,
-	reflectMyNote: {
-	    noteId
-        noteTitle,
-        noteContent,
-        authorNickname,
-        viewNum,
-        likeNum,
-        collectNum,
-        lastModifyTime,
-        location,
-        resources: [
-            index01: {
-                mediaType,
-                url
-            },
-            index02: {
-                mediaType,
-                url
-            },
-            ......
-            ......
-        ]
-	}
+    noteId
 }
 
 验证失败
@@ -726,7 +703,7 @@ res.data = {
 
 修改游记
 
-[POST]	.../travelDiary/verification/uploadNote
+[POST]	.../travelDiary/verification/modifyNote
 
 ```js
 req.data = {
@@ -1204,60 +1181,6 @@ res.data = {
     msg: 'Authentication expires.',
 }
 ```
-
-
-
-获取某审核员审核过的游记列表
-
-[GET]	.../moderationPlatform/verification/getMyReviewNote
-
-```js
-req.data = {
-    token,
-    reviewerId
-}
-
-res.data = {
-    status: 200,
-    freshToken,
-    noteList: [
-        note001: {
-            noteId,
-            title,
-            coverImg: url,
-            authorNickname,
-            authorAvatar: url,
-        	status
-            uploadTime	//较新的
-        },
-        note002: {
-            noteId,
-            title,
-            coverImg: url,
-            authorNickname,
-            authorAvatar: url,
-            status,
-            uploadTime	//较久的
-        },
-        ......
-        ......
-     ]
-}
-    
-验证失败
-res.data = {
-    status: 401,
-    msg: 'Validation failed.',
-}
-
-token过期
-res.data = {
-    status: 401,
-    msg: 'Authentication expires.',
-}
-```
-
-
 
 
 

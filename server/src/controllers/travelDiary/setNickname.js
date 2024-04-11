@@ -1,4 +1,4 @@
-const { User } = require('../../models/usersModel')
+const { User } = require('../../models/UsersModel')
 const { runtimeLog } = require('../../utils/logger');
 
 const setNickname = async function (req, res) {

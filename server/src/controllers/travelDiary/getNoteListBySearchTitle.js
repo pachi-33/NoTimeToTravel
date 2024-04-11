@@ -14,16 +14,16 @@ const clipCover = async function (url) {
     }
 };
 
-const getNoteListByTime = async function (req, res) {
+const getNoteListBySearchTitle = async function (req, res) {
     try {
-        const { listLength } = req.data;
+        const { listLength, keywords } = req.data;
         let rows;
         if (req.data.beforeWhen) {
             const { beforeWhen } = req.data;
-            rows = await TravelNote.getNoteListByTime(beforeWhen, listLength);
+            rows = await TravelNote.getNoteListSearchTitleByTime(beforeWhen, keywords, listLength);
         } else if (req.data.beforeNoteId) {
             const { beforeNoteId } = req.data;
-            rows = await TravelNote.getNoteListById(beforeNoteId, listLength);
+            rows = await TravelNote.getNoteListSearchTitleById(beforeNoteId, keywords, listLength);
         } else {
             throw new Error('No noteid nor beforewhen received.');
         }
@@ -53,4 +53,4 @@ const getNoteListByTime = async function (req, res) {
     }
 };
 
-module.exports = { getNoteListByTime };
+module.exports = { getNoteListBySearchTitle };

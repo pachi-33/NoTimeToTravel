@@ -5,7 +5,7 @@ const { myQuery } = require('../utils/myQuery');
 const { runtimeLog }= require('../utils/logger');
 const { tellTime } = require('../utils/tellTime');
 
-const comments = {
+const Comments = {
     append: async function (noteId, commentBy, commentContent){
         const { year, month, day, hour, minute, second } = tellTime();
         const formatTime = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
@@ -21,7 +21,10 @@ const comments = {
     },
 
     queryCommentListByNoteid: async function (noteId){
-        const sql = `SELECT * FROM comments WHERE noteId = ?`;
+        const sql = `SELECT commentId, nickname, avatar, commentContent, commentTime \
+        FROM comments JOIN users ON comments.commentBy = users.uid \
+        WHERE noteId = ? \
+        ORDER BY commentTime DESC`;
         try {
             const row = await myQuery(sql, [noteId]);
             return row;
@@ -32,4 +35,4 @@ const comments = {
     }
 };
 
-module.exports = {comments};
+module.exports = {Comments};

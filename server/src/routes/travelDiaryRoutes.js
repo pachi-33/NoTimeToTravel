@@ -1,0 +1,43 @@
+const express = require('express');
+const { prefix, travelDiary_urls, moderationPlatform_urls } = require('./src/config/InterfaceURL');
+const { login } = require('../controllers/travelDiary/login');
+const { getUserInfo } = require('../controllers/travelDiary/getUserInfo');
+const { setAvatar } = require('../controllers/travelDiary/setAvatar');
+const { setNickname } = require('../controllers/travelDiary/setNickname');
+const { getNoteListByTime } = require('../controllers/travelDiary/getNoteListByTime');
+const { getNoteListBySearchTitle } = require('../controllers/travelDiary/getNoteListBySearchTitle');
+const { getNoteListBySearchAuthor } = require('../controllers/travelDiary/getNoteListBySearchAuthor');
+const { getNoteDetails } = require('../controllers/travelDiary/getNoteDetails');
+const { getNoteComments } = require('../controllers/travelDiary/getNoteComments');
+const { likeNote } = require('../controllers/travelDiary/likeNote');
+const { collectNote } = require('../controllers/travelDiary/collectNote');
+const { cancelCollectNote } = require('../controllers/travelDiary/cancelCollectNote');
+const { makeComments } = require('../controllers/travelDiary/makeComment');
+const { uploadNote } = require('../controllers/travelDiary/uploadNote');
+const { modifyNote } = require('../controllers/travelDiary/modifyNote');
+const { deleteNote } = require('../controllers/travelDiary/deleteNote');
+const { getMyCollect } = require('../controllers/travelDiary/getMyCollect');
+const { getMyNoteListWithStatus } = require('../controllers/travelDiary/getMyNoteListWithStatus');
+
+const travelDiaryRoutes = express.Router();
+
+travelDiaryRoutes.post(travelDiary_urls.login, login);
+travelDiaryRoutes.get(travelDiary_urls.getUserInfo, getUserInfo);
+travelDiaryRoutes.post(travelDiary_urls.setAvatar, setAvatar);
+travelDiaryRoutes.post(travelDiary_urls.setNickName, setNickname);
+travelDiaryRoutes.post(travelDiary_urls.getNoteListByTime, getNoteListByTime);
+travelDiaryRoutes.post(travelDiary_urls.getNoteListBySearchTitle, getNoteListBySearchTitle);
+travelDiaryRoutes.post(travelDiary_urls.getNoteListBySearchAuthor, getNoteListBySearchAuthor);
+travelDiaryRoutes.get(travelDiary_urls.getNoteDetails, getNoteDetails);
+travelDiaryRoutes.get(travelDiary_urls.getNoteComments, getNoteComments);
+travelDiaryRoutes.get(travelDiary_urls.likeNote, likeNote);
+travelDiaryRoutes.get(travelDiary_urls.collectNote, collectNote);
+travelDiaryRoutes.get(travelDiary_urls.cancelCollectNote, cancelCollectNote);
+travelDiaryRoutes.post(travelDiary_urls.makeComment, makeComments);
+travelDiaryRoutes.post(travelDiary_urls.uploadNote, uploadNote);
+travelDiaryRoutes.post(travelDiary_urls.modifyNote, modifyNote);
+travelDiaryRoutes.post(travelDiary_urls.deleteNote, deleteNote);
+travelDiaryRoutes.get(travelDiary_urls.getMyCollect, getMyCollect);
+travelDiaryRoutes.get(travelDiary_urls.getMyNoteListWithStatus, getMyNoteListWithStatus);
+
+module.exports = {travelDiaryRouter};

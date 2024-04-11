@@ -1,4 +1,4 @@
-const { User } = require('../../models/usersModel')
+const { User } = require('../../models/UsersModel')
 const { runtimeLog } = require('../../utils/logger');
 const { privateKey } = require('../../config/privateKey');
 const { jwt } = require('jsonwebtoken');

@@ -14,22 +14,12 @@ const clipCover = async function (url) {
     }
 };
 
-const getNoteListByTime = async function (req, res) {
+const getNoteList = async function (req, res) {
     try {
-        const { listLength } = req.data;
-        let rows;
-        if (req.data.beforeWhen) {
-            const { beforeWhen } = req.data;
-            rows = await TravelNote.getNoteListByTime(beforeWhen, listLength);
-        } else if (req.data.beforeNoteId) {
-            const { beforeNoteId } = req.data;
-            rows = await TravelNote.getNoteListById(beforeNoteId, listLength);
-        } else {
-            throw new Error('No noteid nor beforewhen received.');
-        }
-
+        const { openid, uid } = req.data;
+        const rows = await TravelNote.getAllList();
         const noteList = await Promise.all(rows.map(async obj => {
-            if (mediaType === 'video') {
+            if (obj.mediaType === 'video') {
                 const coverImg = await clipCover(obj.url);
                 return {
                     ...obj,
@@ -53,4 +43,4 @@ const getNoteListByTime = async function (req, res) {
     }
 };
 
-module.exports = { getNoteListByTime };
+module.exports = { getNoteList };

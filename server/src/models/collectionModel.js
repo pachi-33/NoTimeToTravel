@@ -5,13 +5,13 @@ const { myQuery } = require('../utils/myQuery');
 const { runtimeLog }= require('../utils/logger');
 const { tellTime } = require('../utils/tellTime');
 
-const collection = {
-    append: async function (noteId, uid){
+const Collection = {
+    append: async function (noteId, openid){
         const { year, month, day, hour, minute, second } = tellTime();
         const formatTime = year + "-" + month + "-" + day + " " + hour + ":" + minute + ":" + second;
-        const sql = `INSERT INTO collection (noteId, uid, commentTime) VALUES (?,?,?)`;
+        const sql = `INSERT INTO collection (noteId, openid, commentTime) VALUES (?,?,?)`;
         try {
-            const feedback = await myQuery(sql, [noteId, uid, formatTime]);
+            const feedback = await myQuery(sql, [noteId, openid, formatTime]);
             console.log('Add a collection: ', feedback);
             runtimeLog.info('Add a collection: ',feedback);
         } catch(err) {
@@ -20,11 +20,24 @@ const collection = {
         }
     },
 
-    queryCollectionListByuid: async function (uid){
-        const sql = `SELECT * FROM travelNote WHERE noteId IN \
-        (SELECT noteId FROM collection WHERE collection.uid = ?)`;
+    cancelCollectNote: async function (noteId, openid){
+        const sql = `DELETE FROM collection WHERE noteId = ? AND openid = ?`;
         try {
-            const row = await myQuery(sql, [uid]);
+            const feedback = await myQuery(sql, [noteId, openid]);
+            console.log('Delete a collection: ', feedback);
+            runtimeLog.info('Delete a collection: ',feedback);
+        } catch(err) {
+            console.log('Error when delete collection: ', err);
+            runtimeLog.error('Error when delete collection: ', err);
+        }
+    },
+
+    queryCollectionListByOpenid: async function (openid){
+        const sql = `SELECT noteId, noteTitle, nickname, avatar, likeNum, uploadTime \
+        FROM travelNote JOIN users ON travelNote.updateBy = users.uid WHERE noteId IN \
+        (SELECT noteId FROM collection WHERE collection.openid = ?)`;
+        try {
+            const row = await myQuery(sql, [openid]);
             return row;
         } catch(err) {
             console.log('Error when get note list in collection: ', err);
@@ -33,4 +46,4 @@ const collection = {
     }
 };
 
-module.exports = {collection};
+module.exports = {Collection};

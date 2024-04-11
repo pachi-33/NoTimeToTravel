@@ -41,7 +41,29 @@ const Reviewers = {
             console.log('Error when delete reviewer: ', err);
             runtimeLog.error('Error when delete reviewer: ', err);
         }
+    },
+
+    getReviewerId: async function (username, password){
+        const sql = `SELECT reviewerId FROM reviewers WHERE username = ? AND password = ?`;
+        try {
+            const rows = await myQuery(sql, [username, password]);
+            return rows;
+        } catch(err) {
+            console.log('Error when get reviewer id: ', err);
+            runtimeLog.error('Error when get reviewer id: ', err);
+        }
+    },
+
+    getReviewerList: async function (){
+        const sql = `SELECT reviewerId, username FROM reviewers`;
+        try {
+            const rows = await myQuery(sql);
+            return rows;
+        } catch(err) {
+            console.log('Error when get Reviewer List: ', err);
+            runtimeLog.error('Error when get Reviewer List: ', err);
+        }
     }
 };
 
-module.exports = Reviewers;
+module.exports = {Reviewers};
