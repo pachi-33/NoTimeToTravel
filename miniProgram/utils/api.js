@@ -1,10 +1,14 @@
+import { head } from 'request'
 import request from 'request.js'
 
-const diaryLogin = (data) => {
+const login = (data) => {
   return request({
     url: '/travelDiary/login',
     method: "POST",
-    data: data
+    data: data,
+    header: {
+      'content-type': 'application/json',
+    },
   })
 }
 
@@ -130,6 +134,22 @@ const deleteNote = (data) => {
   })
 }
 
+//获得收藏的游记列表
+const getMyCollect = () => {
+  return request({
+    url: '/travelDiary/getMyCollect',
+    method: "GET",
+  })
+}
+
+//获得我的游记列表
+const getMyNoteListWithStatus = () => {
+  return request({
+    url: '/travelDiary/getMyNoteListWithStatus',
+    method: "GET",
+  })
+}
+
 export default {
   getNoteListByTime,
   getNoteListBySearchTitle,
@@ -144,5 +164,8 @@ export default {
   setAvatar,
   setNickname,
   uploadNote,
-  deleteNote
+  deleteNote,
+  getMyCollect,
+  getMyNoteListWithStatus,
+  login
 }

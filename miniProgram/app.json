@@ -1,14 +1,15 @@
 {
   "pages": [
+    "pages/login/index",
     "pages/home/index",
     "pages/logs/logs",
-    "pages/login/index",
-    "pages/regist/index",
+
     "pages/me/index",
     "pages/createStory/index",
     "pages/storyDetail/index",
     "pages/searchDetail/index",
-    "pages/myStory/index"
+    "pages/myStory/index",
+    "pages/myCollection/index"
   ],
   "tabBar": {
     "borderStyle": "white",

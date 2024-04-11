@@ -1,3 +1,4 @@
+import Api from "api.js";
 const formatTime = (date, format) => {
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
@@ -19,7 +20,8 @@ const formatTime = (date, format) => {
 
 const formatPast = (date, format) => {
   // 传入格式处理、存储转换值
-  let t = date.getTime(),s;
+  let t = date.getTime(),
+    s;
   // 获取js 时间戳
   let time = new Date().getTime();
   // 当前时间戳 - 传入时间戳
@@ -48,7 +50,28 @@ const formatNumber = (n) => {
   return n[1] ? n : `0${n}`;
 };
 
+const checkUserLogin = async () => {
+  try {
+    let res = await Api.getUserInfo();
+    if (res.data && res.data.status === "200") {
+      return{nickname:res.data.data.nickName,avatarUrl:res.data.avatarUrl};
+    } else {
+      wx.navigateTo({
+        url: "/pages/login/index",
+      });
+      throw new Error("用户未登录");
+    }
+  } catch (err) {
+    wx.navigateTo({
+      url: "/pages/login/index",
+    });
+    console.log(err);
+    throw new Error("用户未登录");
+  }
+};
+
 module.exports = {
   formatTime,
   formatPast,
+  checkUserLogin,
 };

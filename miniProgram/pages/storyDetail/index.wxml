@@ -65,6 +65,6 @@
     </list-view>
   </scroll-view>
   <view  class="comment-box">
-    <input placeholder="快来发表评论吧~" bindinput="bindCommentInput" bindconfirm="bindConfirmComment" bindfocus="bindCommentFocus" bindblur="bindCommentBlur" />
+    <input placeholder="快来发表评论吧~" bindinput="bindCommentInput" bindconfirm="bindConfirmComment" bindfocus="bindCommentFocus"/>
   </view>
 </view>
