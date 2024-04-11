@@ -1,5 +1,5 @@
 "use client";
-import React, { Key } from "react";
+import React, { Key, useEffect } from "react";
 import {
   Table,
   TableHeader,
@@ -38,6 +38,7 @@ import { EyeIcon } from "../../icons/EyeIcon";
 import Image from "next/image";
 import API from "@/app/utils/api";
 import { error, success } from "@/app/utils/message";
+import useUserInfo from "@/app/hooks/useUserInfo";
 
 interface noteType {
   noteId: number;
@@ -64,6 +65,22 @@ const INITIAL_VISIBLE_COLUMNS = [
 ];
 
 export default function App() {
+  const userInfo = useUserInfo();
+  const [isAdmin, setIsAdmin] = React.useState(false);
+  useEffect(() => {
+    if (userInfo?.permission === "admin") {
+      setIsAdmin(true);
+      setIsMultiple(true);
+      setTimeout(() => {
+        setIsMultiple(false);
+      }, 500);
+    }
+    // console.log(userInfo);
+  }, [userInfo]);
+
+  // final selected
+  const [arraySelected, setArraySelected] = React.useState([0]);
+
   // input value
   const [filterValue, setFilterValue] = React.useState("");
   // selected columns
@@ -83,10 +100,11 @@ export default function App() {
   const [page, setPage] = React.useState(1);
   // select mode, single or multiple
   const [isMultiple, setIsMultiple] = React.useState(false);
+  //search by name or title
+  const [isSearchName, setIsSearchName] = React.useState(true);
 
   const [showDetails, setShowDetails] = React.useState(false);
   const [showChangeStatus, setShowChangeStatus] = React.useState(false);
-  const [showDelete, setShowDelete] = React.useState(false);
 
   const {
     isOpen: isDetailsOpen,
@@ -98,11 +116,6 @@ export default function App() {
     onOpen: onChangeStatusOpen,
     onOpenChange: onChangeStatusOpenChange,
   } = useDisclosure();
-  const {
-    isOpen: isDeleteOpen,
-    onOpen: onDeleteOpen,
-    onOpenChange: onDeleteOpenChange,
-  } = useDisclosure();
 
   const hasSearchFilter = Boolean(filterValue);
 
@@ -110,8 +123,12 @@ export default function App() {
     let filteredNotes = [...notes];
 
     if (hasSearchFilter) {
-      filteredNotes = filteredNotes.filter((note) =>
-        note.authorNickname.toLowerCase().includes(filterValue.toLowerCase())
+      filteredNotes = filteredNotes.filter((note) => {
+        if (isSearchName)
+          return note.authorNickname.toLowerCase().includes(filterValue.toLowerCase())
+        else
+          return note.title.toLowerCase().includes(filterValue.toLowerCase())
+      }
       );
     }
     if (
@@ -124,7 +141,7 @@ export default function App() {
     }
 
     return filteredNotes;
-  }, [notes, filterValue, statusFilter]);
+  }, [notes, filterValue, statusFilter,isSearchName]);
 
   const headerColumns = React.useMemo(() => {
     if (
@@ -167,7 +184,7 @@ export default function App() {
     resources: Array<{ mediaType: "img" | "video"; url: string }>;
   }
 
-  const [noteDetails, setNoteDetails] = React.useState({
+  const [noteDetails, setNoteDetails] = React.useState<noteDetailsType>({
     noteTitle: "noteTitle",
     noteContent: "noteContent",
     authorNickname: "authorNickname",
@@ -200,6 +217,14 @@ export default function App() {
               error("获取游记详情失败！");
               if (res.data.status === 401) {
                 console.log(res.data?.msg);
+                if (res.data?.msg === 'Authentication expires.') {
+                  error("登录已过期，请重新登录！");
+                  if (process.env.NEXT_PUBLIC_TEST !== "test") {
+                    localStorage.removeItem("userInfo");
+                    localStorage.removeItem("Authorization");
+                  }
+                  window.location.href = "/login";
+                }
               }
             }
           }
@@ -217,18 +242,94 @@ export default function App() {
     onDetailsOpen();
   };
 
-  const handleChangeStatus = (id: number) => {
-    console.log(id);
+  const [modalHeader, setModalHeader] = React.useState("");
+  const [modalContent, setModalContent] = React.useState(false);
+  const [modalOkOption, setModalOkOption] = React.useState<{
+    action: 'approve' | 'disapprove' | 'delete'; cn: string; en: string;
+  }>({ action: 'approve', cn: '通过游记', en: 'Approve Diary' });
+  const [disapproveReason, setDisapproveReason] = React.useState("");
+
+  const handleCheckDiary = (action: 'approve' | 'disapprove' | 'delete', cn: string, en: string) => {
+    try {
+      API.CheckServiceApi.approveNote({
+        noteId: arraySelected,
+        action: action,
+        comment: disapproveReason,
+      })
+        .then((res) => {
+          if (res.status === 200) {
+            if (res.data.status === 200) {
+              success(`${cn}成功`);
+            } else {
+              error(`${cn}失败！`);
+              if (res.data.status === 401) {
+                console.log(res.data?.msg);
+                if (res.data?.msg === 'Authentication expires.') {
+                  error("登录已过期，请重新登录！");
+                  if (process.env.NEXT_PUBLIC_TEST !== "test") {
+                    localStorage.removeItem("userInfo");
+                    localStorage.removeItem("Authorization");
+                  }
+                  window.location.href = "/login";
+                }
+              }
+            }
+          }
+        })
+        .catch((err: any) => {
+          console.log(`${en} Error: `, err);
+          error(`${en} Error: ` + err);
+        });
+    } catch (err: any) {
+      console.log(`${en} Error: `, err);
+      error(`${en} Error: ` + err);
+    }
+  }
+
+  const handlePass = () => {
     setShowChangeStatus(true);
+    setModalHeader("通过游记");
+    setModalContent(false);
+    setModalOkOption({ action: 'approve', cn: '通过游记', en: 'Approve Diary' });
+    setDisapproveReason("");
+    onChangeStatusOpen();
+  }
+
+  const handleReject = () => {
+    setShowChangeStatus(true);
+    setModalHeader("不通过游记");
+    setModalContent(true);
+    setModalOkOption({ action: 'disapprove', cn: '不通过游记', en: 'Disapprove Diary' });
+    setDisapproveReason("");
+    onChangeStatusOpen();
+  }
+
+  const handleDelete = () => {
+    setShowChangeStatus(true);
+    setModalHeader("删除游记");
+    setModalContent(false);
+    setModalOkOption({ action: 'delete', cn: '删除游记', en: 'Delete Diary' });
+    setDisapproveReason("");
     // axios get details
     onChangeStatusOpen();
+  }
+
+  const handlePassDiary = (id: number) => {
+    setArraySelected([id]);
+    console.log(id);
+    handlePass();
   };
 
-  const handleDeleteDiary = (id: number) => {
+  const handleRejectDiary = (id: number) => {
+    setArraySelected([id]);
     console.log(id);
-    setShowDelete(true);
-    // axios get details
-    onDeleteOpen();
+    handleReject();
+  }
+
+  const handleDeleteDiary = (id: number) => {
+    setArraySelected([id]);
+    console.log(id);
+    handleDelete();
   };
 
   const handlePassSelected = () => {
@@ -243,6 +344,8 @@ export default function App() {
       });
     }
     console.log(selectedArray);
+    setArraySelected(selectedArray);
+    handlePass();
   };
 
   const handleRejectSelected = () => {
@@ -257,6 +360,8 @@ export default function App() {
       });
     }
     console.log(selectedArray);
+    setArraySelected(selectedArray);
+    handleReject();
   };
 
   const handleDeleteSelected = () => {
@@ -271,15 +376,18 @@ export default function App() {
       });
     }
     console.log(selectedArray);
+    setArraySelected(selectedArray);
+    handleDelete();
   };
 
-  const renderCell = React.useCallback((note: noteType, columnKey: Key) => {
+  const renderCell = React.useCallback((note: noteType, columnKey: Key, isAdmin: boolean) => {
+    // console.log(isAdmin);
     const cellValue = note[columnKey as keyof typeof note];
 
     switch (columnKey) {
       case "authorNickname":
         return (
-          <p className="text-bold text-blue-500 text-md capitalize flex items-center gap-2">
+          <p className="text-bold text-blue-500 text-md capitalize flex items-center gap-2 min-w-[150px]">
             <Image
               width={50}
               height={50}
@@ -292,7 +400,7 @@ export default function App() {
         );
       case "title":
         return (
-          <p className="text-bold text-blue-500 text-md capitalize flex items-center gap-2">
+          <p className="text-bold text-blue-500 text-md capitalize flex items-center gap-2 min-w-[150px]">
             <Image
               width={50}
               height={50}
@@ -309,12 +417,12 @@ export default function App() {
             className="capitalize"
             color={
               statusColorMap[note.status as keyof typeof statusColorMap] ===
-              "success"
+                "success"
                 ? "success"
                 : statusColorMap[note.status as keyof typeof statusColorMap] ===
                   "danger"
-                ? "danger"
-                : "primary"
+                  ? "danger"
+                  : "primary"
             }
             size="sm"
             variant="flat"
@@ -335,32 +443,40 @@ export default function App() {
                 <EyeIcon />
               </span>
             </Tooltip>
-            <Tooltip content="审核游记">
+            <Tooltip color="success" content="通过游记">
               <span
-                className="text-lg text-default-400 cursor-pointer active:opacity-50"
-                onClick={() => {
-                  handleChangeStatus(note.noteId);
-                }}
+                className="text-2xl text-success cursor-pointer active:opacity-50"
+                onClick={() => handlePassDiary(note.noteId)}
               >
-                <EditIcon />
+                +
               </span>
             </Tooltip>
-            <Tooltip color="danger" content="删除游记">
+            <Tooltip color="danger" content="不通过游记">
               <span
-                className="text-lg text-danger cursor-pointer active:opacity-50"
-                onClick={() => {
-                  handleDeleteDiary(note.noteId);
-                }}
+                className="text-2xl text-danger cursor-pointer active:opacity-50"
+                onClick={() => handleRejectDiary(note.noteId)}
               >
-                <DeleteIcon />
+                -
               </span>
             </Tooltip>
+            {isAdmin && (
+              <Tooltip color="danger" content="删除游记">
+                <span
+                  className="text-lg text-danger cursor-pointer active:opacity-50"
+                  onClick={() => {
+                    handleDeleteDiary(note.noteId);
+                  }}
+                >
+                  <DeleteIcon />
+                </span>
+              </Tooltip>
+            )}
           </div>
         );
       default:
         return cellValue;
     }
-  }, []);
+  }, [isAdmin]);
 
   const onNextPage = React.useCallback(() => {
     if (page < pages) {
@@ -400,16 +516,28 @@ export default function App() {
   const topContent = React.useMemo(() => {
     return (
       <div className="flex flex-col gap-4">
-        <div className="flex justify-between gap-3 items-end">
-          <Input
-            isClearable
-            className="w-full sm:max-w-[44%]"
-            placeholder="Search by name..."
-            startContent={<SearchIcon />}
-            value={filterValue}
-            onClear={() => onClear()}
-            onValueChange={onSearchChange}
-          />
+        <div className="flex justify-between gap-3 items-end flex-warp w-full overflow-scroll no-scrollbar">
+          <div className="flex gap-3">
+            <Input
+              isClearable
+              className="w-full sm:max-w-[500px] min-w-[100px]"
+              placeholder="Search by name..."
+              startContent={<SearchIcon />}
+              value={filterValue}
+              onClear={() => onClear()}
+              onValueChange={onSearchChange}
+            />
+            <div className="flex gap-2 items-center justify-center mr-2">
+              <Switch
+                className="text-small w-full"
+                isSelected={isSearchName}
+                onValueChange={setIsSearchName}
+              >
+                SearchBy:
+              </Switch>
+              <span className="text-small">{isSearchName ? "name" : "title"}</span>
+            </div>
+          </div>
           <div className="flex gap-3">
             <div className="flex gap-2 items-center justify-center mr-2">
               <Switch
@@ -504,6 +632,7 @@ export default function App() {
     onSearchChange,
     hasSearchFilter,
     isMultiple,
+    isSearchName,
   ]);
 
   const bottomContent = React.useMemo(() => {
@@ -513,7 +642,7 @@ export default function App() {
           <div className="w-[30%] flex items-center gap-4">
             <span className=" text-small text-default-400">
               {selectedKeys.size >= filteredItems.length ||
-              `${selectedKeys}` == "all"
+                `${selectedKeys}` == "all"
                 ? "All items selected"
                 : `${selectedKeys.size} of ${filteredItems.length} selected`}
             </span>
@@ -535,14 +664,16 @@ export default function App() {
                     -
                   </span>
                 </Tooltip>
-                <Tooltip color="danger" content="删除所选">
-                  <span
-                    className="text-lg text-danger cursor-pointer active:opacity-50"
-                    onClick={handleDeleteSelected}
-                  >
-                    <DeleteIcon />
-                  </span>
-                </Tooltip>
+                {isAdmin && (
+                  <Tooltip color="danger" content="删除所选">
+                    <span
+                      className="text-lg text-danger cursor-pointer active:opacity-50"
+                      onClick={handleDeleteSelected}
+                    >
+                      <DeleteIcon />
+                    </span>
+                  </Tooltip>
+                )}
               </div>
             )}
           </div>
@@ -620,7 +751,7 @@ export default function App() {
           {(item) => (
             <TableRow key={item.noteId}>
               {(columnKey) => (
-                <TableCell>{renderCell(item, columnKey)}</TableCell>
+                <TableCell>{renderCell(item, columnKey, isAdmin)}</TableCell>
               )}
             </TableRow>
           )}
@@ -642,7 +773,7 @@ export default function App() {
                   <div>location: {noteDetails.location}</div>
                   <div>noteContent: {noteDetails.noteContent}</div>
                   <div>status: {noteDetails.status}</div>
-                  <div className="flex flex-wrap">
+                  <div className="flex flex-wrap gap-4">
                     {noteDetails.resources.map((resource) => {
                       return (
                         <>
@@ -655,7 +786,7 @@ export default function App() {
                             />
                           )}
                           {
-                            resource.mediaType === "video"&&(
+                            resource.mediaType === "video" && (
                               <video src={resource.url} className="w-[50px] h-[50px]"></video>
                             )
                           }
@@ -684,36 +815,28 @@ export default function App() {
             {(onClose) => (
               <>
                 <ModalHeader className="flex flex-col gap-1">
-                  审核游记
+                  {modalHeader}
                 </ModalHeader>
                 <ModalBody>
-                  <p>rmt</p>
+                  {modalContent && (
+                    <div>
+                      <Input isClearable type="textarea" placeholder="请输入不通过原因" onChange={(e) => { setDisapproveReason(e.target.value) }}></Input>
+                    </div>
+                  )}
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="primary" variant="light" onPress={onClose}>
-                    Close
+                  <Button color="danger" variant="light" onPress={onClose}>
+                    取消
                   </Button>
-                </ModalFooter>
-              </>
-            )}
-          </ModalContent>
-        </Modal>
-      )}
-
-      {showDelete && (
-        <Modal isOpen={isDeleteOpen} onOpenChange={onDeleteOpenChange}>
-          <ModalContent>
-            {(onClose) => (
-              <>
-                <ModalHeader className="flex flex-col gap-1">
-                  删除游记
-                </ModalHeader>
-                <ModalBody>
-                  <p>rmt</p>
-                </ModalBody>
-                <ModalFooter>
-                  <Button color="primary" variant="light" onPress={onClose}>
-                    Close
+                  <Button
+                    color="primary"
+                    variant="ghost"
+                    onPress={() => {
+                      handleCheckDiary(modalOkOption.action, modalOkOption.cn, modalOkOption.en);
+                      onClose();
+                    }}
+                  >
+                    确认
                   </Button>
                 </ModalFooter>
               </>

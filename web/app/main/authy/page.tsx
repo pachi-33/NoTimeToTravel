@@ -144,6 +144,14 @@ export default function App() {
               error("增加审核人员列表失败！");
               if (res.data.status === 401) {
                 console.log(res.data?.msg);
+                if (res.data?.msg === 'Authentication expires.') {
+                  error("登录已过期，请重新登录！");
+                  if (process.env.NEXT_PUBLIC_TEST !== "test") {
+                    localStorage.removeItem("userInfo");
+                    localStorage.removeItem("Authorization");
+                  }
+                  window.location.href = "/login";
+                }
               }
             }
           }
@@ -197,6 +205,14 @@ export default function App() {
               error("删除审核人员列表失败！");
               if (res.data.status === 401) {
                 console.log(res.data?.msg);
+                if (res.data?.msg === 'Authentication expires.') {
+                  error("登录已过期，请重新登录！");
+                  if (process.env.NEXT_PUBLIC_TEST !== "test") {
+                    localStorage.removeItem("userInfo");
+                    localStorage.removeItem("Authorization");
+                  }
+                  window.location.href = "/login";
+                }
               }
             }
           }
@@ -346,7 +362,7 @@ export default function App() {
           <div className="w-[30%] flex items-center gap-4">
             <span className=" text-small text-default-400">
               {selectedKeys.size >= filteredItems.length ||
-              `${selectedKeys}` == "all"
+                `${selectedKeys}` == "all"
                 ? "All items selected"
                 : `${selectedKeys.size} of ${filteredItems.length} selected`}
             </span>

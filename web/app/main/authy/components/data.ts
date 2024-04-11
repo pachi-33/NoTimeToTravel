@@ -50,6 +50,14 @@ if (process.env.NEXT_PUBLIC_TEST === "test") {
             error("获取审核人员列表失败！");
             if (res.data.status === 401) {
               console.log(res.data?.msg);
+              if (res.data?.msg === 'Authentication expires.') {
+                error("登录已过期，请重新登录！");
+                if (process.env.NEXT_PUBLIC_TEST !== "test") {
+                  localStorage.removeItem("userInfo");
+                  localStorage.removeItem("Authorization");
+                }
+                window.location.href = "/login";
+              }
             }
           }
         }

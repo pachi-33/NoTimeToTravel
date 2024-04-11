@@ -25,6 +25,7 @@ interface getNoteInfoRes {
 interface approveNoteReq {
   noteId: Array<number>;
   action: "approve" | "disapprove" | "delete" | "restore";
+  comment: string;
 }
 
 interface getNoteListRes {
