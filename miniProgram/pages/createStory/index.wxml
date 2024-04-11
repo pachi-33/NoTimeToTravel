@@ -1,2 +1,31 @@
-<!--pages/createStory/index.wxml-->
-<text>pages/createStory/index.wxml</text>
+<!-- pages/createStory/index.wxml -->
+<view style="margin-top: {{menuTop+menuHeight}}px;" class="main-container">
+  <view class="header">
+    <view class="title">发布我的故事</view>
+  </view>
+  <scroll-view type="custom" scroll-y show-scrollbar="{{false}}" class="input-area">
+    <view class="diaryTitle">
+      <input type="text" placeholder="请输入故事标题" class="input-title" bind:change="handleTitleChange" />
+    </view>
+    <view class="diaryContent">
+      <textarea placeholder="请输入故事内容" class="input-content" bind:change="handleContentChange" maxlength="4000"></textarea>
+    </view>
+    <view class="media-upload-content">
+      <view class="media-frame" wx:for="{{mediaList}}" data-index="{{index}}" bindtap="bindPreviewMedia" wx:key="index">
+        <view wx:if="{{item.fileType=='image'}}" class="item-frame">
+          <image src="{{item.tempFilePath}}" class="media-item" mode="aspectFit" />
+        </view>
+        <view wx:else class="item-frame">
+          <video class="media-item" src="{{item.tempFilePath}}" mode="" />
+        </view>
+        <view class="media-del" bindtap="catchDelMedia" data-index="{{index}}">x</view>
+      </view>
+      <view class="uploadpic-container" style="display: {{uploadPicDisplay}};">
+        <image class="upload-media" src="../../pics/uploadPic.png" mode="" bindtap="bindChooseMedia" />
+      </view>
+    </view>
+    <view class="upload-frame">
+      <button class="upload-btn" size="mini" bindtap="bindSubmit">发布</button>
+    </view>
+  </scroll-view>
+</view>

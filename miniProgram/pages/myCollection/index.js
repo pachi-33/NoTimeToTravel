@@ -1,6 +1,6 @@
-// pages/myStory/index.js
-import Api from "../../utils/api";
-import util from "../../utils/util";
+// pages/myCollection/index.js
+import Api from "../../utils/api.js";
+import util from "../../utils/util.js";
 Page({
   data: {
     noteList: [
@@ -67,7 +67,7 @@ Page({
     menuHeight: 0,
     menuLeft: 0,
   },
-  onLoad: function (options) {
+  onLoad(options) {
     const res = wx.getMenuButtonBoundingClientRect();
     this.setData({
       menuTop: res.top,
@@ -78,6 +78,7 @@ Page({
       .checkUserLogin()
       .then((res) => {
         this.setNoteList();
+        console.log("已登录");
       })
       .catch((err) => {
         console.log("==============", err);
@@ -86,33 +87,15 @@ Page({
   bindTapBackIcon: function () {
     wx.navigateBack();
   },
-  bindTapNewStroy: function () {
-    wx.navigateTo({
-      url: "/pages/createStory/index",
-    });
-  },
-  bindTapEdit: function (e) {
-    const noteId = e.currentTarget.dataset.id;
-    wx.navigateTo({
-      url: `/pages/createStory/index?noteId=${noteId}`,
-    });
-  },
-  bindTapDelete: async function (e) {
-    const noteId = e.currentTarget.dataset.id;
-    await Api.deleteNote({
-      noteId: noteId,
-    });
-    console.log("删除", noteId);
-  },
   bindTapMasonryItem: function (e) {
     const noteId = e.currentTarget.dataset.id;
     wx.navigateTo({
       url: `/pages/storyDetail/index?noteId=${noteId}`,
     });
   },
-  getMyNoteListWithStatus: async function () {
+  getMyCollection: async function () {
     try {
-      const res = await Api.getMyNoteListWithStatus();
+      const res = await Api.getMyCollect();
       const newList = res.data.noteList || [];
       return newList;
     } catch (err) {
@@ -121,7 +104,7 @@ Page({
     }
   },
   setNoteList: async function () {
-    const newList = await getMyNoteListWithStatus();
+    const newList = await getMyCollection();
     newList = newList.map((item) => {
       item.pastTime = util.formatPast(
         new Date(item.uploadTime.replaceAll("-", "/")),
@@ -137,7 +120,7 @@ Page({
       return;
     }
     this.setData({
-      haveNoteList:true,
+      haveNoteList: true,
       noteList: newList,
     });
   },

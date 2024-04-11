@@ -1,3 +1,4 @@
+/* pages/searchDetail/index.wxss */
 .scroll-view {
   width: 100%;
   height: 100%;
@@ -15,21 +16,12 @@
   margin-right: 10px;
 }
 
-.back .title {
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-  font-size: 17px;
-  font-weight: bold;
-}
-
-.newCommit {
+.search {
   border: rgb(228, 226, 226) solid 1px;
   border-radius: 20px;
   margin: 5px 20px;
   line-height: 30px;
   height: 30px;
-  text-align: center;
 }
 
 .search input {
@@ -43,7 +35,6 @@
   margin-top: 10px;
   margin-bottom: 10px;
 }
-
 .searchOption-container view {
   margin-left: 30px;
 }
@@ -66,7 +57,6 @@
 .sticky-header {
   background-color: #fff;
 }
-
 .grid-box {
   padding: 10px;
   border-radius: 8px;
@@ -97,7 +87,7 @@
 }
 
 .profile-text .left {
-  width: 50%;
+  width: 70%;
 }
 
 .left image {
@@ -109,11 +99,8 @@
 
 .profile-text .right {
   text-align: right;
-  border: #fff solid 1px;
-  border-radius: 20px;
-  padding: 2px 10px;
-  color: black;
-
+  color: #888;
+  font-size: 14px;
 }
 
 .right image {
@@ -123,23 +110,4 @@
   opacity: 0.5;
   color: rgba(0, 0, 0, 0.5);
   margin: 0 3px;
-}
-
-.option-box {
-  display: flex;
-  margin-top: 20px;
-  justify-content: space-around;
-}
-
-.option-box view {
-  width: 40%;
-  text-align: center;
-  border-radius: 5px;
-  border: solid 1px #888;
-}
-
-.reject-reason-container text {
-  margin-top: 10px;
-  color: #888;
-  font-size: 14px;
 }

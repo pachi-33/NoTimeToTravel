@@ -1,1 +1,118 @@
 /* pages/createStory/index.wxss */
+.main-contaner{
+    width: 100%;
+    height: 100%;
+}
+
+.header{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.219);
+  padding: 2px;
+}
+
+.title{
+  font-size: larger;
+  font-weight: 700;
+}
+
+.input-area{
+  width: 100%;
+  margin-top: 2px;
+  height: 100vh;
+}
+
+.diaryTitle{
+  width: 100%;
+  margin: 3px;
+  background-color: rgba(199, 199, 199, 0.203);
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+.input-title{
+  font-weight: 600;
+  padding: 2px;
+}
+
+.diaryContent{
+  width: 100%;
+  margin: 3px;
+  background-color: rgba(199, 199, 199, 0.603);
+}
+
+.input-content{
+  font-weight: 500;
+  font-size: small;
+  padding: 2px;
+  width: 96%;
+  margin-left: 2%;
+}
+
+.media-upload-content{
+    width: 97.5%;
+    margin-top: 3%;
+    margin-left:1.25%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
+}
+
+.media-frame{
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  width: 30vw;
+  height: 30vw;
+  border: 2px solid #ccc;
+  margin:1.24vw;
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.media-item{
+  width: 30vw;
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+}
+
+.item-frame{
+  width: 30vw;
+}
+
+.media-del{
+  position: absolute;
+  top:0;
+  right:7px;
+}
+
+.uploadpic-container{
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    width: 30vw;
+    height: 30vw;
+    border: 2px solid #ccc;
+    margin:1.24vw;
+    border-radius: 10px;
+}
+
+.upload-media{
+    width: 40px;
+    height: 40px;
+}
+
+.upload-frame{
+  width: 100%;
+  margin:5px;
+}
+
+.upload-btn{
+  font-size: large;
+  font-weight: 600;
+}
