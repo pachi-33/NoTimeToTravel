@@ -4,57 +4,102 @@
     height: 100%;
 }
 
+.header{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.219);
+  padding: 2px;
+}
+
+.title{
+  font-size: larger;
+  font-weight: 700;
+}
+
 .input-area{
-    width: 100%;
-    margin-top: 2px;
-    height: 100vh;
+  width: 100%;
+  margin-top: 2px;
+  height: 100vh;
 }
 
-.upload-btn{
-    width: 30px;
+.diaryTitle{
+  width: 100%;
+  margin: 3px;
+  background-color: rgba(199, 199, 199, 0.203);
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 3px;
+  padding-bottom: 3px;
 }
 
-.textarea{
-    width: 90%;
-    margin-left: 5%;
-    margin-right: 5%;
-    margin-top: 5%;
-    font-size: 16px;
-    border: 1px solid black;
-
+.input-title{
+  font-weight: 600;
+  padding: 2px;
 }
 
+.diaryContent{
+  width: 100%;
+  margin: 3px;
+  background-color: rgba(199, 199, 199, 0.603);
+}
 
-
-.input-container{
-    width: 22%;
-    height: 22vw;
-    border: 1px solid #ccc;
+.input-content{
+  font-weight: 500;
+  font-size: small;
+  padding: 2px;
+  width: 96%;
+  margin-left: 2%;
 }
 
 .media-upload-content{
-    width: 90%;
-    margin-left: 5%;
-    margin-right: 5%;
+    width: 97.5%;
     margin-top: 3%;
+    margin-left:1.25%;
     display: flex;
     flex-wrap: wrap;
     justify-content: start;
-
 }
 
-.media-list{
-    width: 22%;
-    height: 22vw;
+.media-frame{
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  width: 30vw;
+  height: 30vw;
+  border: 2px solid #ccc;
+  margin:1.24vw;
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.media-item{
+  width: 30vw;
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+}
+
+.item-frame{
+  width: 30vw;
+}
+
+.media-del{
+  position: absolute;
+  top:0;
+  right:7px;
 }
 
 .uploadpic-container{
     display: flex;
     justify-content: center;
     align-items: center; 
-    width: 20vw;
-    height: 20vw;
+    width: 30vw;
+    height: 30vw;
     border: 2px solid #ccc;
+    margin:1.24vw;
+    border-radius: 10px;
 }
 
 .upload-media{
@@ -62,8 +107,12 @@
     height: 40px;
 }
 
+.upload-frame{
+  width: 100%;
+  margin:5px;
+}
 
-.media-item-container{
-    width: 20%;
-    height: 20vw;
+.upload-btn{
+  font-size: large;
+  font-weight: 600;
 }
