@@ -9,56 +9,57 @@ Page({
       noteTitle: "我是标题",
       noteContent: "内容内容内容内容",
       authorNickname: "MAple",
-      avatar:
-        "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAOEcdM.img",
+      avatar: "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAOEcdM.img",
       viewNum: 100,
       likeNum: 200,
       collectNum: 300,
       isCollected: true,
       lastModifyTime: "2024-04-04 12:12:12",
       location: "上海",
-      resources: [
-        {
+      resources: [{
           mediaType: "image",
-          avatar:
-            "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAOEcdM.img",
           url: "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAOEcdM.img",
         },
         {
           mediaType: "image",
-          avatar:
-            "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAOEcdM.img",
           url: "https://res.wx.qq.com/op_res/7_miJnK0wxIrh5bV2QqvYYjda9Dp372N3T05q_nn3PgvoXBoReXvaXBfkthtXQLN7m5_YI6FoTre-xvJBDFLMA",
         },
         {
           mediaType: "image",
-          avatar:
-            "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAOEcdM.img",
           url: "https://res.wx.qq.com/op_res/7_miJnK0wxIrh5bV2QqvYfa6mRnywhNbBFV5eAt7oTz3zjlNJeujfQx0PVA1ufenPHBvxYXRNJ5chyi6RPaE7A",
         },
         {
           mediaType: "image",
-          avatar:
-            "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAOEcdM.img",
           url: "https://res.wx.qq.com/op_res/7_miJnK0wxIrh5bV2QqvYZB1p48LLH-Pc7Rzr4nN0YF-uZg7FW7zksw_Kjp0BNDHcZp9R9SRKbg0rA1HBaeK3Q",
         },
         {
           mediaType: "image",
-          avatar:
-            "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAOEcdM.img",
           url: "https://res.wx.qq.com/op_res/0-l2fyKjv3_BR62E3KwTJPRaN5CDI6NZFg_qbSxeqF8UBpM4lXJ_1o9S9bsOOxMpuXGLeKyAKleWlAXmVLmQOw",
         },
         {
           mediaType: "image",
-          avatar:
-            "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAOEcdM.img",
           url: "https://res.wx.qq.com/op_res/7_miJnK0wxIrh5bV2QqvYRu0VRyVvePJ4pB4_Dvj0ytF-ovjQzMl6WMLyuCeKk3579HNjKLIeNrHE7OprTBx5w",
+        },
+        {
+          mediaType: "image",
+          url: "https://res.wx.qq.com/op_res/7_miJnK0wxIrh5bV2QqvYRu0VRyVvePJ4pB4_Dvj0ytF-ovjQzMl6WMLyuCeKk3579HNjKLIeNrHE7OprTBx5w",
+        },
+        {
+          mediaType: "video",
+          url: "https://prod-streaming-video-msn-com.akamaized.net/910e7354-d9fa-46b7-851d-0dfbd7854b52/6b480c47-1959-400e-9fb5-22d51f4a6427.mp4",
+        },
+        {
+          mediaType: "video",
+          url: "https://prod-streaming-video-msn-com.akamaized.net/9d7890f2-2646-4544-bbc7-5082440f52ef/df8ea196-566a-4291-85b2-c3bcb3781080.mp4",
+        },
+        {
+          mediaType: "video",
+          url: "https://prod-streaming-video-msn-com.akamaized.net/a75a7d73-21ab-4ac9-8c30-890433965c24/e9f6bdcb-eba0-4eca-b9d2-60d3415bf65f.mp4",
         },
       ],
     },
     haveCommentList: true,
-    comments: [
-      {
+    comments: [{
         commentId: 1,
         commentBy: "nickname1",
         commentContent: "哇塞，姐妹你好厉害",
@@ -115,7 +116,9 @@ Page({
 
   onLoad: function (options) {
     const res = wx.getMenuButtonBoundingClientRect();
-    const { noteId } = options;
+    const {
+      noteId
+    } = options;
     this.setData({
       menuTop: res.top,
       menuHeight: res.height,
@@ -147,6 +150,9 @@ Page({
     });
     console.log(this.data.imgheightList);
   },
+  videoLoad: function (e) {
+    console.log("视频加载完成",e);
+  },
   bindCommentInput: function (e) {
     this.setData({
       userComment: e.detail.current,
@@ -170,7 +176,9 @@ Page({
     await getComment();
   },
   getDetail: async function () {
-    let res = await Api.getNoteDetails({ noteId: this.data.noteIdToSearch });
+    let res = await Api.getNoteDetails({
+      noteId: this.data.noteIdToSearch
+    });
     console.log("getNoteDetail的res", res);
     let newContent = res.data || {};
     this.setData({
@@ -178,7 +186,9 @@ Page({
     });
   },
   getComment: async function () {
-    let res = await Api.getCommentList({ noteId: this.data.noteIdToSearch });
+    let res = await Api.getCommentList({
+      noteId: this.data.noteIdToSearch
+    });
     console.log("getCommentList的res", res);
     let newComments = res.data || [];
     this.setData({
@@ -214,8 +224,8 @@ Page({
   },
   bindTapCollect: async function () {
     const data = {
-        noteId: this.data.noteIdToSearch,
-      };
+      noteId: this.data.noteIdToSearch,
+    };
     let res;
     if (this.data.content.isCollected) {
       res = await Api.cancelcollectNote(data);
@@ -248,8 +258,13 @@ Page({
     util.checkUserLogin();
   },
   onShareAppMessage() {
-    const { noteTitle, noteId } = this.data.content;
-    const { imageUrl } = this.data.content.resources[0].url;
+    const {
+      noteTitle,
+      noteId
+    } = this.data.content;
+    const {
+      imageUrl
+    } = this.data.content.resources[0].url;
     return {
       title: noteTitle,
       path: `/pages/storyDetail/index?noteId=${noteId}`,

@@ -12,7 +12,8 @@
         <block wx:if="{{content.resources.length>0}}" wx:for="{{content.resources}}" wx:key="index">
           <swiper-item bindtap="seeImageDetail" data-index="{{index}}">
             <view class='slide-navigator acea-row row-between-wrapper' hover-class='none'>
-              <image src="{{item.url}}" class="slide-image" mode="widthFix" data-id='{{index}}' mode="widthFix" bindload="imageLoad" />
+              <view wx:if="{{item.mediaType==='video'}}" class="video-container"> <video src="{{item.url}}" bindload="videoLoad" /></view>
+              <image wx:else src="{{item.url}}" class="slide-image" mode="widthFix" data-id='{{index}}' mode="widthFix" bindload="imageLoad" />
             </view>
           </swiper-item>
         </block>
@@ -64,7 +65,7 @@
       <view wx:if="{{!haveCommentList}}" class="no-data">还没有评论呢~</view>
     </list-view>
   </scroll-view>
-  <view  class="comment-box">
-    <input placeholder="快来发表评论吧~" bindinput="bindCommentInput" bindconfirm="bindConfirmComment" bindfocus="bindCommentFocus"/>
+  <view class="comment-box">
+    <input placeholder="快来发表评论吧~" bindinput="bindCommentInput" bindconfirm="bindConfirmComment" bindfocus="bindCommentFocus" />
   </view>
 </view>

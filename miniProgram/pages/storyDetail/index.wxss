@@ -20,6 +20,17 @@
     height: auto;
     margin-left: 5%;
 }
+.swiper-container video{
+  margin-left: 5%;
+}
+.video-container{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.swiper-container swiper{
+  height: 507rpx;
+}
 
 .content{
   margin:10px 10px;

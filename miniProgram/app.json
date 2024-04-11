@@ -18,14 +18,15 @@
       {
         "pagePath": "pages/home/index",
         "text": "首页",
-
         "iconPath": "pics/home.png",
         "selectedIconPath": "pics/home-active.png"
       },
       {
         "pagePath": "pages/createStory/index",
         "text": "发布游记",
-        "iconPath": "pics/plus-circle-fill.png"
+        "iconPath": "pics/plus-circle-fill.png",
+        "selectedIconPath": "pics/plus-circle-fill.png"
+
       },
       {
         "pagePath": "pages/me/index",
