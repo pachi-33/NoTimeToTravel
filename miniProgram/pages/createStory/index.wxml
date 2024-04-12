@@ -1,14 +1,14 @@
 <!-- pages/createStory/index.wxml -->
 <view style="margin-top: {{menuTop+menuHeight}}px;" class="main-container">
   <view class="header">
-    <view class="title">发布我的故事</view>
+    <view class="title">发布我的游记</view>
   </view>
   <scroll-view type="custom" scroll-y show-scrollbar="{{false}}" class="input-area">
     <view class="diaryTitle">
-      <input type="text" placeholder="请输入故事标题" class="input-title" bind:change="handleTitleChange" />
+      <input type="text" placeholder="请输入游记标题" class="input-title" bind:change="handleTitleChange" />
     </view>
     <view class="diaryContent">
-      <textarea placeholder="请输入故事内容" class="input-content" bind:change="handleContentChange" maxlength="4000"></textarea>
+      <textarea placeholder="请输入游记内容" class="input-content" bind:change="handleContentChange" maxlength="4000"></textarea>
     </view>
     <view class="media-upload-content">
       <view class="media-frame" wx:for="{{mediaList}}" data-index="{{index}}" bindtap="bindPreviewMedia" wx:key="index">

@@ -3,7 +3,7 @@ import Api from "../../utils/api.js";
 import util from "../../utils/util.js";
 Page({
   data: {
-    nickname: "游客",
+    nickname: "爱旅游的yeye",
     avatarUrl:
       "https://res.wx.qq.com/op_res/7_miJnK0wxIrh5bV2QqvYYjda9Dp372N3T05q_nn3PgvoXBoReXvaXBfkthtXQLN7m5_YI6FoTre-xvJBDFLMA",
     canEditNickName: false,
@@ -57,12 +57,19 @@ Page({
         icon: "none",
         duration: 2000,
       });
+      util.checkUserLogin().then((res) => {
+        console.log("已登录");
+        this.setData({
+          nickname: res.nickName,
+          avatarUrl: res.avatarUrl,
+        });
+      });
     }
   },
   bindChooseAvatar: function (e) {
     const tmpURL = e.detail.avatarUrl;
     wx.uploadFile({
-      url: "https://ctrip.x3322.net:3000/api/travelDiary/uploadFile", //仅为示例，非真实的接口地址
+      url: "https://xtrip.x3322.net:3000/api/travelDiary/verification/uploadFile", //仅为示例，非真实的接口地址
       filePath: tmpURL,
       name: "avatar",
       formData: {
@@ -89,6 +96,13 @@ Page({
                   title: "修改失败",
                   icon: "none",
                   duration: 2000,
+                });
+                util.checkUserLogin().then((res) => {
+                  console.log("已登录");
+                  this.setData({
+                    nickname: res.nickName,
+                    avatarUrl: res.avatarUrl,
+                  });
                 });
               }
             })

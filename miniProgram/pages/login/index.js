@@ -31,7 +31,10 @@ Page({
           //发起网络请求
           Api.login({
             code: res.code,
-          });
+          }).then((res)=>{
+            wx.navigateBack();
+          })
+
         } else {
           console.log('登录失败！' + res.errMsg)
         }

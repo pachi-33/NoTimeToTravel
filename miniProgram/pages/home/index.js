@@ -36,6 +36,9 @@ Page({
   },
 
   getNewList: async function (refresh = false) {
+    if(refresh===false && noteList.length===0){
+      refresh=true;
+    }
     let noteListQuery = {
       beforeNoteId: "",
       beforeWhen: refresh
@@ -197,7 +200,9 @@ Page({
   },
   bindScrollToUpper: async function () {
     try{
+      console.log("请求新数据",newList);
       let newList = await this.getNewList(true);
+      
       this.setData({
         noteList: newList,
       });

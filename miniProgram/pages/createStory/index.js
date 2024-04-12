@@ -1,5 +1,6 @@
 // pages/createStory/index.js
 import Api from "../../utils/api";
+import util from "../../utils/util";
 Page({
   /**
    * 页面的初始数据
@@ -8,7 +9,7 @@ Page({
     mediaList: [],
     diaryTitle: "",
     diaryContent: "",
-    mode: "create",//create or edit
+    mode: "create", //create or edit
     // 顶部布局参数
     menuTop: 0,
     menuHeight: 0,
@@ -23,6 +24,7 @@ Page({
       menuLeft: res.width + 10,
       mode: "create"
     });
+    await util.checkUserLogin();
     if (options.noteId) {
       this.setData({
         mode: "edit"
@@ -41,7 +43,9 @@ Page({
   },
   bindChooseMedia: function () {
     if (this.data.mediaList.length >= 9) {
-      this.setData({ uploadPicDisplay: "none" })
+      this.setData({
+        uploadPicDisplay: "none"
+      })
       wx.showToast({
         title: "最多上传9张图片/视频",
         icon: "none",
@@ -49,7 +53,9 @@ Page({
       });
       return;
     }
-    this.setData({ uploadPicDisplay: "flex" })
+    this.setData({
+      uploadPicDisplay: "flex"
+    })
     let remainChooseCount = 9 - this.data.mediaList.length;
     wx.chooseMedia({
       count: remainChooseCount,
@@ -57,7 +63,9 @@ Page({
       mediaType: ["image", "video"],
       sourceType: ["album", "camera"],
       success: (res) => {
-        let { tempFiles } = res;
+        let {
+          tempFiles
+        } = res;
         // console.log(tempFiles);
         let tempArray = this.data.mediaList;
         for (let i = 0; i < tempFiles.length; i++) {
@@ -69,13 +77,16 @@ Page({
           wx.uploadFile({
             filePath: tempFiles[i].tempFilePath,
             name: tempFiles[i].fileType == "image" ? "imageFile" : "videoFile",
-            url: 'https://ctrip.x3322.net:3000/api/travelDiary/uploadFile',
+            url: 'https://xtrip.x3322.net:3000/api/travelDiary/verification/uploadFile',
             formData: {
               mediaType: tempFiles[i].fileType == "image" ? "img" : "video"
             },
             success(res) {
               if (res.statusCode === 200) {
-                const { url, mediaType } = res.data;
+                const {
+                  url,
+                  mediaType
+                } = res.data;
                 tempArray[tempArray.length - 1].url = url;
               }
             }
@@ -86,13 +97,15 @@ Page({
           mediaList: tempArray,
         });
         if (tempArray.length >= 9) {
-          this.setData({ uploadPicDisplay: "none" })
+          this.setData({
+            uploadPicDisplay: "none"
+          })
         }
       },
     });
   },
   //先不做
-  bindPreviewMedia: function () { },
+  bindPreviewMedia: function () {},
   catchDelMedia: function (e) {
     if (this.data.mediaList.length >= 9) {
       this.setData({
@@ -109,7 +122,7 @@ Page({
   bindSubmit: async function () {
     if (this.data.diaryTitle == "") {
       wx.showToast({
-        title: "请输入故事标题！",
+        title: "请输入游记标题！",
         icon: "none",
         duration: 2000,
       });
@@ -117,7 +130,7 @@ Page({
     }
     if (this.data.diaryContent == "") {
       wx.showToast({
-        title: "请输入故事内容！",
+        title: "请输入游记内容！",
         icon: "none",
         duration: 2000,
       });
@@ -157,8 +170,7 @@ Page({
           url: `/pages/storyDetail/index?noteId=${res.data.noteId}`,
         })
       }, 2000)
-    }
-    else {
+    } else {
       wx.showToast({
         title: '发布失败',
         icon: 'error',

@@ -6,7 +6,7 @@ Page({
     noteList: [
       {
         noteId: 0,
-        title: "震惊，怎么到现在还没写完",
+        title: "震惊，上海有这么多好玩滴地方",
         coverImg:
           "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAOEcdM.img",
         authorNickname: "MAple",
@@ -20,7 +20,7 @@ Page({
       },
       {
         noteId: 1,
-        title: "我真的很想玩博德之门",
+        title: "韩国旅行初体验1",
         coverImg:
           "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAOEcdM.img",
         authorNickname: "MAple",
@@ -34,7 +34,7 @@ Page({
       },
       {
         noteId: 2,
-        title: "不玩博德之门的人生是不完整的",
+        title: "去欧洲的旅行必备",
         coverImg:
           "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAOEcdM.img",
         authorNickname: "MAple",
@@ -48,7 +48,7 @@ Page({
       },
       {
         noteId: 3,
-        title: "不玩舞萌的人生是不完整的",
+        title: "日本旅游超详细打卡攻略！",
         coverImg:
           "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAOEcdM.img",
         authorNickname: "MAple",
