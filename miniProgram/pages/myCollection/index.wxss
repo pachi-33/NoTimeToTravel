@@ -1,0 +1,121 @@
+/* pages/myCollection/index.wxss */
+.scroll-view {
+  width: 100%;
+  height: 100%;
+}
+
+.back {
+  display: flex;
+  flex-direction: row;
+  margin-left: 10px;
+}
+
+.back image {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.back .title{
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.search {
+  border: rgb(228, 226, 226) solid 1px;
+  border-radius: 20px;
+  margin: 5px 20px;
+  line-height: 30px;
+  height: 30px;
+}
+
+.search input {
+  padding: 0 10px;
+  line-height: 30px;
+  height: 30px;
+}
+
+.searchOption-container {
+  display: flex;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+.searchOption-container view {
+  margin-left: 30px;
+}
+
+.active-mode {
+  color: #39c5bb;
+  font-weight: bold;
+}
+
+.inactive-mode {
+  color: #ccc;
+}
+
+.no-data {
+  display: flex;
+  margin-top: 30vh;
+  justify-content: center;
+}
+
+.sticky-header {
+  background-color: #fff;
+}
+.grid-box {
+  padding: 10px;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+}
+
+.grid-box image {
+  width: 100%;
+}
+
+.content-box {
+  padding-top: 10px;
+}
+
+.profile-text {
+  display: flex;
+  flex-direction: row;
+  padding-top: 4px;
+  align-items: center;
+}
+
+.profile-text view {
+  display: flex;
+  color: #888;
+  font-size: 14px;
+  flex-direction: row;
+  align-items: center;
+}
+
+.profile-text .left {
+  width: 70%;
+}
+
+.left image {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  margin-right: 4px;
+}
+
+.profile-text .right {
+  text-align: right;
+  color: #888;
+  font-size: 14px;
+}
+
+.right image {
+  width: 16px;
+  height: 16px;
+  background-size: cover;
+  opacity: 0.5;
+  color: rgba(0, 0, 0, 0.5);
+  margin: 0 3px;
+}

@@ -1,0 +1,71 @@
+<!-- pages/content/index.wxml -->
+<view style="height: 100%;margin-top: {{menuTop}}px;">
+  <view class="sticky-header">
+    <view class="back" style="height: {{menuHeight}}px;line-height: {{menuHeight}}px; margin-right: {{menuLeft}}px;">
+      <image bindtap="bindTapBackIcon" src="../../pics/left.png" mode="widthFix"></image>
+      <text>返回首页</text>
+    </view>
+  </view>
+  <scroll-view type="custom" scroll-y show-scrollbar="{{false}}" scroll-into-view="{{intoView}}" class="scroll-view" bindscrolltoupper="bindScrollToUpper">
+    <view class="swiper-container">
+      <swiper indicator-dots bindchange="bindChange" style="height:{{imgheightList[current]}}rpx;">
+        <block wx:if="{{content.resources.length>0}}" wx:for="{{content.resources}}" wx:key="index">
+          <swiper-item bindtap="seeImageDetail" data-index="{{index}}">
+            <view class='slide-navigator acea-row row-between-wrapper' hover-class='none'>
+              <view wx:if="{{item.mediaType==='video'}}" class="video-container"> <video src="{{item.url}}" bindload="videoLoad" 	show-fullscreen-btn="{{false}}" /></view>
+              <image wx:else src="{{item.url}}" class="slide-image" mode="widthFix" data-id='{{index}}' mode="widthFix" bindload="imageLoad" />
+            </view>
+          </swiper-item>
+        </block>
+      </swiper>
+    </view>
+    <view class="content">
+      <text class="title">{{content.noteTitle}}</text>
+      <view class="author-profile">
+        <view class="left">
+          <image src="{{content.avatar}}"></image>
+          <text>{{content.authorNickname}}</text>
+        </view>
+        <view class="right">
+          <!-- <image src="../../pics/location.png"></image>
+          <text>{{content.location}}</text> -->
+        </view>
+      </view>
+      <view class="story-profile">
+        <view>
+          <image src="../../pics/eye.png"></image>
+          <text>{{content.viewNum}}</text>
+        </view>
+        <view>
+          <image bindtap="bindTapLike" src="{{likeImgUrl}}"></image>
+          <text>{{content.likeNum}}</text>
+        </view>
+        <view>
+          <image bindtap="bindTapCollect" src="{{content.isCollected?'../../pics/star-fill.png':'../../pics/star.png'}}"></image>
+          <text>{{content.collectNum}}</text>
+        </view>
+      </view>
+      <text class="content-text" space="{{true}}">{{content.noteContent}}</text>
+      <view class="content-bottom">
+        <text>上次修改于 {{content.lastModifyTime}}</text>
+      </view>
+    </view>
+    <list-view class="comment">
+      <text class="comment-total">共{{comments.length}}条评论</text>
+      <block wx:for="{{comments}}" wx:key="commentId" wx:if="{{haveCommentList}}">
+        <view class="comment-list-box" data-id="{{item.commentId}}">
+          <view class="comment-author">
+            <image src="{{content.avatar}}"></image>
+            <text class="comment-username">{{item.commentBy}}</text>
+          </view>
+          <text class="comment-content">{{item.commentContent}}</text>
+          <text class="comment-time">{{item.commentTime}}</text>
+        </view>
+      </block>
+      <view wx:if="{{!haveCommentList}}" class="no-data">还没有评论呢~</view>
+    </list-view>
+  </scroll-view>
+  <view class="comment-box">
+    <input placeholder="快来发表评论吧~" bindinput="bindCommentInput" bindconfirm="bindConfirmComment" bindfocus="bindCommentFocus" />
+  </view>
+</view>

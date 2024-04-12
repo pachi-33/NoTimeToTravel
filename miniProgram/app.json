@@ -1,0 +1,49 @@
+{
+  "pages": [
+
+    "pages/home/index",
+    "pages/me/index",
+    "pages/createStory/index",
+    "pages/storyDetail/index",
+    "pages/searchDetail/index",
+    "pages/myStory/index",
+    "pages/login/index",
+    "pages/myCollection/index"
+  ],
+  "tabBar": {
+    "borderStyle": "white",
+    "selectedColor": "#39c5bb",
+    "list": [
+      {
+        "pagePath": "pages/home/index",
+        "text": "首页",
+        "iconPath": "pics/home.png",
+        "selectedIconPath": "pics/home-active.png"
+      },
+      {
+        "pagePath": "pages/createStory/index",
+        "text": "发布游记",
+        "iconPath": "pics/plus-circle-fill.png",
+        "selectedIconPath": "pics/plus-circle-fill.png"
+
+      },
+      {
+        "pagePath": "pages/me/index",
+        "text": "我的",
+        "iconPath": "pics/user.png",
+        "selectedIconPath": "pics/user-active.png"
+      }
+    ]
+  },
+  "renderer": "skyline",
+  "rendererOptions": {
+    "skyline": {
+      "defaultDisplayBlock": true,
+      "disableABTest": true
+    }
+  },
+  "componentFramework": "glass-easel",
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

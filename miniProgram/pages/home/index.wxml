@@ -1,0 +1,44 @@
+<!-- index.wxml -->
+<scroll-view type="custom" scroll-y show-scrollbar="{{false}}" scroll-into-view="{{intoView}}" class="scroll-view" bindscrolltolower="bindSrollToLower" bindscrolltoupper="bindScrollToUpper" style="margin-top: {{menuTop}}px;" bindtap="hideSearchOption">
+  <sticky-section push-pinned-header="{{false}}">
+    <sticky-header>
+      <view class="sticky-header">
+        <view class="search" style="height: {{menuHeight}}px;line-height: {{menuHeight}}px; margin-right: {{menuLeft}}px;">
+          <input placeholder="寻找物语" bindinput="bindSearchInput" bindconfirm="bindSubmitSearch" bindfocus="bindSearchFocus" bindblur="bindSearchBlur" />
+        </view>
+        <view class="searchOption-container" wx:if="{{isSearching || isSearchOptionActive}}" catchtap="bindtapsearchOption">
+          <view bindtap="bindTapTitle" class="{{isSearchByTitle?'active-mode':'inactive-mode'}}">按标题</view>
+          <view bindtap="bindTapAuthor" class="{{isSearchByTitle?'inactive-mode':'active-mode'}}">按作者</view>
+        </view>
+      </view>
+    </sticky-header>
+  </sticky-section>
+  <sticky-section push-pinned-header="{{false}}">
+    <grid-view type="masonry" cross-axis-count="{{crossAxisCount}}" cross-axis-gap="{{crossAxisGap}}" main-axis-gap="{{mainAxisGap}}" wx:if="{{haveNoteList}}">
+      <view wx:for="{{noteList}}" wx:key="index" class="grid-box" data-id="{{item.noteId}}" bindtap="bindTapMasonryItem">
+        <image referrerPolicy="no-referrer" src="{{item.coverImg}}" mode="widthFix"></image>
+        <view class="content-box">
+          <text>{{item.title}}</text>
+          <view class="profile-text">
+            <view class="left">
+              <image src="{{item.authorAvatar}}"></image>
+              <text>{{item.authorNickname}}</text>
+            </view>
+            <view class="right">
+              <image src="https://res.wx.qq.com/community/dist/community/images/disagree_icon_fab2b7.svg"></image>
+              <text>{{item.likeNume}}</text>
+            </view>
+          </view>
+          <view class="profile-text">
+            <view class="left">
+              <text>{{item.pastTime}}</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </grid-view>
+    <view wx:if="{{!haveNoteList}}" class="no-data">似乎没有物语哦~</view>
+    <!-- <button bindtap="bindTESTTODETAIL">测试游记详情</button> -->
+    <view wx:if="{{loaing}}">加载中...</view>
+  </sticky-section>
+</scroll-view>
