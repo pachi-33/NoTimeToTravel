@@ -6,6 +6,7 @@ import {
   Modal,
   ModalBody,
   ModalContent,
+  ModalFooter,
   ModalHeader,
   Navbar,
   NavbarBrand,
@@ -21,7 +22,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { success } from "@/app/utils/message";
 import Image from "next/image";
-import { logoutClicked } from "../../utils/auth";
+import { logoutClicked } from "../../utils/login";
 import useUserInfo from "../../hooks/useUserInfo";
 import { useRouter } from "next/navigation";
 import ProfileSVG from "@/app/svg/avatar.svg";
@@ -40,13 +41,18 @@ const NavBar = ({ className }: { className: string }) => {
     { name: "管理", href: "/main/authy", disabled: !isAdmin },
   ];
 
-  let isLogin = false;
-  if (userInfo) {
-    isLogin = userInfo.isLogin;
-    if (!isLogin) {
-      router.push("/login");
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+
+  let isLogin = true;
+  useEffect(() => {
+    if (userInfo) {
+      // console.log(userInfo);
+      if (userInfo.userName === "None") {
+        isLogin = false;
+        onOpen();
+      }
     }
-  }
+  }, [userInfo]);
 
   const SignInUpOut = ({
     isLogin,
@@ -195,6 +201,35 @@ const NavBar = ({ className }: { className: string }) => {
           <NavLinks isLogin={isLogin} handleLogout={logoutClicked} />
         </NavbarMenu>
       </Navbar>
+
+      <Modal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
+        hideCloseButton={true}
+      >
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                请登录！
+              </ModalHeader>
+              <ModalFooter>
+                <Button
+                  color="primary"
+                  onPress={() => {
+                    onClose();
+                    router.push("/login");
+                  }}
+                >
+                  Ok
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </div>
   );
 };

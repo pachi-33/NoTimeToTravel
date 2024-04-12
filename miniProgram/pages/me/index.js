@@ -36,13 +36,11 @@ Page({
     this.setData({
       canEditNickName: true,
     });
-
   },
   bindConfirmName: async function () {
     let res = await Api.updateUserInfo({
       nickName: this.data.nickname,
     });
-
     console.log(res);
     this.setData({
       canEditNickName: false,

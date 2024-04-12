@@ -1,5 +1,5 @@
 "use client";
-import React, { Key } from "react";
+import React, { Key, useEffect } from "react";
 import {
   Table,
   TableHeader,
@@ -25,21 +25,40 @@ import {
 import { SearchIcon } from "../../icons/SearchIcon";
 import { columns, users } from "./components/data";
 import { DeleteIcon } from "../../icons/DeleteIcon";
+import useUserInfo from "../../hooks/useUserInfo";
+import { useRouter } from "next/navigation";
+import API from "@/app/utils/api";
+import { error, success } from "@/app/utils/message";
 
 interface userType {
-  id: number;
-  name: string;
+  reviewerId: number;
+  username: string;
 }
 
 export default function App() {
+  const router = useRouter();
+  const userInfo = useUserInfo();
+  const isAdmin = userInfo?.permission === "admin";
+  // 防止非管理员通过直接输入路由进入管理页面
+  useEffect(() => {
+    console.log(isAdmin, userInfo);
+    if (userInfo) {
+      if (!isAdmin) {
+        router.push("/main");
+      }
+    }
+  }, [userInfo]);
+
   // input value
   const [filterValue, setFilterValue] = React.useState("");
+  // final selected
+  const [arraySelected, setArraySelected] = React.useState([0]);
   // selected columns
   const [selectedKeys, setSelectedKeys] = React.useState(new Set([]) || "all");
   // rows per page
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [sortDescriptor, setSortDescriptor] = React.useState({
-    column: "name",
+    column: "username",
     direction: "ascending",
   });
   const [page, setPage] = React.useState(1);
@@ -68,7 +87,7 @@ export default function App() {
 
     if (hasSearchFilter) {
       filteredUsers = filteredUsers.filter((user) =>
-        user.name.toLowerCase().includes(filterValue.toLowerCase())
+        user.username.toLowerCase().includes(filterValue.toLowerCase())
       );
     }
 
@@ -96,13 +115,62 @@ export default function App() {
     });
   }, [sortDescriptor, items]);
 
+  const [password, setPassword] = React.useState("");
+  const [username, setUsername] = React.useState("");
+
   const handleAddNew = () => {
     setShowAdd(true);
     onAddOpen();
   };
 
+  const handleAdd = () => {
+    if (!username || !password) {
+      console.log("Username or password is empty.");
+      return;
+    }
+
+    try {
+      API.AuthyServiceApi.registerReviewer({
+        username: username,
+        password: password,
+      })
+        .then((res) => {
+          if (res.status === 200) {
+            if (res.data.status === 200) {
+              if (res.data.freshToken)
+                localStorage.setItem("Authorization", res.data.freshToken);
+              success("增加审核人员列表成功");
+            } else {
+              error("增加审核人员列表失败！");
+              if (res.data.status === 401) {
+                console.log(res.data?.msg);
+                if (res.data?.msg === 'Authentication expires.') {
+                  error("登录已过期，请重新登录！");
+                  if (process.env.NEXT_PUBLIC_TEST !== "test") {
+                    localStorage.removeItem("userInfo");
+                    localStorage.removeItem("Authorization");
+                  }
+                  window.location.href = "/login";
+                }
+              }
+            }
+          }
+        })
+        .catch((err: any) => {
+          console.log("Add Reviewer Error: ", err);
+          error("Add Reviewer Error: " + err);
+        });
+    } catch (err: any) {
+      console.log("Add Reviewer Error: ", err);
+      error("Add Reviewer Error: " + err);
+    } finally {
+      router.refresh();
+    }
+  };
+
   const handleDeleteUser = (id: number) => {
-    console.log(id);
+    // console.log(id);
+    setArraySelected([id]);
     setShowDelete(true);
     onDeleteOpen();
   };
@@ -111,21 +179,61 @@ export default function App() {
     let selectedArray: Array<number> = [];
     if (`${selectedKeys}` == "all") {
       users.forEach((value) => {
-        selectedArray.push(value.id);
+        selectedArray.push(value.reviewerId);
       });
     } else {
       selectedKeys.forEach((value) => {
         selectedArray.push(value);
       });
     }
-    console.log(selectedArray);
+    // console.log(selectedArray);
+    setArraySelected(selectedArray);
+    setShowDelete(true);
+    onDeleteOpen();
+  };
+
+  const handleDelete = () => {
+    try {
+      API.AuthyServiceApi.deleteReviewer({ reviewerId: arraySelected })
+        .then((res) => {
+          if (res.status === 200) {
+            if (res.data.status === 200) {
+              if (res.data.freshToken)
+                localStorage.setItem("Authorization", res.data.freshToken);
+              success("删除审核人员列表成功");
+            } else {
+              error("删除审核人员列表失败！");
+              if (res.data.status === 401) {
+                console.log(res.data?.msg);
+                if (res.data?.msg === 'Authentication expires.') {
+                  error("登录已过期，请重新登录！");
+                  if (process.env.NEXT_PUBLIC_TEST !== "test") {
+                    localStorage.removeItem("userInfo");
+                    localStorage.removeItem("Authorization");
+                  }
+                  window.location.href = "/login";
+                }
+              }
+            }
+          }
+        })
+        .catch((err: any) => {
+          console.log("Delete Reviewer Error: ", err);
+          error("Delete Reviewer Error: " + err);
+        });
+    } catch (err: any) {
+      console.log("Delete Reviewer Error: ", err);
+      error("Delete Reviewer Error: " + err);
+    } finally {
+      router.refresh();
+    }
   };
 
   const renderCell = React.useCallback((user: userType, columnKey: Key) => {
     const cellValue = user[columnKey as keyof typeof user];
 
     switch (columnKey) {
-      case "name":
+      case "username":
         return (
           <p className="text-bold text-blue-500 text-md capitalize">
             {cellValue}
@@ -138,7 +246,7 @@ export default function App() {
               <span
                 className="text-lg text-danger cursor-pointer active:opacity-50"
                 onClick={() => {
-                  handleDeleteUser(user.id);
+                  handleDeleteUser(user.reviewerId);
                 }}
               >
                 <DeleteIcon />
@@ -193,7 +301,7 @@ export default function App() {
           <Input
             isClearable
             className="w-full sm:max-w-[44%]"
-            placeholder="Search by name..."
+            placeholder="Search by username..."
             startContent={<SearchIcon />}
             value={filterValue}
             onClear={() => onClear()}
@@ -254,7 +362,7 @@ export default function App() {
           <div className="w-[30%] flex items-center gap-4">
             <span className=" text-small text-default-400">
               {selectedKeys.size >= filteredItems.length ||
-              `${selectedKeys}` == "all"
+                `${selectedKeys}` == "all"
                 ? "All items selected"
                 : `${selectedKeys.size} of ${filteredItems.length} selected`}
             </span>
@@ -344,7 +452,7 @@ export default function App() {
         </TableHeader>
         <TableBody emptyContent={"暂无审核人员"} items={sortedItems}>
           {(item) => (
-            <TableRow key={item.id}>
+            <TableRow key={item.reviewerId}>
               {(columnKey) => (
                 <TableCell>{renderCell(item, columnKey)}</TableCell>
               )}
@@ -362,11 +470,36 @@ export default function App() {
                   增加审核人员
                 </ModalHeader>
                 <ModalBody>
-                  <p>rmt</p>
+                  <form className="flex flex-col gap-4">
+                    <Input
+                      isRequired
+                      label="Username"
+                      placeholder="Enter username"
+                      type="text"
+                      onValueChange={setUsername}
+                    />
+                    <Input
+                      isRequired
+                      label="Password"
+                      placeholder="Enter password"
+                      type="text"
+                      onValueChange={setPassword}
+                    />
+                  </form>
                 </ModalBody>
                 <ModalFooter>
-                  <Button color="primary" variant="light" onPress={onClose}>
-                    Close
+                  <Button color="danger" variant="light" onPress={onClose}>
+                    取消
+                  </Button>
+                  <Button
+                    color="primary"
+                    variant="ghost"
+                    onPress={() => {
+                      handleAdd();
+                      onClose();
+                    }}
+                  >
+                    确认
                   </Button>
                 </ModalFooter>
               </>
@@ -383,12 +516,19 @@ export default function App() {
                 <ModalHeader className="flex flex-col gap-1">
                   删除审核人员
                 </ModalHeader>
-                <ModalBody>
-                  <p>rmt</p>
-                </ModalBody>
                 <ModalFooter>
-                  <Button color="primary" variant="light" onPress={onClose}>
-                    Close
+                  <Button color="danger" variant="light" onPress={onClose}>
+                    取消
+                  </Button>
+                  <Button
+                    color="primary"
+                    variant="ghost"
+                    onPress={() => {
+                      handleDelete();
+                      onClose();
+                    }}
+                  >
+                    确认
                   </Button>
                 </ModalFooter>
               </>

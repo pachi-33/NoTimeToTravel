@@ -2,7 +2,7 @@
 
 import {
   signInClicked,
-} from '@/app/utils/auth';
+} from '@/app/utils/login';
 import {
   Button,
   Card,
@@ -16,8 +16,6 @@ import { EyeSlashFilledIcon } from './components/EyeSlashFilledIcon';
 import { useRouter } from 'next/navigation';
 
 const Login = () => {
-  const [selected, setSelected] = useState<string | number>('login');
-  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
   const [isVisible, setIsVisible] = useState(false);
@@ -27,33 +25,14 @@ const Login = () => {
   
   const router = useRouter();
 
-  useEffect(() => {
-  }, []);
-
-  const validateEmail = (value: string) =>
-    value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i);
-
-  const isInvalidEmail = useMemo(() => {
-    if (email === '') return false;
-    return validateEmail(email) ? false : true;
-  }, [email]);
-
-  const validatePassword = (value: string) =>
-    value.match(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/i);
-
-  const isInvalidPassword = useMemo(() => {
-    if (password === '') return false;
-    return validatePassword(password) ? false : true;
-  }, [password]);
-
   const login = useCallback(async () => {
-    if (!email || !password) {
-      console.log('Email or password is empty.');
+    if (!username || !password) {
+      console.log('Username or password is empty.');
       return;
     }
     try {
       setIsLoading(true);
-      let response=await signInClicked(email, password);
+      let response=await signInClicked(username, password);
       setIsLoading(false);
       if(response==='success'){
         router.push('/main')
@@ -61,7 +40,7 @@ const Login = () => {
     } catch (error) {
       console.log(error);
     }
-  }, [email, password]);
+  }, [username, password]);
 
   return (
     <div className="flex w-full flex-col">
@@ -69,15 +48,14 @@ const Login = () => {
         <CardBody className="gap-5 overflow-hidden">
           
             <div key="login" title="Login">
+              <div className='mb-8 text-center font-bold text-[#5c5c5c]'>欢迎登录旅行物语审核网站</div>
               <form className="flex flex-col gap-4">
                 <Input
                   isRequired
-                  label="Email"
-                  placeholder="Enter your email"
-                  type="email"
-                  isInvalid={isInvalidEmail}
-                  errorMessage={isInvalidEmail && 'Please enter a valid email'}
-                  onValueChange={setEmail}
+                  label="Username"
+                  placeholder="Enter your username"
+                  type="text"
+                  onValueChange={setUsername}
                 />
                 <Input
                   isRequired
@@ -102,7 +80,7 @@ const Login = () => {
                 <div className="mt-3 flex justify-end gap-2">
                   <Button
                     fullWidth
-                    color="danger"
+                    color="primary"
                     onClick={login}
                     isLoading={isLoading}
                   >
