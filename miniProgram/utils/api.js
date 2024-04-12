@@ -14,6 +14,7 @@ const login = (data) => {
 
 // 按时间获取一定数量的游记列表
 const getNoteListByTime = (data) => {
+  console.log("按照时间获取数据")
   return request({
     url: 'travelDiary/verification/getNoteListByTime',
     method: "POST",

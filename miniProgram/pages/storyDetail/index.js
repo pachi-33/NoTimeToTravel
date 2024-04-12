@@ -6,16 +6,16 @@ Page({
     noteIdToSearch: 0,
     content: {
       noteId: "",
-      noteTitle: "我是标题",
-      noteContent: "内容内容内容内容",
-      authorNickname: "MAple",
+      noteTitle: "鼓浪屿探秘：闲适慢生活的海岛风情",
+      noteContent: `  鼓浪屿是厦门的象征之一，其历史可以追溯到19世纪。岛上保留着大量具有欧洲风情的建筑，包括西式别墅、教堂和邮局等，每一座建筑都有着属于自己的故事。漫步在鼓浪屿的小巷中，仿佛穿越到了百年前的时光隧道。`,
+      authorNickname: "喜欢旅游的小明",
       avatar: "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAOEcdM.img",
       viewNum: 100,
       likeNum: 200,
       collectNum: 300,
       isCollected: true,
       lastModifyTime: "2024-04-04 12:12:12",
-      location: "上海",
+      location: "厦门",
       resources: [{
           mediaType: "image",
           url: "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAOEcdM.img",
@@ -61,32 +61,32 @@ Page({
     haveCommentList: true,
     comments: [{
         commentId: 1,
-        commentBy: "nickname1",
+        commentBy: "mmmmii",
         commentContent: "哇塞，姐妹你好厉害",
         commentTime: "2024-05-05 12:12:12", //较新的
       },
       {
         commentId: 2,
-        commentBy: "nickname2",
+        commentBy: "闪闪",
         commentContent: "666",
         commentTime: "2024-05-05 12:12:12", //较久的
       },
       {
         commentId: 3,
-        commentBy: "nickname2",
-        commentContent: "哇塞，xd你好厉害",
+        commentBy: "爱吃的小红花",
+        commentContent: "厦门有什么好吃的吗",
         commentTime: "2024-05-05 12:12:12", //较久的
       },
       {
         commentId: 4,
-        commentBy: "nickname2",
-        commentContent: "我想玩博德之门",
+        commentBy: "红一耶",
+        commentContent: "我也想去厦门玩",
         commentTime: "2024-05-05 12:12:12", //较久的
       },
       {
         commentId: 5,
         commentBy: "nickname2",
-        commentContent: "我也想玩",
+        commentContent: "下周就出发去厦门了",
         commentTime: "2024-05-05 12:12:12", //较久的
       },
       {

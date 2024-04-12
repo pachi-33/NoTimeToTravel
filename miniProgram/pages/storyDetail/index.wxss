@@ -15,90 +15,88 @@
   margin-right: 10px;
 }
 
-.swiper-container image{
-    width: 90%;
-    height: auto;
-    margin-left: 5%;
-}
-.swiper-container video{
+.swiper-container image {
+  width: 90%;
+  height: auto;
   margin-left: 5%;
 }
-.video-container{
+.swiper-container video {
+  margin-left: 5%;
+}
+.video-container {
   width: 100%;
   display: flex;
   justify-content: center;
 }
-.swiper-container swiper{
+.swiper-container swiper {
   height: 507rpx;
 }
 
-.content{
-  margin:10px 10px;
+.content {
+  margin: 10px 10px;
 }
 
-.author-profile{
+.author-profile {
   font-size: 17px;
 }
-.author-profile{
+.author-profile {
   display: flex;
   justify-content: center;
   margin: 10px 20px;
 }
-.author-profile .left{
-  width: 50%;
+.author-profile .left {
+  width: 100%;
   display: flex;
 }
-.author-profile .left image{
-  width: 30px; 
-  height: 30px; 
-  border-radius: 50%; 
-  margin-right: 10px; 
+.author-profile .left image {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
 }
-.author-profile .right{
+.author-profile .right {
   display: flex;
   width: 50%;
 }
-.author-profile image{
+.author-profile image {
   width: 25px;
   height: 25px;
 }
-.story-profile{
+.story-profile {
   display: flex;
   margin: 5px 20px;
 }
-.story-profile view{
+.story-profile view {
   width: 33%;
   display: flex;
-  flex-direction:column;
+  flex-direction: column;
   align-items: center;
 }
-.story-profile image{
+.story-profile image {
   width: 25px;
   height: 25px;
 }
-.title{
+.title {
   font-size: 22px;
   font-weight: bold;
 }
 
-.bottom-commentbox{
+.bottom-commentbox {
   border: 1px solid black;
   height: 70px;
 }
 
-.content-bottom{
+.content-bottom {
   font-size: 12px;
-  color: #999; 
-  margin:10px 0;
-
+  color: #999;
+  margin: 10px 0;
 }
 
 .comment {
   width: 100%;
 }
 
-
-.comment-total{
+.comment-total {
   margin-left: 10px;
   margin-top: 20px;
   font-size: 15px;
@@ -112,21 +110,21 @@
 
 .comment-author {
   display: flex;
-  align-items: left; 
+  align-items: left;
 }
 
 .comment-author image {
-  width: 30px; 
-  height: 30px; 
-  border-radius: 50%; 
-  margin-right: 10px; 
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
 }
 .comment-username {
   font-weight: bold;
 }
 
 .comment-content {
-  margin-top: 5px; 
+  margin-top: 5px;
 }
 
 .comment-time {
@@ -135,9 +133,9 @@
 }
 
 .no-data {
-  padding: 10px; 
-  text-align: center; 
-  color: #999; 
+  padding: 10px;
+  text-align: center;
+  color: #999;
 }
 
 .comment-box {
@@ -153,4 +151,3 @@
   line-height: 30px;
   height: 30px;
 }
-

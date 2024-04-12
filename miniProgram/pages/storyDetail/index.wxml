@@ -12,7 +12,7 @@
         <block wx:if="{{content.resources.length>0}}" wx:for="{{content.resources}}" wx:key="index">
           <swiper-item bindtap="seeImageDetail" data-index="{{index}}">
             <view class='slide-navigator acea-row row-between-wrapper' hover-class='none'>
-              <view wx:if="{{item.mediaType==='video'}}" class="video-container"> <video src="{{item.url}}" bindload="videoLoad" /></view>
+              <view wx:if="{{item.mediaType==='video'}}" class="video-container"> <video src="{{item.url}}" bindload="videoLoad" 	show-fullscreen-btn="{{false}}" /></view>
               <image wx:else src="{{item.url}}" class="slide-image" mode="widthFix" data-id='{{index}}' mode="widthFix" bindload="imageLoad" />
             </view>
           </swiper-item>
@@ -27,8 +27,8 @@
           <text>{{content.authorNickname}}</text>
         </view>
         <view class="right">
-          <image src="../../pics/location.png"></image>
-          <text>{{content.location}}</text>
+          <!-- <image src="../../pics/location.png"></image>
+          <text>{{content.location}}</text> -->
         </view>
       </view>
       <view class="story-profile">
@@ -45,7 +45,7 @@
           <text>{{content.collectNum}}</text>
         </view>
       </view>
-      <text class="content-text">{{content.noteContent}}</text>
+      <text class="content-text" space="{{true}}">{{content.noteContent}}</text>
       <view class="content-bottom">
         <text>上次修改于 {{content.lastModifyTime}}</text>
       </view>

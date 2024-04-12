@@ -5,7 +5,28 @@ import Api from "../../utils/api.js";
 Page({
   data: {
     times: 0, //测试代码内容
-    noteList: [],
+    noteList: [{
+        noteId: 0,
+        title: "厦门真好玩",
+        uploadTime: `2024-04-06 12:12:12`,
+        pastTime:"2024-04-06",
+        likeNume: 200,
+        mediaType: "image",
+        coverImg: "https://res.wx.qq.com/op_res/0-l2fyKjv3_BR62E3KwTJPRaN5CDI6NZFg_qbSxeqF8UBpM4lXJ_1o9S9bsOOxMpuXGLeKyAKleWlAXmVLmQOw",
+        authorAvatar: "https://res.wx.qq.com/op_res/7_miJnK0wxIrh5bV2QqvYZB1p48LLH-Pc7Rzr4nN0YF-uZg7FW7zksw_Kjp0BNDHcZp9R9SRKbg0rA1HBaeK3Q",
+        authorNickname: "喜欢旅游"
+      },
+      {
+        noteId: 2,
+        title: "去厦门，玩这些就够了",
+        uploadTime: `2024-04-06 12:12:12`,
+        pastTime:"2024-04-06",
+        likeNume: 300,
+        mediaType: "image",
+        coverImg: "https://res.wx.qq.com/op_res/7_miJnK0wxIrh5bV2QqvYYjda9Dp372N3T05q_nn3PgvoXBoReXvaXBfkthtXQLN7m5_YI6FoTre-xvJBDFLMA",
+        authorAvatar: "https://res.wx.qq.com/op_res/7_miJnK0wxIrh5bV2QqvYYjda9Dp372N3T05q_nn3PgvoXBoReXvaXBfkthtXQLN7m5_YI6FoTre-xvJBDFLMA",
+        authorNickname: "小强"},
+    ],
     isSearching: false,
     isSearchByTitle: true, //默认按照标题搜索
     isSearchOptionActive: false,
@@ -53,12 +74,10 @@ Page({
     });
     console.log("searchValue", this.data.searchValue);
     const data = {
-      beforeWhen: refresh
-        ? util.formatTime(new Date(), "YYYY-mm-dd HH:mm:ss")
-        : "",
-      beforeNoteId: refresh
-        ? ""
-        : this.noteList[this.noteList.length - 1].noteId,
+      beforeWhen: refresh ?
+        util.formatTime(new Date(), "YYYY-mm-dd HH:mm:ss") : "",
+      beforeNoteId: refresh ?
+        "" : this.noteList[this.noteList.length - 1].noteId,
       listLength: 100,
     };
     if (this.data.isSearchByTitle) {
@@ -120,7 +139,7 @@ Page({
     });
   },
   bindSubmitSearch: async function () {
-    try{
+    try {
       let newList = await this.getNewSearchList();
       if (newList.length === 0) {
         this.setData({
@@ -130,14 +149,13 @@ Page({
       this.setData({
         noteList: newList,
       });
-    }
-    catch(err){
+    } catch (err) {
       wx.showToast({
         title: "搜索失败",
         icon: "none",
         duration: 2000,
       });
-      console.log("err",err);
+      console.log("err", err);
     }
   },
   bindSearchInput: function (e) {

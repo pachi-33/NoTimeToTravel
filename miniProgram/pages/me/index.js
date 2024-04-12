@@ -3,7 +3,7 @@ import Api from "../../utils/api.js";
 import util from "../../utils/util.js";
 Page({
   data: {
-    nickname: "游客",
+    nickname: "爱旅游的yeye",
     avatarUrl:
       "https://res.wx.qq.com/op_res/7_miJnK0wxIrh5bV2QqvYYjda9Dp372N3T05q_nn3PgvoXBoReXvaXBfkthtXQLN7m5_YI6FoTre-xvJBDFLMA",
     canEditNickName: false,
@@ -36,11 +36,13 @@ Page({
     this.setData({
       canEditNickName: true,
     });
+
   },
   bindConfirmName: async function () {
     let res = await Api.updateUserInfo({
       nickName: this.data.nickname,
     });
+
     console.log(res);
     this.setData({
       canEditNickName: false,
@@ -56,6 +58,13 @@ Page({
         title: "修改失败",
         icon: "none",
         duration: 2000,
+      });
+      util.checkUserLogin().then((res) => {
+        console.log("已登录");
+        this.setData({
+          nickname: res.nickName,
+          avatarUrl: res.avatarUrl,
+        });
       });
     }
   },
@@ -89,6 +98,13 @@ Page({
                   title: "修改失败",
                   icon: "none",
                   duration: 2000,
+                });
+                util.checkUserLogin().then((res) => {
+                  console.log("已登录");
+                  this.setData({
+                    nickname: res.nickName,
+                    avatarUrl: res.avatarUrl,
+                  });
                 });
               }
             })

@@ -41,7 +41,7 @@
 .diaryContent{
   width: 100%;
   margin: 3px;
-  background-color: rgba(199, 199, 199, 0.603);
+  border: rgba(199, 199, 199, 0.603) solid 1px;
 }
 
 .input-content{
@@ -113,6 +113,11 @@
 }
 
 .upload-btn{
-  font-size: large;
-  font-weight: 600;
+  font-size: 16px;
+  padding: 10px 20px;
+  background-color: #39c5bb;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  width: 100px !important;
 }

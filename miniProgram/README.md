@@ -66,26 +66,23 @@
     └── util.js //工具函数封装
 ```
 ## 使用说明
-使用微信扫描下二维码即可使用小程序
+使用微信扫描下二维码即可使用小程序，小程序包含以下页面
 ![小程序码](./readmePic/gh_ecd2332eb518_258.jpg)
 
 1. 首页
-
+![alt text](README/9beccebdbe1ca08b61cfc7edb929cca.png)
 2. 搜索结果页
-
+![alt text](README/0184878bd5e7397d35020274b125d64.png)
 3. 游记详情页
-
+![alt text](README/f83d6c24a0832f5d35f8666bfa6c465.png)
 4. 发布游记/编辑游记页
-
+![alt text](README/b3e6aaceb7b8abe7f68ba9ce8d5985a.jpg)
 5. 我的资料页面
-
+![alt text](README/cdc86c6fe4481c04c60388639c18529.jpg)
 6. 我的游记页面
-
+![alt text](README/10572fff5c45971e7059a1ec48f57fb.png)
 7. 我的收藏页面
+![alt text](README/fe47e2714bd8699d5a71e02b66ec2e5.png)
+8. 登录页
+![alt text](README/99ae1542cf04b73ef5ef938e672e9b1.jpg)
 
-## 难点突破
-1. 瀑布屏实现以及视频展示
-
-2. 详情页swiper随图片改变高度
-
-## 项目亮点
