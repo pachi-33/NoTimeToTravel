@@ -3,7 +3,7 @@ import request from 'request.js'
 
 const login = (data) => {
   return request({
-    url: 'travelDiary/login',
+    url: '/nofresh/travelDiary/login',
     method: "POST",
     data: data,
     header: {
@@ -16,7 +16,7 @@ const login = (data) => {
 const getNoteListByTime = (data) => {
   console.log("按照时间获取数据")
   return request({
-    url: 'travelDiary/verification/getNoteListByTime',
+    url: '/travelDiary/verification/getNoteListByTime',
     method: "POST",
     data: data,
   })
