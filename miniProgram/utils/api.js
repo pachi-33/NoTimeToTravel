@@ -16,7 +16,7 @@ const login = (data) => {
 const getNoteListByTime = (data) => {
   console.log("按照时间获取数据")
   return request({
-    url: '/travelDiary/verification/getNoteListByTime',
+    url: '/travelDiary/getNoteListByTime',
     method: "POST",
     data: data,
   })
@@ -24,7 +24,7 @@ const getNoteListByTime = (data) => {
 //搜索游记标题 获得列表
 const getNoteListBySearchTitle = (data) => {
   return request({
-    url: 'travelDiary/verification/getNoteListBySearchTitle',
+    url: '/travelDiary/verification/getNoteListBySearchTitle',
     method: "POST",
     data: data
   })
@@ -32,7 +32,7 @@ const getNoteListBySearchTitle = (data) => {
 //搜索作者获取游记列表
 const getNoteListBySearchAuthor = (data) => {
   return request({
-    url: 'travelDiary/verification/getNoteListBySearchAuthor',
+    url: '/travelDiary/verification/getNoteListBySearchAuthor',
     method: "POST",
     data: data
   })
@@ -40,7 +40,7 @@ const getNoteListBySearchAuthor = (data) => {
 //获取游记详情内容 同时浏览量加一
 const getNoteDetails = (data) => {
   return request({
-    url: 'travelDiary/getNoteDetails',
+    url: '/nofresh/travelDiary/getNoteDetails',
     method: "POST",
     data: data
   })
@@ -49,7 +49,7 @@ const getNoteDetails = (data) => {
 //获取游记评论区列表
 const getNoteComments = (data) => {
   return request({
-    url: 'travelDiary/getNoteComments',
+    url: '/nofresh/travelDiary/getNoteComments',
     method: "POST",
     data: data
   })
@@ -58,7 +58,7 @@ const getNoteComments = (data) => {
 //点赞
 const likeNote = (data) => {
   return request({
-    url: 'travelDiary/verification/likeNote',
+    url: '/travelDiary/verification/likeNote',
     method: "POST",
     data: data
   })
@@ -67,7 +67,7 @@ const likeNote = (data) => {
 //收藏
 const collectNote = (data) => {
   return request({
-    url: 'travelDiary/verification/collectNote',
+    url: '/travelDiary/verification/collectNote',
     method: "POST",
     data: data
   })
@@ -76,7 +76,7 @@ const collectNote = (data) => {
 //取消收藏
 const cancelcollectNote = (data) => {
   return request({
-    url: 'travelDiary/verification/cancelcollectNote',
+    url: '/travelDiary/verification/cancelCollectNote',
     method: "POST",
     data: data
   })
@@ -85,7 +85,7 @@ const cancelcollectNote = (data) => {
 //评论
 const makeComment = (data) => {
   return request({
-    url: 'travelDiary/verification/makeComment',
+    url: '/travelDiary/verification/makeComment',
     method: "POST",
     data: data
   })
@@ -94,7 +94,7 @@ const makeComment = (data) => {
 //获得用户信息
 const getUserInfo = () => {
   return request({
-    url: 'travelDiary/getUserInfo',
+    url: '/travelDiary/verification/getUserInfo',
     method: "GET"
   })
 }
@@ -102,7 +102,7 @@ const getUserInfo = () => {
 //设置头像
 const setAvatar = (data) => {
   return request({
-    url: 'travelDiary/verification/setAvatar',
+    url: '/travelDiary/verification/setAvatar',
     method: "POST",
     data: data
   })
@@ -111,7 +111,7 @@ const setAvatar = (data) => {
 //设置昵称
 const setNickname = (data) => {
   return request({
-    url: 'travelDiary/verification/setNickname',
+    url: 'travelDiary/verification/setNickName',
     method: "POST",
     data: data
   })
@@ -120,16 +120,25 @@ const setNickname = (data) => {
 //编辑游记、上传游记(没有noteId)
 const uploadNote = (data) => {
   return request({
-    url: 'travelDiary/verification/uploadNote',
+    url: '/travelDiary/verification/uploadNote',
     method: "POST",
     data: data
   })
 }
 
+const modifyNote = (data) => {
+  return request({
+    url: '/travelDiary/verification/modifyNote',
+    method: "POST",
+    data: data
+  })
+}
+
+
 //删除游记
 const deleteNote = (data) => {
   return request({
-    url: 'travelDiary/verification/deleteNote',
+    url: '/travelDiary/verification/deleteNote',
     method: "POST",
     data: data
   })
@@ -138,7 +147,7 @@ const deleteNote = (data) => {
 //获得收藏的游记列表
 const getMyCollect = () => {
   return request({
-    url: 'travelDiary/verification/getMyCollect',
+    url: '/travelDiary/verification/getMyCollect',
     method: "GET",
   })
 }
@@ -146,7 +155,7 @@ const getMyCollect = () => {
 //获得我的游记列表
 const getMyNoteListWithStatus = () => {
   return request({
-    url: 'travelDiary/verification/getMyNoteListWithStatus',
+    url: '/travelDiary/verification/getMyNoteListWithStatus',
     method: "GET",
   })
 }

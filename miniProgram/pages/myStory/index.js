@@ -124,7 +124,7 @@ Page({
     const newList = await getMyNoteListWithStatus();
     newList = newList.map((item) => {
       item.pastTime = util.formatPast(
-        new Date(item.uploadTime.replaceAll("-", "/")),
+        new Date(item.uploadTime),
         "YYYY-mm-dd"
       );
       return item;

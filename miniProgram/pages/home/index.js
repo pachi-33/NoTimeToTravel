@@ -52,10 +52,10 @@ Page({
     try {
       let res = await Api.getNoteListByTime(noteListQuery);
       console.log("getNewList的res", res);
-      let newList = res.data || [];
+      let newList = res.data.noteList || [];
       newList = newList.map((item) => {
         item.pastTime = util.formatPast(
-          new Date(item.uploadTime.replaceAll("-", "/")),
+          new Date(item.uploadTime),
           "YYYY-mm-dd"
         );
         return item;

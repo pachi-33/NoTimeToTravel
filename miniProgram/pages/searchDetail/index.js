@@ -9,7 +9,7 @@ Page({
         noteId: 0,
         title: "厦门真好玩",
         uploadTime: `2024-04-06 12:12:12`,
-        pastTime:"2024-04-06",
+        pastTime: "2024-04-06",
         likeNume: 200,
         mediaType: "image",
         coverImg: "https://res.wx.qq.com/op_res/0-l2fyKjv3_BR62E3KwTJPRaN5CDI6NZFg_qbSxeqF8UBpM4lXJ_1o9S9bsOOxMpuXGLeKyAKleWlAXmVLmQOw",
@@ -20,12 +20,13 @@ Page({
         noteId: 2,
         title: "去厦门，玩这些就够了",
         uploadTime: `2024-04-06 12:12:12`,
-        pastTime:"2024-04-06",
+        pastTime: "2024-04-06",
         likeNume: 300,
         mediaType: "image",
         coverImg: "https://res.wx.qq.com/op_res/7_miJnK0wxIrh5bV2QqvYYjda9Dp372N3T05q_nn3PgvoXBoReXvaXBfkthtXQLN7m5_YI6FoTre-xvJBDFLMA",
         authorAvatar: "https://res.wx.qq.com/op_res/7_miJnK0wxIrh5bV2QqvYYjda9Dp372N3T05q_nn3PgvoXBoReXvaXBfkthtXQLN7m5_YI6FoTre-xvJBDFLMA",
-        authorNickname: "小强"},
+        authorNickname: "小强"
+      },
     ],
     isSearching: false,
     isSearchByTitle: true, //默认按照标题搜索
@@ -82,17 +83,19 @@ Page({
     };
     if (this.data.isSearchByTitle) {
       data.keyWords = this.data.searchValue;
+      console.log("开始搜索")
       Api.getNoteListBySearchTitle(data)
         .then((res) => {
-          console.log("res", res);
-          let newList = res.data || [];
-          newList = newList.map((item) => {
-            item.pastTime = util.formatPast(
-              new Date(item.uploadTime.replaceAll("-", "/")),
-              "YYYY-mm-dd"
-            );
-            return item;
-          });
+          let newList = res.data.noteList || [];
+          if (newList.length !== 0) {
+            newList = newList.map((item) => {
+              item.pastTime = util.formatPast(
+                new Date(item.uploadTime),
+                "YYYY-mm-dd"
+              );
+              return item;
+            });
+          }
           this.setData({
             loading: false,
           });
@@ -110,10 +113,10 @@ Page({
       Api.getNoteListBySearchAuthor(data)
         .then((res) => {
           console.log("res", res);
-          let newList = res.data || [];
+          let newList = res.data.noteList || [];
           newList = newList.map((item) => {
             item.pastTime = util.formatPast(
-              new Date(item.uploadTime.replaceAll("-", "/")),
+              new Date(item.uploadTime),
               "YYYY-mm-dd"
             );
             return item;
@@ -213,6 +216,7 @@ Page({
   bindScrollToUpper: async function () {
     try {
       let newList = await this.getNewSearchList(true);
+      console.log("newList",newList)
       if (newList.length === 0) {
         this.setData({
           haveNoteList: false,

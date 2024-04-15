@@ -45,8 +45,9 @@ const formatPast = (date, format) => {
 const checkUserLogin = async () => {
   try {
     let res = await Api.getUserInfo();
-    if (res.data && res.data.status === "200") {
-      return{nickname:res.data.data.nickName,avatarUrl:res.data.avatarUrl};
+    console.log("用户是否登录？",res.data)
+    if (res.data && res.data.status === 200) {
+      return{nickname:res.data.data.nickname,avatarUrl:res.data.avatarUrl};
     } else {
       wx.navigateTo({
         url: "/pages/login/index",

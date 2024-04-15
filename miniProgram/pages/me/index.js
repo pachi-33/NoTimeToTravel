@@ -38,14 +38,14 @@ Page({
     });
   },
   bindConfirmName: async function () {
-    let res = await Api.updateUserInfo({
+    let res = await Api.setNickname({
       nickName: this.data.nickname,
     });
     console.log(res);
     this.setData({
       canEditNickName: false,
     });
-    if (res.data && res.data.status === "200") {
+    if (res.data && res.data.status === 200) {
       wx.showToast({
         title: "修改成功",
         icon: "success",
@@ -82,7 +82,7 @@ Page({
             img: url,
           })
             .then((res) => {
-              if (res.data && res.data.status === "200") {
+              if (res.data && res.data.status === 200) {
                 wx.showToast({
                   title: "修改成功",
                   icon: "success",
