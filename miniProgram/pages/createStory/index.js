@@ -30,16 +30,20 @@ Page({
         mode: "edit"
       })
       const res = await Api.getNoteDetails({
-        noteId: options.noteId
+        noteId: Number(options.noteId)
       });
     }
 
   },
   handleTitleChange(e) {
-    this.data.diaryTitle = e.detail.value;
+    this.setData({
+      diaryTitle: e.detail.value
+    });
   },
   handleContentChange(e) {
-    this.data.diaryContent = e.detail.value;
+    this.setData({
+      diaryContent: e.detail.value
+    });
   },
   bindChooseMedia: function () {
     if (this.data.mediaList.length >= 9) {
@@ -77,7 +81,11 @@ Page({
           wx.uploadFile({
             filePath: tempFiles[i].tempFilePath,
             name: tempFiles[i].fileType == "image" ? "imageFile" : "videoFile",
-            url: 'https://xtrip.x3322.net:3000/api/travelDiary/verification/uploadFile',
+            header: {
+              "content-type": "multipart/form-data",
+              "Authorization": wx.getStorageSync("token"),
+            },
+            url: 'https://47.120.68.102/api/travelDiary/verification/uploadFile',
             formData: {
               mediaType: tempFiles[i].fileType == "image" ? "img" : "video"
             },
@@ -154,8 +162,8 @@ Page({
     let res = await Api.uploadNote({
       content: {
         noteTitle: this.data.diaryTitle,
-        noteContent: this.data.noteContent,
-        location: "",
+        noteContent: this.data.diaryContent,
+        location: "SHANGHAI",
         resources: tempArray,
       }
     })

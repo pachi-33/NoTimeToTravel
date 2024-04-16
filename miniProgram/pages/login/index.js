@@ -29,11 +29,9 @@ Page({
       success(res) {
         if (res.code) {
           //发起网络请求
-          console.log("发起网络请求前的res",res)
           Api.login({
             code: res.code,
           }).then((res)=>{
-            console.log('结果有')
             wx.navigateBack();
           })
 

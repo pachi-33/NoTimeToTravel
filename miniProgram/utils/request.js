@@ -1,4 +1,4 @@
-const pubUrl = "https://47.120.68.102/api"//这是我要请求的数据接口的公共部分
+const pubUrl = "https://47.120.68.102/api"
 const http = (options) =>{
   return new Promise((resolve,reject) => {
     wx.request({

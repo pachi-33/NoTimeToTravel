@@ -11,7 +11,7 @@ Page({
         uploadTime: `2024-04-06 12:12:12`,
         pastTime: "2024-04-06",
         likeNume: 200,
-        mediaType: "image",
+        mediaType: "img",
         coverImg: "https://res.wx.qq.com/op_res/0-l2fyKjv3_BR62E3KwTJPRaN5CDI6NZFg_qbSxeqF8UBpM4lXJ_1o9S9bsOOxMpuXGLeKyAKleWlAXmVLmQOw",
         authorAvatar: "https://res.wx.qq.com/op_res/7_miJnK0wxIrh5bV2QqvYZB1p48LLH-Pc7Rzr4nN0YF-uZg7FW7zksw_Kjp0BNDHcZp9R9SRKbg0rA1HBaeK3Q",
         authorNickname: "喜欢旅游"
@@ -22,7 +22,7 @@ Page({
         uploadTime: `2024-04-06 12:12:12`,
         pastTime: "2024-04-06",
         likeNume: 300,
-        mediaType: "image",
+        mediaType: "iag",
         coverImg: "https://res.wx.qq.com/op_res/7_miJnK0wxIrh5bV2QqvYYjda9Dp372N3T05q_nn3PgvoXBoReXvaXBfkthtXQLN7m5_YI6FoTre-xvJBDFLMA",
         authorAvatar: "https://res.wx.qq.com/op_res/7_miJnK0wxIrh5bV2QqvYYjda9Dp372N3T05q_nn3PgvoXBoReXvaXBfkthtXQLN7m5_YI6FoTre-xvJBDFLMA",
         authorNickname: "小强"
@@ -99,6 +99,7 @@ Page({
           this.setData({
             loading: false,
           });
+          console.log("返回前",newList)
           return newList;
         })
         .catch((err) => {
@@ -192,7 +193,7 @@ Page({
   bindSrollToLower: async function () {
     try {
       let newList = await this.getNewSearchList();
-      console.log("newlist", newList);
+      console.log("newlist阻塞", newList);
       if (newList.length === 0) {
         wx.showToast({
           title: "你居然看完了全部的物语~",

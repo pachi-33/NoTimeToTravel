@@ -4,8 +4,7 @@ import util from "../../utils/util.js";
 Page({
   data: {
     nickname: "爱旅游的yeye",
-    avatarUrl:
-      "https://res.wx.qq.com/op_res/7_miJnK0wxIrh5bV2QqvYYjda9Dp372N3T05q_nn3PgvoXBoReXvaXBfkthtXQLN7m5_YI6FoTre-xvJBDFLMA",
+    avatarUrl: "https://res.wx.qq.com/op_res/7_miJnK0wxIrh5bV2QqvYYjda9Dp372N3T05q_nn3PgvoXBoReXvaXBfkthtXQLN7m5_YI6FoTre-xvJBDFLMA",
     canEditNickName: false,
     // 顶部布局参数
     menuTop: 0,
@@ -37,7 +36,13 @@ Page({
       canEditNickName: true,
     });
   },
+  bindInputNickname: function (e) {
+    this.setData({
+      nickname: e.detail.value
+    })
+  },
   bindConfirmName: async function () {
+    console.log("nickname", this.data.nickname)
     let res = await Api.setNickname({
       nickName: this.data.nickname,
     });
@@ -67,20 +72,28 @@ Page({
     }
   },
   bindChooseAvatar: function (e) {
-    const tmpURL = e.detail.avatarUrl;
+    console.log("头像网址", e.detail.avatarUrl)
     wx.uploadFile({
-      url: "https://xtrip.x3322.net:3000/api/travelDiary/verification/uploadFile", //仅为示例，非真实的接口地址
-      filePath: tmpURL,
+      url: "https://47.120.68.102/api/travelDiary/verification/uploadFile",
+      filePath: e.detail.avatarUrl,
       name: "avatar",
       formData: {
         mediaType: "img",
       },
+      header: {
+        "content-type": "multipart/form-data",
+        "Authorization": wx.getStorageSync("token"),
+      },
       success(res) {
-        if (res.statusCode === 200) {
-          const { url, mediaType } = res.data;
+        if (res.data.status === 200) {
+          const {
+            url,
+            mediaType
+          } = res.data;
+          console.log("上传结果", url)
           Api.setAvatar({
-            img: url,
-          })
+              img: url,
+            })
             .then((res) => {
               if (res.data && res.data.status === 200) {
                 wx.showToast({

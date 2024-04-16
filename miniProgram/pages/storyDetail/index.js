@@ -125,6 +125,7 @@ Page({
       menuLeft: res.width + 10,
       noteIdToSearch: noteId,
     });
+    console.log("noteID",noteId)
     this.getDetail();
     this.getComment();
   },
@@ -163,10 +164,10 @@ Page({
   },
   bindConfirmComment: async function () {
     const data = {
-      noteId: this.data.noteIdToSearch,
+      noteId: Number(this.data.noteIdToSearch),
       commentContent: this.data.userComment,
     };
-    let res = await Api.addComment(data);
+    let res = await Api.makeComment(data);
     if (res.data.status !== 200) {
       wx.navigateTo({
         url: "/pages/login/index",
@@ -177,7 +178,7 @@ Page({
   },
   getDetail: async function () {
     let res = await Api.getNoteDetails({
-      noteId: this.data.noteIdToSearch
+      noteId: Number(this.data.noteIdToSearch)
     });
     console.log("getNoteDetail的res", res);
     let newContent = res.data || {};
@@ -186,8 +187,8 @@ Page({
     });
   },
   getComment: async function () {
-    let res = await Api.getCommentList({
-      noteId: this.data.noteIdToSearch
+    let res = await Api.getNoteComments({
+      noteId: Number(this.data.noteIdToSearch)
     });
     console.log("getCommentList的res", res);
     let newComments = res.data || [];

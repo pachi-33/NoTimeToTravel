@@ -1,14 +1,14 @@
 import Api from "api.js";
 const formatTime = (date, format) => {
-  console.log("data",date)
+  console.log("data", date)
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
   const day = String(date.getDate()).padStart(2, '0');
   const hour = String(date.getHours()).padStart(2, '0');
   const minute = String(date.getMinutes()).padStart(2, '0');
   const second = String(date.getSeconds()).padStart(2, '0');
-  console.log("结果",year,month,day)
-  
+  console.log("结果", year, month, day)
+
   if (format === "YYYY-mm-dd HH:mm:ss")
     return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
   else if (format === "YYYY-mm-dd")
@@ -45,9 +45,12 @@ const formatPast = (date, format) => {
 const checkUserLogin = async () => {
   try {
     let res = await Api.getUserInfo();
-    console.log("用户是否登录？",res.data)
+    console.log("用户是否登录？", res.data)
     if (res.data && res.data.status === 200) {
-      return{nickname:res.data.data.nickname,avatarUrl:res.data.avatarUrl};
+      return {
+        nickname: res.data.nickname,
+        avatarUrl: res.data.avatarUrl
+      };
     } else {
       wx.navigateTo({
         url: "/pages/login/index",

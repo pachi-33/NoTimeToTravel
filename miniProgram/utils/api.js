@@ -83,7 +83,7 @@ const cancelcollectNote = (data) => {
 }
 
 //评论
-const makeComment = (data) => {
+const makeComment  = (data) => {
   return request({
     url: '/travelDiary/verification/makeComment',
     method: "POST",
