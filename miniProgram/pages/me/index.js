@@ -23,7 +23,7 @@ Page({
       .then((res) => {
         console.log("已登录");
         this.setData({
-          nickname: res.nickName,
+          nickname: res.nickname,
           avatarUrl: res.avatarUrl,
         });
       })
@@ -41,10 +41,11 @@ Page({
       nickname: e.detail.value
     })
   },
-  bindConfirmName: async function () {
-    console.log("nickname", this.data.nickname)
+  bindConfirmName: async function (_this) {
+    console.log("nickname=========", this.data.nickname)
+    const nickname = this.data.nickname
     let res = await Api.setNickname({
-      nickName: this.data.nickname,
+      nickName: nickname,
     });
     console.log(res);
     this.setData({
@@ -62,14 +63,14 @@ Page({
         icon: "none",
         duration: 2000,
       });
-      util.checkUserLogin().then((res) => {
-        console.log("已登录");
-        this.setData({
-          nickname: res.nickName,
-          avatarUrl: res.avatarUrl,
-        });
-      });
     }
+    util.checkUserLogin().then((res) => {
+      console.log("已登录");
+      this.setData({
+        nickname: res.nickname,
+        avatarUrl: res.avatarUrl,
+      });
+    });
   },
   bindChooseAvatar: function (e) {
     console.log("头像网址", e.detail.avatarUrl)
@@ -113,7 +114,7 @@ Page({
                 util.checkUserLogin().then((res) => {
                   console.log("已登录");
                   this.setData({
-                    nickname: res.nickName,
+                    nickname: res.nickname,
                     avatarUrl: res.avatarUrl,
                   });
                 });

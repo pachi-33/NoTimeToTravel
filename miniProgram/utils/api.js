@@ -111,7 +111,7 @@ const setAvatar = (data) => {
 //设置昵称
 const setNickname = (data) => {
   return request({
-    url: 'travelDiary/verification/setNickName',
+    url: '/travelDiary/verification/setNickName',
     method: "POST",
     data: data
   })
@@ -177,5 +177,6 @@ export default {
   deleteNote,
   getMyCollect,
   getMyNoteListWithStatus,
-  login
+  login,
+  modifyNote
 }
