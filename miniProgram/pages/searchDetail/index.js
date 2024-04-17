@@ -78,7 +78,7 @@ Page({
       beforeWhen: refresh ?
         util.formatTime(new Date(), "YYYY-mm-dd HH:mm:ss") : "",
       beforeNoteId: refresh ?
-        "" : this.noteList[this.noteList.length - 1].noteId,
+        "" : this.data.noteList[this.data.noteList.length - 1].noteId,
       listLength: 100,
     };
     if (this.data.isSearchByTitle) {
@@ -99,7 +99,7 @@ Page({
           this.setData({
             loading: false,
           });
-          console.log("返回前",newList)
+          console.log("返回前", newList)
           return newList;
         })
         .catch((err) => {
@@ -115,13 +115,15 @@ Page({
         .then((res) => {
           console.log("res", res);
           let newList = res.data.noteList || [];
-          newList = newList.map((item) => {
-            item.pastTime = util.formatPast(
-              new Date(item.uploadTime),
-              "YYYY-mm-dd"
-            );
-            return item;
-          });
+          if (newList.length !== 0) {
+            newList = newList.map((item) => {
+              item.pastTime = util.formatPast(
+                new Date(item.uploadTime),
+                "YYYY-mm-dd"
+              );
+              return item;
+            });
+          }
           this.setData({
             loading: false,
           });
@@ -202,8 +204,9 @@ Page({
         });
         return;
       }
+      let oldList = this.data.noteList
       this.setData({
-        noteList: this.data.noteList.concat(newList),
+        noteList: oldList.concat(newList),
       });
     } catch (err) {
       wx.showToast({
@@ -217,7 +220,7 @@ Page({
   bindScrollToUpper: async function () {
     try {
       let newList = await this.getNewSearchList(true);
-      console.log("newList",newList)
+      console.log("newList", newList)
       if (newList.length === 0) {
         this.setData({
           haveNoteList: false,

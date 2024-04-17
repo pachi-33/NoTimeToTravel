@@ -1,6 +1,9 @@
 // index.js
 
-import { getLandscapeImages, getMediaType } from "./data";
+import {
+  getLandscapeImages,
+  getMediaType
+} from "./data";
 import util from "../../utils/util.js";
 import Api from "../../utils/api.js";
 
@@ -36,30 +39,30 @@ Page({
   },
 
   getNewList: async function (refresh = false) {
-    if(refresh===false && noteList.length===0){
-      refresh=true;
+    if (refresh === false && this.data.noteList.length === 0) {
+      refresh = true;
     }
     let noteListQuery = {
       beforeNoteId: "",
-      beforeWhen: refresh
-        ? util.formatTime(new Date(), "YYYY-mm-dd HH:mm:ss")
-        : "",
-      beforeNoteId: refresh
-        ? ""
-        : this.noteList[this.noteList.length - 1].noteId,
+      beforeWhen: refresh ?
+        util.formatTime(new Date(), "YYYY-mm-dd HH:mm:ss") : "",
+      beforeNoteId: refresh ?
+        "" : this.data.noteList[this.data.noteList.length - 1].noteId,
       listLength: 100,
     };
     try {
       let res = await Api.getNoteListByTime(noteListQuery);
       console.log("getNewList的res", res);
       let newList = res.data.noteList || [];
-      newList = newList.map((item) => {
-        item.pastTime = util.formatPast(
-          new Date(item.uploadTime),
-          "YYYY-mm-dd"
-        );
-        return item;
-      });
+      if (newList.length !== 0) {
+        newList = newList.map((item) => {
+          item.pastTime = util.formatPast(
+            new Date(item.uploadTime),
+            "YYYY-mm-dd"
+          );
+          return item;
+        });
+      }
       this.setData({
         loading: false,
       });
@@ -177,7 +180,7 @@ Page({
   bindSrollToLower: async function () {
     try {
       let newList = await this.getNewList();
-      console.log("newlist", newList);
+      console.log("判断拿取新列表newlist", newList);
       if (newList.length === 0) {
         wx.showToast({
           title: "你居然看完了全部的物语~",
@@ -186,8 +189,10 @@ Page({
         });
         return;
       }
+      let oldList = this.data.noteList;
+      console.log(oldList)
       this.setData({
-        noteList: this.data.noteList.concat(newList),
+        noteList: oldList.concat(newList),
       });
     } catch (err) {
       wx.showToast({
@@ -199,15 +204,13 @@ Page({
     }
   },
   bindScrollToUpper: async function () {
-    try{
-      console.log("请求新数据",newList);
+    try {
       let newList = await this.getNewList(true);
-      
+      console.log("请求新数据", newList);
       this.setData({
         noteList: newList,
       });
-    }
-    catch(err){
+    } catch (err) {
       wx.showToast({
         title: "出错了~",
         icon: "none",

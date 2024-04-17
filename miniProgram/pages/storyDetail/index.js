@@ -202,7 +202,7 @@ Page({
   },
   bindTapLike: async function () {
     const data = {
-      noteId: this.data.noteIdToSearch,
+      noteId: Number(this.data.noteIdToSearch),
     };
     this.setData({
       content: {
@@ -225,15 +225,15 @@ Page({
   },
   bindTapCollect: async function () {
     const data = {
-      noteId: this.data.noteIdToSearch,
+      noteId: Number(this.data.noteIdToSearch),
     };
     let res;
-    if (this.data.content.isCollected) {
+    if (this.data.content.isCollected==="true") {
       res = await Api.cancelcollectNote(data);
       this.setData({
         content: {
           ...this.data.content,
-          isCollected: false,
+          isCollected: "false",
           collectNum: this.data.content.collectNum - 1,
         },
       });
@@ -242,12 +242,12 @@ Page({
       this.setData({
         content: {
           ...this.data.content,
-          isCollected: true,
+          isCollected: "true",
           collectNum: this.data.content.collectNum + 1,
         },
       });
     }
-    if (res.data.status !== 200) {
+    if (res.data.status === 401 ) {
       wx.navigateTo({
         url: "/pages/login/index",
       });

@@ -3,15 +3,12 @@ import Api from "../../utils/api.js";
 import util from "../../utils/util.js";
 Page({
   data: {
-    noteList: [
-      {
+    noteList: [{
         noteId: 0,
         title: "震惊，上海有这么多好玩滴地方",
-        coverImg:
-          "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAOEcdM.img",
+        coverImg: "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAOEcdM.img",
         authorNickname: "MAple",
-        authorAvatar:
-          "https://res.wx.qq.com/op_res/7_miJnK0wxIrh5bV2QqvYRu0VRyVvePJ4pB4_Dvj0ytF-ovjQzMl6WMLyuCeKk3579HNjKLIeNrHE7OprTBx5w",
+        authorAvatar: "https://res.wx.qq.com/op_res/7_miJnK0wxIrh5bV2QqvYRu0VRyVvePJ4pB4_Dvj0ytF-ovjQzMl6WMLyuCeKk3579HNjKLIeNrHE7OprTBx5w",
         likeNume: 100,
         status: "waiting",
         reviewComment: "",
@@ -21,11 +18,9 @@ Page({
       {
         noteId: 1,
         title: "韩国旅行初体验1",
-        coverImg:
-          "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAOEcdM.img",
+        coverImg: "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAOEcdM.img",
         authorNickname: "MAple",
-        authorAvatar:
-          "https://res.wx.qq.com/op_res/7_miJnK0wxIrh5bV2QqvYRu0VRyVvePJ4pB4_Dvj0ytF-ovjQzMl6WMLyuCeKk3579HNjKLIeNrHE7OprTBx5w",
+        authorAvatar: "https://res.wx.qq.com/op_res/7_miJnK0wxIrh5bV2QqvYRu0VRyVvePJ4pB4_Dvj0ytF-ovjQzMl6WMLyuCeKk3579HNjKLIeNrHE7OprTBx5w",
         likeNume: 100,
         status: "disapproved",
         reviewComment: "",
@@ -35,11 +30,9 @@ Page({
       {
         noteId: 2,
         title: "去欧洲的旅行必备",
-        coverImg:
-          "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAOEcdM.img",
+        coverImg: "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAOEcdM.img",
         authorNickname: "MAple",
-        authorAvatar:
-          "https://res.wx.qq.com/op_res/7_miJnK0wxIrh5bV2QqvYRu0VRyVvePJ4pB4_Dvj0ytF-ovjQzMl6WMLyuCeKk3579HNjKLIeNrHE7OprTBx5w",
+        authorAvatar: "https://res.wx.qq.com/op_res/7_miJnK0wxIrh5bV2QqvYRu0VRyVvePJ4pB4_Dvj0ytF-ovjQzMl6WMLyuCeKk3579HNjKLIeNrHE7OprTBx5w",
         likeNume: 100,
         status: "disapproved",
         pastTime: "2023-03-03",
@@ -49,11 +42,9 @@ Page({
       {
         noteId: 3,
         title: "日本旅游超详细打卡攻略！",
-        coverImg:
-          "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAOEcdM.img",
+        coverImg: "https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAOEcdM.img",
         authorNickname: "MAple",
-        authorAvatar:
-          "https://res.wx.qq.com/op_res/7_miJnK0wxIrh5bV2QqvYRu0VRyVvePJ4pB4_Dvj0ytF-ovjQzMl6WMLyuCeKk3579HNjKLIeNrHE7OprTBx5w",
+        authorAvatar: "https://res.wx.qq.com/op_res/7_miJnK0wxIrh5bV2QqvYRu0VRyVvePJ4pB4_Dvj0ytF-ovjQzMl6WMLyuCeKk3579HNjKLIeNrHE7OprTBx5w",
         likeNume: 100,
         status: "approved",
         reviewComment: "舞萌是什么？",
@@ -105,13 +96,15 @@ Page({
   },
   setNoteList: async function () {
     const newList = await this.getMyCollection();
-    newList = newList.map((item) => {
-      item.pastTime = util.formatPast(
-        new Date(item.uploadTime),
-        "YYYY-mm-dd"
-      );
-      return item;
-    });
+    if (newList.length !== 0) {
+      newList = newList.map((item) => {
+        item.pastTime = util.formatPast(
+          new Date(item.uploadTime),
+          "YYYY-mm-dd"
+        );
+        return item;
+      });
+    }
     if (newList.length === 0) {
       this.setData({
         noteList: [],

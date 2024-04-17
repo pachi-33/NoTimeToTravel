@@ -9,6 +9,7 @@ Page({
     mediaList: [],
     diaryTitle: "",
     diaryContent: "",
+    editNoteId: "",
     mode: "create", //create or edit
     // 顶部布局参数
     menuTop: 0,
@@ -27,7 +28,8 @@ Page({
     await util.checkUserLogin();
     if (options.noteId) {
       this.setData({
-        mode: "edit"
+        mode: "edit",
+        editNoteId: options.noteId
       })
       const res = await Api.getNoteDetails({
         noteId: Number(options.noteId)
@@ -190,33 +192,64 @@ Page({
           url: this.data.mediaList[i].url,
         })
       }
-      Api.uploadNote({
-        content: {
-          noteTitle: this.data.diaryTitle,
-          noteContent: this.data.diaryContent,
-          location: "SHANGHAI",
-          resources: tempArray,
-        }
-      }).then(res => {
-        if (res.data.status === 200) {
-          wx.showToast({
-            title: '发布成功',
-            icon: 'success',
-            duration: 2000
-          })
-          setTimeout(() => {
-            wx.navigateTo({
-              url: `/pages/storyDetail/index?noteId=${res.data.noteId}`,
+      if (this.data.mode === 'edit') {
+        Api.modifyNote({
+          content: {
+            noteId: this.data.editNoteId,
+            noteTitle: this.data.diaryTitle,
+            noteContent: this.data.diaryContent,
+            location: "SHANGHAI",
+            resources: tempArray,
+          }
+        }).then(res => {
+          if (res.data.status === 200) {
+            wx.showToast({
+              title: '发布成功',
+              icon: 'success',
+              duration: 2000
             })
-          }, 2000)
-        } else {
-          wx.showToast({
-            title: '发布失败',
-            icon: 'error',
-            duration: 2000,
-          })
-        }
-      })
+            setTimeout(() => {
+              wx.navigateTo({
+                url: `/pages/storyDetail/index?noteId=${res.data.noteId}`,
+              })
+            }, 2000)
+          } else {
+            wx.showToast({
+              title: '发布失败',
+              icon: 'error',
+              duration: 2000,
+            })
+          }
+        })
+      } else {
+        Api.uploadNote({
+          content: {
+            noteTitle: this.data.diaryTitle,
+            noteContent: this.data.diaryContent,
+            location: "SHANGHAI",
+            resources: tempArray,
+          }
+        }).then(res => {
+          if (res.data.status === 200) {
+            wx.showToast({
+              title: '发布成功',
+              icon: 'success',
+              duration: 2000
+            })
+            setTimeout(() => {
+              wx.navigateTo({
+                url: `/pages/storyDetail/index?noteId=${res.data.noteId}`,
+              })
+            }, 2000)
+          } else {
+            wx.showToast({
+              title: '发布失败',
+              icon: 'error',
+              duration: 2000,
+            })
+          }
+        })
+      }
     })
   },
 });

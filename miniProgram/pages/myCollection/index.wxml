@@ -35,6 +35,6 @@
                 </view>
             </view>
         </grid-view>
-        <view wx:if="{{!haveNoteList}}" class="no-data">似乎没有你搜索的物语哦~</view>
+        <view wx:if="{{!haveNoteList}}" class="no-data">你好像还没有收藏物语哦~</view>
     </sticky-section>
 </scroll-view>

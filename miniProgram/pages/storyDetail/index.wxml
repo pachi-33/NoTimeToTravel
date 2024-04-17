@@ -41,7 +41,7 @@
           <text>{{content.likeNum}}</text>
         </view>
         <view>
-          <image bindtap="bindTapCollect" src="{{content.isCollected?'../../pics/star-fill.png':'../../pics/star.png'}}"></image>
+          <image bindtap="bindTapCollect" src="{{content.isCollected==='true'?'../../pics/star-fill.png':'../../pics/star.png'}}"></image>
           <text>{{content.collectNum}}</text>
         </view>
       </view>
