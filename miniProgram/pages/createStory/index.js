@@ -97,6 +97,7 @@ Page({
     let _this = this
     for (let i = 0; i < tempFiles.length; i++) {
       let tempFiles = _this.data.mediaList
+      console.log(tempFiles)
       let prefix = ''
       if (tempFiles[i].fileType === 'video')
         prefix = 'video'
@@ -156,39 +157,66 @@ Page({
       return;
     }
     //所有内容上传到云端
-    await this.uploadToCloud();
-    let tempArray = [];
-    for (let i = 0; i < this.data.mediaList.length; i++) {
-      tempArray.push({
-        mediaType: this.data.mediaList[i].fileType == "image" ? "img" : "video",
-        url: this.data.mediaList[i].url,
-      })
-    }
-    let res = await Api.uploadNote({
-      content: {
-        noteTitle: this.data.diaryTitle,
-        noteContent: this.data.diaryContent,
-        location: "SHANGHAI",
-        resources: tempArray,
-      }
-    })
-    if (res.data.status === 200) {
-      wx.showToast({
-        title: '发布成功',
-        icon: 'success',
-        duration: 2000
-      })
-      setTimeout(() => {
-        wx.navigateTo({
-          url: `/pages/storyDetail/index?noteId=${res.data.noteId}`,
+    const upLoadPromises = this.data.mediaList.map(file => {
+      return new Promise((resolve, reject) => {
+        let prefix = ''
+        if (file.fileType === 'video')
+          prefix = 'video'
+        else prefix = 'img'
+        let suffix = /\.\w+$/.exec(file.tempFilePath)[0] //正则表达式返回文件的扩展名
+        wx.cloud.uploadFile({
+          cloudPath: prefix + '/' + new Date().getTime() + suffix,
+          filePath: file.tempFilePath,
+        }).then(res => {
+          console.log("上传media到云成功", res)
+          file.url = res.fileID
+          resolve(file)
+          // _this.setData({
+          //   [`mediaList[${i}].url`]: res.fileID,
+          // })
+        }).catch(err => {
+          console.log(err)
         })
-      }, 2000)
-    } else {
-      wx.showToast({
-        title: '发布失败',
-        icon: 'error',
-        duration: 2000,
       })
-    }
+    })
+    Promise.all(upLoadPromises).then(res => {
+      this.setData({
+        mediaList: res
+      })
+      let tempArray = [];
+      for (let i = 0; i < this.data.mediaList.length; i++) {
+        tempArray.push({
+          mediaType: this.data.mediaList[i].fileType == "image" ? "img" : "video",
+          url: this.data.mediaList[i].url,
+        })
+      }
+      Api.uploadNote({
+        content: {
+          noteTitle: this.data.diaryTitle,
+          noteContent: this.data.diaryContent,
+          location: "SHANGHAI",
+          resources: tempArray,
+        }
+      }).then(res => {
+        if (res.data.status === 200) {
+          wx.showToast({
+            title: '发布成功',
+            icon: 'success',
+            duration: 2000
+          })
+          setTimeout(() => {
+            wx.navigateTo({
+              url: `/pages/storyDetail/index?noteId=${res.data.noteId}`,
+            })
+          }, 2000)
+        } else {
+          wx.showToast({
+            title: '发布失败',
+            icon: 'error',
+            duration: 2000,
+          })
+        }
+      })
+    })
   },
 });
