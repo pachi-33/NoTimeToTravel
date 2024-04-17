@@ -75,103 +75,81 @@ Page({
   bindChooseAvatar: function (e) {
     let _this = this
     let tmpFile = e.detail.avatarUrl
-    console.log("头像网址", e.detailfw.avatarUrl)
+    let fileuuid = util.wxuuid()
+    console.log("头像路径",fileuuid)
+    let suffix = /\.\w+$/.exec(tmpFile)[0]
     wx.cloud.uploadFile({
-      cloudPath:'avatar/'+new Date().getTime()+'.png',
+      cloudPath: 'avatar/' + new Date().getTime() + fileuuid + suffix,
       filePath: tmpFile,
       success: res => {
-        console.log("上传成功",res)
-        //获取文件路径
-        _this.setData({
-          avatarUrl:res.fileID
-        })
-        let returnedURL=res.fileID
-        Api.setAvatar({
-          img: returnedURL,
-        })
-        .then((res) => {
-          if (res.data && res.data.status === 200) {
-            wx.showToast({
-              title: "修改成功",
-              icon: "success",
-              duration: 2000,
-            });
-            this.setData({
-              avatarUrl: res.data.avatarUrl,
-            });
-          } else {
-            wx.showToast({
-              title: "修改失败",
-              icon: "none",
-              duration: 2000,
-            });
-            util.checkUserLogin().then((res) => {
-              console.log("已登录");
-              this.setData({
-                nickname: res.nickname,
-                avatarUrl: res.avatarUrl,
+        console.log("上传成功", res)
+        //获取文件临时路径
+        const fileIDAvatarURL = res.fileID
+        //获取文件下载路径
+        wx.cloud.getTempFileURL({
+          fileList: [{
+            fileID: fileIDAvatarURL,
+          }]
+        }).then(res => {
+          // get temp file URL
+          console.log(res.fileList)
+          if (res.fileList[0].status === 0) {
+            const avatarURL = res.fileList[0].tempFileURL
+            Api.setAvatar({
+                img: avatarURL,
+              })
+              .then((res) => {
+                if (res.data && res.data.status === 200) {
+                  wx.showToast({
+                    title: "修改成功",
+                    icon: "success",
+                    duration: 2000,
+                  });
+                  this.setData({
+                    avatarUrl: res.data.avatarUrl,
+                  });
+                } else {
+                  wx.showToast({
+                    title: "修改失败",
+                    icon: "none",
+                    duration: 2000,
+                  });
+                  util.checkUserLogin().then((res) => {
+                    console.log("已登录");
+                    this.setData({
+                      nickname: res.nickname,
+                      avatarUrl: res.avatarUrl,
+                    });
+                  });
+                }
+              })
+              .catch((err) => {
+                console.log(err);
               });
-            });
           }
+        }).catch(error => {
+          console.log(error)
         })
-        .catch((err) => {
-          console.log(err);
-        });
       },
       fail: console.error
     })
-    // wx.uploadFile({
-    //   url: "https://47.120.68.102/api/travelDiary/verification/uploadFile",
-    //   filePath: e.detail.avatarUrl,
-    //   name: "avatar",
-    //   formData: {
-    //     mediaType: "img",
-    //   },
-    //   header: {
-    //     "content-type": "multipart/form-data",
-    //     "Authorization": wx.getStorageSync("token"),
-    //   },
-    //   success(res) {
-    //     if (res.data.status === 200) {
-    //       const {
-    //         url,
-    //         mediaType
-    //       } = res.data;
-    //       console.log("上传结果", url)
-    //       Api.setAvatar({
-    //           img: url,
-    //         })
-    //         .then((res) => {
-    //           if (res.data && res.data.status === 200) {
-    //             wx.showToast({
-    //               title: "修改成功",
-    //               icon: "success",
-    //               duration: 2000,
-    //             });
-    //             this.setData({
-    //               avatarUrl: res.data.avatarUrl,
-    //             });
-    //           } else {
-    //             wx.showToast({
-    //               title: "修改失败",
-    //               icon: "none",
-    //               duration: 2000,
-    //             });
-    //             util.checkUserLogin().then((res) => {
-    //               console.log("已登录");
-    //               this.setData({
-    //                 nickname: res.nickname,
-    //                 avatarUrl: res.avatarUrl,
-    //               });
-    //             });
-    //           }
-    //         })
-    //         .catch((err) => {
-    //           console.log(err);
-    //         });
-    //     }
-    //   },
-    // });
+  },
+  bindInputNameBlur:function (e) {
+    //防止用户输入后未修改
+    util
+      .checkUserLogin()
+      .then((res) => {
+        this.setData({
+          nickname: res.nickname,
+          avatarUrl: res.avatarUrl,
+        });
+      })
+      .catch((err) => {
+        console.log("==============", err);
+      });
+    this.setData({
+      canEditNickName:false
+    })
   },
   bindTapMyStory: function () {
     wx.navigateTo({

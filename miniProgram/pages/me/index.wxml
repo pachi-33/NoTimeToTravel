@@ -5,7 +5,7 @@
       <image class="avatar" src="{{avatarUrl}}"></image>
     </view>
     <view class="user-description-container">
-      <input focus="{{canEditNickName}}" type="nickname" disabled="{{!canEditNickName}}" value="{{nickname}}" focus="{{true}}" bindconfirm="bindConfirmName" bindinput="bindInputNickname" />
+      <input focus="{{canEditNickName}}" type="nickname" disabled="{{!canEditNickName}}" value="{{nickname}}" focus="{{true}}" bindconfirm="bindConfirmName" bindblur="bindInputNameBlur" bindinput="bindInputNickname" />
     </view>
     <!-- <view class="user-description-container">
       <text style="font-size: 17px;color: #999;">uid</text>
