@@ -46,6 +46,7 @@ Page({
     });
   },
   bindChooseMedia: function () {
+    let _this = this
     if (this.data.mediaList.length >= 9) {
       this.setData({
         uploadPicDisplay: "none"
@@ -70,40 +71,20 @@ Page({
         let {
           tempFiles
         } = res;
-        // console.log(tempFiles);
+        //console.log(tempFiles);
         let tempArray = this.data.mediaList;
         for (let i = 0; i < tempFiles.length; i++) {
           tempArray.push({
-            tempFilePath: tempFiles[i].tempFilePath,
             fileType: tempFiles[i].fileType,
+            tempFilePath: tempFiles[i].tempFilePath,
             url: "",
-          })
-          wx.uploadFile({
-            filePath: tempFiles[i].tempFilePath,
-            name: tempFiles[i].fileType == "image" ? "imageFile" : "videoFile",
-            header: {
-              "content-type": "multipart/form-data",
-              "Authorization": wx.getStorageSync("token"),
-            },
-            url: 'https://47.120.68.102/api/travelDiary/verification/uploadFile',
-            formData: {
-              mediaType: tempFiles[i].fileType == "image" ? "img" : "video"
-            },
-            success(res) {
-              if (res.statusCode === 200) {
-                const {
-                  url,
-                  mediaType
-                } = res.data;
-                tempArray[tempArray.length - 1].url = url;
-              }
-            }
           })
         }
         // console.log(tempArray);
         this.setData({
           mediaList: tempArray,
         });
+        console.log(this.data.mediaList)
         if (tempArray.length >= 9) {
           this.setData({
             uploadPicDisplay: "none"
@@ -111,6 +92,28 @@ Page({
         }
       },
     });
+  },
+  uploadToCloud: function () {
+    let _this = this
+    for (let i = 0; i < tempFiles.length; i++) {
+      let tempFiles = _this.data.mediaList
+      let prefix = ''
+      if (tempFiles[i].fileType === 'video')
+        prefix = 'video'
+      else prefix = 'img'
+      let suffix = /\.\w+$/.exec(tempFiles[i].tempFilePath)[0] //正则表达式返回文件的扩展名
+      wx.cloud.uploadFile({
+        cloudPath: prefix + '/' + new Date().getTime() + suffix,
+        filePath: tempFiles[i].tempFilePath,
+      }).then(res => {
+        console.log("上传media到云成功", res)
+        _this.setData({
+          [`mediaList[${i}].url`]: res.fileID,
+        })
+      }).catch(err => {
+        console.log(err)
+      })
+    }
   },
   //先不做
   bindPreviewMedia: function () {},
@@ -152,10 +155,12 @@ Page({
       });
       return;
     }
+    //所有内容上传到云端
+    await this.uploadToCloud();
     let tempArray = [];
     for (let i = 0; i < this.data.mediaList.length; i++) {
       tempArray.push({
-        fileType: this.data.mediaList[i].fileType == "image" ? "img" : "video",
+        mediaType: this.data.mediaList[i].fileType == "image" ? "img" : "video",
         url: this.data.mediaList[i].url,
       })
     }

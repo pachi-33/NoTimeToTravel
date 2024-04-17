@@ -181,7 +181,7 @@ Page({
       noteId: Number(this.data.noteIdToSearch)
     });
     console.log("getNoteDetail的res", res);
-    let newContent = res.data || {};
+    let newContent = res.data.content || {};
     this.setData({
       content: newContent,
     });
@@ -191,7 +191,7 @@ Page({
       noteId: Number(this.data.noteIdToSearch)
     });
     console.log("getCommentList的res", res);
-    let newComments = res.data || [];
+    let newComments = res.data.comments || [];
     this.setData({
       comments: newComments,
     });
