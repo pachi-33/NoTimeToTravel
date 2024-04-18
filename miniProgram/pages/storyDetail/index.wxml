@@ -55,7 +55,7 @@
       <block wx:for="{{comments}}" wx:key="commentId" wx:if="{{haveCommentList}}">
         <view class="comment-list-box" data-id="{{item.commentId}}">
           <view class="comment-author">
-            <image src="{{content.avatar}}"></image>
+            <image src="{{item.avatar}}"></image>
             <text class="comment-username">{{item.commentBy}}</text>
           </view>
           <text class="comment-content">{{item.commentContent}}</text>

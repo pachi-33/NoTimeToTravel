@@ -34,8 +34,7 @@ Page({
       menuLeft: res.width + 10,
       loading: true,
     });
-    this.bindScrollToUpper();
-    console.log(this.data.noteList);
+    await this.bindScrollToUpper();
   },
 
   getNewList: async function (refresh = false) {

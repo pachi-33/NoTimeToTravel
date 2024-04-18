@@ -59,49 +59,7 @@ Page({
       ],
     },
     haveCommentList: true,
-    comments: [{
-        commentId: 1,
-        commentBy: "mmmmii",
-        commentContent: "哇塞，姐妹你好厉害",
-        commentTime: "2024-05-05 12:12:12", //较新的
-      },
-      {
-        commentId: 2,
-        commentBy: "闪闪",
-        commentContent: "666",
-        commentTime: "2024-05-05 12:12:12", //较久的
-      },
-      {
-        commentId: 3,
-        commentBy: "爱吃的小红花",
-        commentContent: "厦门有什么好吃的吗",
-        commentTime: "2024-05-05 12:12:12", //较久的
-      },
-      {
-        commentId: 4,
-        commentBy: "红一耶",
-        commentContent: "我也想去厦门玩",
-        commentTime: "2024-05-05 12:12:12", //较久的
-      },
-      {
-        commentId: 5,
-        commentBy: "nickname2",
-        commentContent: "下周就出发去厦门了",
-        commentTime: "2024-05-05 12:12:12", //较久的
-      },
-      {
-        commentId: 6,
-        commentBy: "nickname2",
-        commentContent: "呜呜呜呜呜我的阿斯",
-        commentTime: "2024-05-05 12:12:12", //较久的
-      },
-      {
-        commentId: 7,
-        commentBy: "nickname2",
-        commentContent: "666",
-        commentTime: "2024-05-05 12:12:12", //较久的
-      },
-    ],
+    comments: [],
     imgheightList: [],
     userComment: "",
     current: 0,

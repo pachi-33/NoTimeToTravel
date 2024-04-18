@@ -35,6 +35,11 @@ Page({
       canEditNickName: true,
     });
   },
+  bindTapNew:function () {
+    wx.switchTab({
+      url: 'pages/createStory/index',
+    })
+  },
   bindInputNickname: function (e) {
     this.setData({
       nickname: e.detail.value
