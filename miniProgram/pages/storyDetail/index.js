@@ -125,7 +125,6 @@ Page({
       menuLeft: res.width + 10,
       noteIdToSearch: noteId,
     });
-    console.log("noteID",noteId)
     this.getDetail();
     this.getComment();
   },
@@ -140,7 +139,6 @@ Page({
     let imgheight = e.detail.height;
     //宽高比
     const ratio = imgwidth / imgheight;
-    console.log(imgwidth, imgheight);
     //计算的高度值
     const newHeight = 675 / ratio;
     const imgheights = this.data.imgheightList;
@@ -149,14 +147,13 @@ Page({
     this.setData({
       imgheightList: imgheights,
     });
-    console.log(this.data.imgheightList);
   },
   videoLoad: function (e) {
     console.log("视频加载完成",e);
   },
   bindCommentInput: function (e) {
     this.setData({
-      userComment: e.detail.current,
+      userComment: e.detail.value,
     });
   },
   bindTapBackIcon: function () {
@@ -168,13 +165,17 @@ Page({
       commentContent: this.data.userComment,
     };
     let res = await Api.makeComment(data);
+    console.log("提交评论结果",res)
     if (res.data.status !== 200) {
       wx.navigateTo({
         url: "/pages/login/index",
       });
       return;
     }
-    await getComment();
+    this.setData({
+      userComment:""
+    })
+    await this.getComment();
   },
   getDetail: async function () {
     let res = await Api.getNoteDetails({

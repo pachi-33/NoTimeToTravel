@@ -25,7 +25,6 @@ Page({
           nickname: res.nickname,
           avatarUrl: res.avatarUrl,
         });
-        console.log("初始化后，头像为：", this.data.avatarUrl)
       })
       .catch((err) => {
         console.log("checkUserLogin", err);

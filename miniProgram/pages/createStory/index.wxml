@@ -15,8 +15,8 @@
         <view wx:if="{{item.fileType=='image'}}" class="item-frame">
           <image src="{{item.tempFilePath}}" class="media-item" mode="aspectFit" />
         </view>
-        <view wx:else class="item-frame">
-          <video class="media-item" src="{{item.tempFilePath}}" mode="" />
+        <view wx:else class="item-frame video-frame">
+          <video class="media-item" src="{{item.tempFilePath}}" controls="{{false}}"/>
         </view>
         <view class="media-del" bindtap="catchDelMedia" data-index="{{index}}">x</view>
       </view>

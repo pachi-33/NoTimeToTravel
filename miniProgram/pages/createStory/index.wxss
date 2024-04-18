@@ -1,10 +1,10 @@
 /* pages/createStory/index.wxss */
-.main-contaner{
-    width: 100%;
-    height: 100%;
+.main-contaner {
+  width: 100%;
+  height: 100%;
 }
 
-.header{
+.header {
   width: 100%;
   display: flex;
   justify-content: center;
@@ -12,18 +12,18 @@
   padding: 2px;
 }
 
-.title{
+.title {
   font-size: larger;
   font-weight: 700;
 }
 
-.input-area{
+.input-area {
   width: 100%;
   margin-top: 2px;
   height: 100vh;
 }
 
-.diaryTitle{
+.diaryTitle {
   width: 100%;
   margin: 3px;
   background-color: rgba(199, 199, 199, 0.203);
@@ -33,18 +33,18 @@
   padding-bottom: 3px;
 }
 
-.input-title{
+.input-title {
   font-weight: 600;
   padding: 2px;
 }
 
-.diaryContent{
+.diaryContent {
   width: 100%;
   margin: 3px;
   border: rgba(199, 199, 199, 0.603) solid 1px;
 }
 
-.input-content{
+.input-content {
   font-weight: 500;
   font-size: small;
   padding: 2px;
@@ -52,67 +52,80 @@
   margin-left: 2%;
 }
 
-.media-upload-content{
-    width: 97.5%;
-    margin-top: 3%;
-    margin-left:1.25%;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: start;
+.media-upload-content {
+  width: 97.5%;
+  margin-top: 3%;
+  margin-left: 1.25%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: start;
 }
 
-.media-frame{
+.media-frame {
   display: flex;
   justify-content: center;
-  align-items: center; 
+  align-items: center;
   width: 30vw;
   height: 30vw;
   border: 2px solid #ccc;
-  margin:1.24vw;
+  margin: 1.24vw;
   position: relative;
   border-radius: 10px;
   overflow: hidden;
 }
 
-.media-item{
+.media-item {
   width: 30vw;
   display: flex;
   justify-content: center;
-  align-items: center; 
+  align-items: center;
 }
 
-.item-frame{
+.item-frame {
   width: 30vw;
 }
 
-.media-del{
+.video-frame {
+  position: relative;
+  width: 30vw;
+  height: 30vw;
+}
+
+.video-frame video {
   position: absolute;
-  top:0;
-  right:7px;
+  top: 0;
+  z-index: -1;
 }
 
-.uploadpic-container{
-    display: flex;
-    justify-content: center;
-    align-items: center; 
-    width: 30vw;
-    height: 30vw;
-    border: 2px solid #ccc;
-    margin:1.24vw;
-    border-radius: 10px;
+
+.media-del {
+  position: absolute;
+  top: 0;
+  right: 7px;
 }
 
-.upload-media{
-    width: 40px;
-    height: 40px;
+.uploadpic-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 30vw;
+  height: 30vw;
+  border: 2px solid #ccc;
+  margin: 1.24vw;
+  border-radius: 10px;
 }
 
-.upload-frame{
+.upload-media {
+  width: 40px;
+  height: 40px;
+}
+
+.upload-frame {
   width: 100%;
-  margin:5px;
+  margin: 5px;
 }
 
-.upload-btn{
+.upload-btn {
   font-size: 16px;
   padding: 10px 20px;
   background-color: #39c5bb;

@@ -152,14 +152,10 @@ Page({
       }
     })
     console.log(e.currentTarget.dataset.index)
-    wx.previewMedia
-    let tapIndex = e.currentTarget.dataset.index
-    if (this.data.mediaList[tapIndex] === "img") {
-      wx.previewImage({
-        current: this.data.mediaList[tapIndex].url, // 当前显示图片的http链接
-        urls: this.data.mediaList.map(file => file.tempFilePath) // 需要预览的图片http链接列表
-      })
-    }
+    wx.previewMedia({
+      sources:previewMediaList,
+      current:e.currentTarget.dataset.index
+    })
   },
   catchDelMedia: function (e) {
     if (this.data.mediaList.length >= 9) {
