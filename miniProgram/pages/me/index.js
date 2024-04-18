@@ -4,7 +4,7 @@ import util from "../../utils/util.js";
 Page({
   data: {
     nickname: "游客",
-    avatarUrl: "cloud://cloud1-3gqiovxdc0a8a188.636c-cloud1-3gqiovxdc0a8a188-1325653378/default/noavatar.png",
+    avatarUrl: "",
     canEditNickName: false,
     // 顶部布局参数
     menuTop: 0,
@@ -25,6 +25,7 @@ Page({
           nickname: res.nickname,
           avatarUrl: res.avatarUrl,
         });
+        console.log("初始化后，头像为：", this.data.avatarUrl)
       })
       .catch((err) => {
         console.log("checkUserLogin", err);
@@ -100,10 +101,7 @@ Page({
                     icon: "success",
                     duration: 2000,
                   });
-                  console.log("修改成功，res",res)
-                  this.setData({
-                    avatarUrl: res.data.avatarUrl,
-                  });
+                  console.log("修改成功，res", res)
                 } else {
                   wx.showToast({
                     title: "修改失败",
@@ -121,6 +119,12 @@ Page({
               .catch((err) => {
                 console.log(err);
               });
+          } else {
+            wx.showToast({
+              title: '上传头像失败',
+              icon: "none",
+              duration: 2000,
+            })
           }
         }).catch(error => {
           console.log(error)
@@ -129,7 +133,7 @@ Page({
       fail: console.error
     })
   },
-  bindInputNameBlur:function (e) {
+  bindInputNameBlur: function (e) {
     //防止用户输入后未修改
     util
       .checkUserLogin()
@@ -143,7 +147,7 @@ Page({
         console.log("checkUserLogin", err);
       });
     this.setData({
-      canEditNickName:false
+      canEditNickName: false
     })
   },
   bindTapMyStory: function () {
