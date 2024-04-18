@@ -23,36 +23,35 @@ Page({
       menuTop: res.top,
       menuHeight: res.height,
       menuLeft: res.width + 10,
-      mode: "create"
+      mode: "create",
     });
     await util.checkUserLogin();
     if (options.noteId) {
       this.setData({
         mode: "edit",
-        editNoteId: options.noteId
-      })
+        editNoteId: options.noteId,
+      });
       const res = await Api.getNoteDetails({
-        noteId: Number(options.noteId)
+        noteId: Number(options.noteId),
       });
     }
-
   },
   handleTitleChange(e) {
     this.setData({
-      diaryTitle: e.detail.value
+      diaryTitle: e.detail.value,
     });
   },
   handleContentChange(e) {
     this.setData({
-      diaryContent: e.detail.value
+      diaryContent: e.detail.value,
     });
   },
   bindChooseMedia: function () {
-    let _this = this
+    let _this = this;
     if (this.data.mediaList.length >= 9) {
       this.setData({
-        uploadPicDisplay: "none"
-      })
+        uploadPicDisplay: "none",
+      });
       wx.showToast({
         title: "最多上传9张图片/视频",
         icon: "none",
@@ -61,8 +60,8 @@ Page({
       return;
     }
     this.setData({
-      uploadPicDisplay: "flex"
-    })
+      uploadPicDisplay: "flex",
+    });
     let remainChooseCount = 9 - this.data.mediaList.length;
     wx.chooseMedia({
       count: remainChooseCount,
@@ -70,9 +69,7 @@ Page({
       mediaType: ["image", "video"],
       sourceType: ["album", "camera"],
       success: (res) => {
-        let {
-          tempFiles
-        } = res;
+        let { tempFiles } = res;
         //console.log(tempFiles);
         let tempArray = this.data.mediaList;
         for (let i = 0; i < tempFiles.length; i++) {
@@ -80,42 +77,46 @@ Page({
             fileType: tempFiles[i].fileType,
             tempFilePath: tempFiles[i].tempFilePath,
             url: "",
-          })
+            fileID: "",
+          });
         }
         // console.log(tempArray);
         this.setData({
           mediaList: tempArray,
         });
-        console.log(this.data.mediaList)
+        console.log(this.data.mediaList);
         if (tempArray.length >= 9) {
           this.setData({
-            uploadPicDisplay: "none"
-          })
+            uploadPicDisplay: "none",
+          });
         }
       },
     });
   },
   uploadToCloud: function () {
-    let _this = this
+    let _this = this;
     for (let i = 0; i < tempFiles.length; i++) {
-      let tempFiles = _this.data.mediaList
-      console.log(tempFiles)
-      let prefix = ''
-      if (tempFiles[i].fileType === 'video')
-        prefix = 'video'
-      else prefix = 'img'
-      let suffix = /\.\w+$/.exec(tempFiles[i].tempFilePath)[0] //正则表达式返回文件的扩展名
-      wx.cloud.uploadFile({
-        cloudPath: prefix + '/' + new Date().getTime() + suffix,
-        filePath: tempFiles[i].tempFilePath,
-      }).then(res => {
-        console.log("上传media到云成功", res)
-        _this.setData({
-          [`mediaList[${i}].url`]: res.fileID,
+      let tempFiles = _this.data.mediaList;
+      console.log(tempFiles);
+      let prefix = "";
+      if (tempFiles[i].fileType === "video") prefix = "video";
+      else prefix = "img";
+      let fileuuid = util.wxuuid();
+      let suffix = /\.\w+$/.exec(tempFiles[i].tempFilePath)[0];
+      wx.cloud
+        .uploadFile({
+          cloudPath: prefix + "/" + new Date().getTime() + fileuuid + suffix,
+          filePath: tempFiles[i].tempFilePath,
         })
-      }).catch(err => {
-        console.log(err)
-      })
+        .then((res) => {
+          console.log("上传media到云成功", res);
+          _this.setData({
+            [`mediaList[${i}].url`]: res.fileID,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   },
   //先不做
@@ -123,14 +124,14 @@ Page({
   catchDelMedia: function (e) {
     if (this.data.mediaList.length >= 9) {
       this.setData({
-        uploadPicDisplay: "flex"
-      })
+        uploadPicDisplay: "flex",
+      });
     }
     let tempArray = this.data.mediaList;
     tempArray.splice(e.target.dataset.index, 1);
     this.setData({
-      mediaList: tempArray
-    })
+      mediaList: tempArray,
+    });
     // console.log(this.data.mediaList);
   },
   bindSubmit: async function () {
@@ -159,40 +160,67 @@ Page({
       return;
     }
     //所有内容上传到云端
-    const upLoadPromises = this.data.mediaList.map(file => {
+    const upLoadPromises = this.data.mediaList.map((file) => {
       return new Promise((resolve, reject) => {
-        let prefix = ''
-        if (file.fileType === 'video')
-          prefix = 'video'
-        else prefix = 'img'
-        let suffix = /\.\w+$/.exec(file.tempFilePath)[0] //正则表达式返回文件的扩展名
-        wx.cloud.uploadFile({
-          cloudPath: prefix + '/' + new Date().getTime() + suffix,
-          filePath: file.tempFilePath,
-        }).then(res => {
-          console.log("上传media到云成功", res)
-          file.url = res.fileID
-          resolve(file)
-          // _this.setData({
-          //   [`mediaList[${i}].url`]: res.fileID,
-          // })
-        }).catch(err => {
-          console.log(err)
-        })
-      })
-    })
-    Promise.all(upLoadPromises).then(res => {
+        let prefix = "";
+        if (file.fileType === "video") prefix = "video";
+        else prefix = "img";
+        let fileuuid = util.wxuuid();
+        let suffix = /\.\w+$/.exec(file.tempFilePath)[0]; //正则表达式返回文件的扩展名
+        wx.cloud
+          .uploadFile({
+            cloudPath: prefix + "/" + new Date().getTime() + fileuuid + suffix,
+            filePath: file.tempFilePath,
+          })
+          .then((res) => {
+            console.log("上传media到云成功", res);
+            file.fileID = res.fileID;
+            resolve(file);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      });
+    });
+    Promise.all(upLoadPromises).then((res) => {
       this.setData({
-        mediaList: res
-      })
+        mediaList: res,
+      });
+      const fileIDList = this.data.mediaList.map((fileobj) => fileobj.fileID);
+      //fileID换取url
+      wx.cloud
+        .getTempFileURL({
+          fileList: fileIDList,
+        })
+        .then((res) => {
+          // get temp file URL
+          console.log(res.fileList);
+          for (let i = 0; i < res.fileList.length; i++) {
+            if (res.fileList[i].status === 0)
+              this.setData({
+                [`mediaList[${i}].url`]: res.fileList[i].tempFileURL,
+              });
+            else
+              this.setData({
+                [`mediaList[${i}].fileType`]: "image",
+                [`mediaList[${i}].url`]:
+                  "cloud://cloud1-3gqiovxdc0a8a188.636c-cloud1-3gqiovxdc0a8a188-1325653378/default/nopic.png",
+              });
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+          return;
+        });
       let tempArray = [];
       for (let i = 0; i < this.data.mediaList.length; i++) {
         tempArray.push({
-          mediaType: this.data.mediaList[i].fileType == "image" ? "img" : "video",
+          mediaType:
+            this.data.mediaList[i].fileType == "image" ? "img" : "video",
           url: this.data.mediaList[i].url,
-        })
+        });
       }
-      if (this.data.mode === 'edit') {
+      if (this.data.mode === "edit") {
         Api.modifyNote({
           content: {
             noteId: this.data.editNoteId,
@@ -200,27 +228,27 @@ Page({
             noteContent: this.data.diaryContent,
             location: "SHANGHAI",
             resources: tempArray,
-          }
-        }).then(res => {
+          },
+        }).then((res) => {
           if (res.data.status === 200) {
             wx.showToast({
-              title: '发布成功',
-              icon: 'success',
-              duration: 2000
-            })
+              title: "发布成功",
+              icon: "success",
+              duration: 2000,
+            });
             setTimeout(() => {
               wx.navigateTo({
                 url: `/pages/storyDetail/index?noteId=${res.data.noteId}`,
-              })
-            }, 2000)
+              });
+            }, 2000);
           } else {
             wx.showToast({
-              title: '发布失败',
-              icon: 'error',
+              title: "发布失败",
+              icon: "error",
               duration: 2000,
-            })
+            });
           }
-        })
+        });
       } else {
         Api.uploadNote({
           content: {
@@ -228,28 +256,28 @@ Page({
             noteContent: this.data.diaryContent,
             location: "SHANGHAI",
             resources: tempArray,
-          }
-        }).then(res => {
+          },
+        }).then((res) => {
           if (res.data.status === 200) {
             wx.showToast({
-              title: '发布成功',
-              icon: 'success',
-              duration: 2000
-            })
+              title: "发布成功",
+              icon: "success",
+              duration: 2000,
+            });
             setTimeout(() => {
               wx.navigateTo({
                 url: `/pages/storyDetail/index?noteId=${res.data.noteId}`,
-              })
-            }, 2000)
+              });
+            }, 2000);
           } else {
             wx.showToast({
-              title: '发布失败',
-              icon: 'error',
+              title: "发布失败",
+              icon: "error",
               duration: 2000,
-            })
+            });
           }
-        })
+        });
       }
-    })
+    });
   },
 });

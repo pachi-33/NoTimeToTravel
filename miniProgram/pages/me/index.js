@@ -3,8 +3,8 @@ import Api from "../../utils/api.js";
 import util from "../../utils/util.js";
 Page({
   data: {
-    nickname: "爱旅游的yeye",
-    avatarUrl: "cloud://cloud1-3gqiovxdc0a8a188.636c-cloud1-3gqiovxdc0a8a188-1325653378/avatar/1713321285200.png",
+    nickname: "游客",
+    avatarUrl: "cloud://cloud1-3gqiovxdc0a8a188.636c-cloud1-3gqiovxdc0a8a188-1325653378/default/noavatar.png",
     canEditNickName: false,
     // 顶部布局参数
     menuTop: 0,
@@ -21,14 +21,13 @@ Page({
     util
       .checkUserLogin()
       .then((res) => {
-        console.log("已登录");
         this.setData({
           nickname: res.nickname,
           avatarUrl: res.avatarUrl,
         });
       })
       .catch((err) => {
-        console.log("==============", err);
+        console.log("checkUserLogin", err);
       });
   },
   bindTapEditNickName: function () {
@@ -42,7 +41,6 @@ Page({
     })
   },
   bindConfirmName: async function (_this) {
-    console.log("nickname=========", this.data.nickname)
     const nickname = this.data.nickname
     let res = await Api.setNickname({
       nickName: nickname,
@@ -65,7 +63,6 @@ Page({
       });
     }
     util.checkUserLogin().then((res) => {
-      console.log("已登录");
       this.setData({
         nickname: res.nickname,
         avatarUrl: res.avatarUrl,
@@ -76,13 +73,11 @@ Page({
     let _this = this
     let tmpFile = e.detail.avatarUrl
     let fileuuid = util.wxuuid()
-    console.log("头像路径",fileuuid)
     let suffix = /\.\w+$/.exec(tmpFile)[0]
     wx.cloud.uploadFile({
       cloudPath: 'avatar/' + new Date().getTime() + fileuuid + suffix,
       filePath: tmpFile,
       success: res => {
-        console.log("上传成功", res)
         //获取文件临时路径
         const fileIDAvatarURL = res.fileID
         //获取文件下载路径
@@ -105,6 +100,7 @@ Page({
                     icon: "success",
                     duration: 2000,
                   });
+                  console.log("修改成功，res",res)
                   this.setData({
                     avatarUrl: res.data.avatarUrl,
                   });
@@ -114,14 +110,13 @@ Page({
                     icon: "none",
                     duration: 2000,
                   });
-                  util.checkUserLogin().then((res) => {
-                    console.log("已登录");
-                    this.setData({
-                      nickname: res.nickname,
-                      avatarUrl: res.avatarUrl,
-                    });
-                  });
                 }
+                util.checkUserLogin().then((res) => {
+                  this.setData({
+                    nickname: res.nickname,
+                    avatarUrl: res.avatarUrl,
+                  });
+                });
               })
               .catch((err) => {
                 console.log(err);
@@ -145,7 +140,7 @@ Page({
         });
       })
       .catch((err) => {
-        console.log("==============", err);
+        console.log("checkUserLogin", err);
       });
     this.setData({
       canEditNickName:false
