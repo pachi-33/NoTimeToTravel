@@ -123,7 +123,7 @@ Page({
       menuTop: res.top,
       menuHeight: res.height,
       menuLeft: res.width + 10,
-      noteIdToSearch: noteId,
+      noteIdToSearch: Number(noteId),
     });
     this.getDetail();
     this.getComment();
