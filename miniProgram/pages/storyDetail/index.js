@@ -182,6 +182,9 @@ Page({
     });
     console.log("getNoteDetail的res", res);
     let newContent = res.data.content || {};
+    if(newContent.lastModifyTime){
+      newContent.lastModifyTime = util.formatPast(new Date(newContent.lastModifyTime), "YYYY-mm-dd");
+    }
     this.setData({
       content: newContent,
     });
@@ -192,6 +195,12 @@ Page({
     });
     console.log("getCommentList的res", res);
     let newComments = res.data.comments || [];
+    if(newComments.length !== 0){
+      newComments = newComments.map((item) => {
+        item.commentTime = util.formatPast(new Date(item.commentTime), "YYYY-mm-dd");
+        return item;
+      });
+    }
     this.setData({
       comments: newComments,
     });
