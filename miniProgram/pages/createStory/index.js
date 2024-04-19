@@ -195,6 +195,11 @@ Page({
       });
       return;
     }
+    wx.showToast({
+      title: '抓紧上传中~',
+      icon: 'loading',
+      duration:3000
+    })
     //所有内容上传到云端[已有内容不上传]
     const upLoadPromises = this.data.mediaList.map((file) => {
       return new Promise((resolve, reject) => {
@@ -302,6 +307,11 @@ Page({
                   duration: 2000,
                 });
                 setTimeout(() => {
+                  this.setData({
+                    mediaList:[],
+                    diaryTitle:"",
+                    diaryContent:""
+                  })
                   wx.navigateTo({
                     url: `/pages/storyDetail/index?noteId=${res.data.noteId}`,
                   });

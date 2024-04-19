@@ -91,9 +91,9 @@ Page({
   bindTapDelete: async function (e) {
     const noteId = e.currentTarget.dataset.id;
     await Api.deleteNote({
-      noteId: noteId,
+      noteId: Number(noteId),
     });
-    console.log("删除", noteId);
+    this.setNoteList();
   },
   bindTapMasonryItem: function (e) {
     const noteId = e.currentTarget.dataset.id;

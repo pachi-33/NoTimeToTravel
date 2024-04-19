@@ -32,8 +32,8 @@
                       <text>拒绝原因：{{item.reviewComment||'暂无'}}</text>
                     </view>
                     <view class="option-box">
-                        <view wx:if="{{item.status!=='approved'}}" bind:tap="bindTapEdit">编辑</view>
-                        <view bind:tap="bindTapDelete">删除</view>
+                        <view wx:if="{{item.status!=='approved'}}" catchtap="bindTapEdit" data-id="{{item.noteId}}">编辑</view>
+                        <view catchtap="bindTapDelete" data-id="{{item.noteId}}">删除</view>
                     </view>
                 </view>
             </view>
