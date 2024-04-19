@@ -45,6 +45,7 @@ Page({
   },
   onLoad: async function (options) {
     const res = wx.getMenuButtonBoundingClientRect();
+    console.log(options)
     this.setData({
       menuTop: res.top,
       menuHeight: res.height,
@@ -83,7 +84,6 @@ Page({
     };
     if (this.data.isSearchByTitle) {
       data.keyWords = this.data.searchValue;
-      console.log("开始搜索")
       Api.getNoteListBySearchTitle(data)
         .then((res) => {
           let newList = res.data.noteList || [];
@@ -99,11 +99,9 @@ Page({
           this.setData({
             loading: false,
           });
-          console.log("返回前", newList)
           return newList;
         })
         .catch((err) => {
-          console.log("搜索err", err);
           this.setData({
             loading: false,
           });
@@ -195,7 +193,6 @@ Page({
   bindSrollToLower: async function () {
     try {
       let newList = await this.getNewSearchList();
-      console.log("newlist阻塞", newList);
       if (newList.length === 0) {
         wx.showToast({
           title: "你居然看完了全部的物语~",

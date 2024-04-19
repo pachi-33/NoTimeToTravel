@@ -141,7 +141,6 @@ Page({
   },
   bindTapMasonryItem: function (e) {
     const noteId = e.currentTarget.dataset.id;
-    console.log("点击了", noteId);
     wx.navigateTo({
       url: `/pages/storyDetail/index?noteId=${noteId}`,
     });
@@ -179,7 +178,6 @@ Page({
   bindSrollToLower: async function () {
     try {
       let newList = await this.getNewList();
-      console.log("判断拿取新列表newlist", newList);
       if (newList.length === 0) {
         wx.showToast({
           title: "你居然看完了全部的物语~",

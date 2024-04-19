@@ -139,7 +139,6 @@ Page({
     let res = await Api.getNoteDetails({
       noteId: Number(this.data.noteIdToSearch)
     });
-    console.log("getNoteDetail的res", res);
     let newContent = res.data.content || {};
     if(newContent.lastModifyTime){
       newContent.lastModifyTime = util.formatPast(new Date(newContent.lastModifyTime), "YYYY-mm-dd");

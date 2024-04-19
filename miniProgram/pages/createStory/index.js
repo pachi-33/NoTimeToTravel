@@ -18,19 +18,35 @@ Page({
   onLoad: async function (options) {
     const res = wx.getMenuButtonBoundingClientRect();
     this.setData({
+      mediaList: [],
+      diaryTitle: "",
+      diaryContent: ""
+    })
+    // if(EditnoteId){
+    //   console.log("有参数")
+    //   wx.removeStorageSync('edit')
+    //   this.setData({
+    //     mode: "edit",
+    //     editNoteId: options.EditnoteId,
+    //   });
+    // }
+    this.setData({
       menuTop: res.top,
       menuHeight: res.height,
       menuLeft: res.width + 10,
       mode: "create",
     });
     await util.checkUserLogin();
-    if (options.noteId) {
+    const EditnoteId = wx.getStorageSync('edit')
+    console.log("Edit=======",EditnoteId)
+    if (EditnoteId) {
+      console.log("有参数")
       this.setData({
         mode: "edit",
-        editNoteId: options.noteId,
+        editNoteId: EditnoteId,
       });
       const res = await Api.getNoteDetails({
-        noteId: Number(options.noteId),
+        noteId: Number(EditnoteId),
       });
       //设置默认值为已获得的内容
       if (res.data.status === 200 && res.data.content.resources) {
@@ -46,6 +62,13 @@ Page({
             fileID: ""
           }
         })
+        this.setData({
+          mediaList:newMediaList,
+          diaryTitle:res.data.content.noteTitle,
+          diaryContent:res.data.content.noteContent,
+        })
+        console.log(this.diaryTitle)
+      
       } else {
         wx.showToast({
           title: '获取游记详情失败',
@@ -53,9 +76,6 @@ Page({
           duration: 2000
         })
       }
-
-
-
     }
   },
   handleTitleChange(e) {
@@ -153,8 +173,8 @@ Page({
     })
     console.log(e.currentTarget.dataset.index)
     wx.previewMedia({
-      sources:previewMediaList,
-      current:e.currentTarget.dataset.index
+      sources: previewMediaList,
+      current: e.currentTarget.dataset.index
     })
   },
   catchDelMedia: function (e) {
@@ -198,7 +218,7 @@ Page({
     wx.showToast({
       title: '抓紧上传中~',
       icon: 'loading',
-      duration:3000
+      duration: 3000
     })
     //所有内容上传到云端[已有内容不上传]
     const upLoadPromises = this.data.mediaList.map((file) => {
@@ -308,9 +328,9 @@ Page({
                 });
                 setTimeout(() => {
                   this.setData({
-                    mediaList:[],
-                    diaryTitle:"",
-                    diaryContent:""
+                    mediaList: [],
+                    diaryTitle: "",
+                    diaryContent: ""
                   })
                   wx.navigateTo({
                     url: `/pages/storyDetail/index?noteId=${res.data.noteId}`,

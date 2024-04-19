@@ -78,14 +78,18 @@ Page({
     wx.navigateBack();
   },
   bindTapNewStroy: function () {
-    wx.navigateTo({
+    wx.switchTab({
       url: "/pages/createStory/index",
-    });
+    })
   },
   bindTapEdit: function (e) {
     const noteId = e.currentTarget.dataset.id;
-    wx.navigateTo({
-      url: `/pages/createStory/index?noteId=${noteId}`,
+    console.log("edit", noteId)
+    wx.setStorageSync("edit",noteId)
+    // let getEdit=wx.getStorageSync('edit')
+    // console.log(getEdit)
+    wx.switchTab({
+      url: `/pages/createStory/index`,
     });
   },
   bindTapDelete: async function (e) {

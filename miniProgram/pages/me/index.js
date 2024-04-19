@@ -105,7 +105,6 @@ Page({
                     icon: "success",
                     duration: 2000,
                   });
-                  console.log("修改成功，res", res)
                 } else {
                   wx.showToast({
                     title: "修改失败",
