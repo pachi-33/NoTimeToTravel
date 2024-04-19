@@ -103,7 +103,7 @@ Page({
           return newList;
         })
         .catch((err) => {
-          console.log("err", err);
+          console.log("搜索err", err);
           this.setData({
             loading: false,
           });

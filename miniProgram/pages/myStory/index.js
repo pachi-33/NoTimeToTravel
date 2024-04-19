@@ -112,7 +112,7 @@ Page({
     }
   },
   setNoteList: async function () {
-    const newList = await this.getMyNoteListWithStatus();
+    let newList = await this.getMyNoteListWithStatus();
     if (newList.length !== 0) {
       newList = newList.map((item) => {
         item.pastTime = util.formatPast(

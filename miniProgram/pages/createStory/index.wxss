@@ -85,19 +85,6 @@
   width: 30vw;
 }
 
-.video-frame {
-  position: relative;
-  width: 30vw;
-  height: 30vw;
-}
-
-.video-frame video {
-  position: absolute;
-  top: 0;
-  z-index: -1;
-}
-
-
 .media-del {
   position: absolute;
   top: 0;

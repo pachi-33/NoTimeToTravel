@@ -87,7 +87,8 @@ Page({
   getMyCollection: async function () {
     try {
       const res = await Api.getMyCollect();
-      const newList = res.data.noteList || [];
+      let newList = res.data.noteList || [];
+      console.log("返回的结果",res.data.noteList)
       return newList;
     } catch (err) {
       console.log("err", err);
@@ -95,7 +96,7 @@ Page({
     }
   },
   setNoteList: async function () {
-    const newList = await this.getMyCollection();
+    let newList = await this.getMyCollection();
     if (newList.length !== 0) {
       newList = newList.map((item) => {
         item.pastTime = util.formatPast(

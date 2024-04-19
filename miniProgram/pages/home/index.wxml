@@ -26,7 +26,7 @@
             </view>
             <view class="right">
               <image src="https://res.wx.qq.com/community/dist/community/images/disagree_icon_fab2b7.svg"></image>
-              <text>{{item.likeNume}}</text>
+              <text>{{item.likeNum}}</text>
             </view>
           </view>
           <view class="profile-text">

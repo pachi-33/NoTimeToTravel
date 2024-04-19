@@ -14,7 +14,6 @@
   <view class="option-list">
     <view><button open-type="chooseAvatar" 	plain="{{true}}" bind:chooseavatar="bindChooseAvatar">更改头像</button></view>
     <view bindtap="bindTapEditNickName">更改昵称</view>
-    <view bindtap="bindTapNew">新增游记</view>
     <view bindtap="bindTapMyStory">我的游记</view>
     <view bindtap="bindTapMyCollect">我的收藏</view>
   </view>
